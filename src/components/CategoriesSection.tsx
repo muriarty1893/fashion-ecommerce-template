@@ -1,0 +1,37 @@
+import CategoryItem from "./CategoryItem";
+import { useLanguage } from "../i18n";
+
+const CategoriesSection = () => {
+  const { t } = useLanguage();
+
+  return (
+    <div className="max-w-screen-2xl px-5 mx-auto mt-24">
+      <h2 className="text-black text-5xl font-normal tracking-[1.56px] max-sm:text-4xl mb-12">
+        {t("categories")}
+      </h2>
+      <div className="flex justify-between flex-wrap gap-y-10">
+        <CategoryItem
+          categoryTitle={t("specialEdition")}
+          image="luxury category 1.png"
+          link="special-edition"
+        />
+        <CategoryItem
+          categoryTitle={t("luxuryCollection")}
+          image="luxury category 2.png"
+          link="luxury-collection"
+        />
+        <CategoryItem
+          categoryTitle={t("summerEdition")}
+          image="luxury category 3.png"
+          link="summer-edition"
+        />
+        <CategoryItem
+          categoryTitle={t("uniqueCollection")}
+          image="luxury category 4.png"
+          link="unique-collection"
+        />
+      </div>
+    </div>
+  );
+};
+export default CategoriesSection;
