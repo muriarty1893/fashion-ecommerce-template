@@ -13,6 +13,7 @@ import {
   Settings,
   ShoppingBag,
   Users,
+  X,
 } from "lucide-react";
 import db from "../data/db.json";
 import { formatCategoryName } from "../utils/formatCategoryName";
@@ -81,6 +82,7 @@ const Admin = () => {
   const [query, setQuery] = useState("");
   const [form, setForm] = useState<ProductForm>(initialForm);
   const [activeView, setActiveView] = useState<AdminView>("dashboard");
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [settings, setSettings] = useState({
     storeName: "MODE",
     currency: "USD",
@@ -103,6 +105,11 @@ const Admin = () => {
   const lowStockLimit = Number(settings.lowStockThreshold) || 20;
   const lowStockCount = products.filter((product) => product.stock < lowStockLimit).length;
   const averageOrder = orders.length > 0 ? Math.round(revenue / orders.length) : 0;
+
+  const setView = (view: AdminView) => {
+    setActiveView(view);
+    setMobileMenuOpen(false);
+  };
 
   const handleProductSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -153,31 +160,31 @@ const Admin = () => {
               active={activeView === "dashboard"}
               icon={<LayoutDashboard size={18} />}
               label="Dashboard"
-              onClick={() => setActiveView("dashboard")}
+              onClick={() => setView("dashboard")}
             />
             <AdminNavItem
               active={activeView === "products"}
               icon={<Boxes size={18} />}
               label="Products"
-              onClick={() => setActiveView("products")}
+              onClick={() => setView("products")}
             />
             <AdminNavItem
               active={activeView === "orders"}
               icon={<ClipboardList size={18} />}
               label="Orders"
-              onClick={() => setActiveView("orders")}
+              onClick={() => setView("orders")}
             />
             <AdminNavItem
               active={activeView === "customers"}
               icon={<Users size={18} />}
               label="Customers"
-              onClick={() => setActiveView("customers")}
+              onClick={() => setView("customers")}
             />
             <AdminNavItem
               active={activeView === "settings"}
               icon={<Settings size={18} />}
               label="Settings"
-              onClick={() => setActiveView("settings")}
+              onClick={() => setView("settings")}
             />
           </nav>
           <div className="mx-4 mt-6 rounded border border-white/10 bg-white/5 p-4">
@@ -195,6 +202,7 @@ const Admin = () => {
                 type="button"
                 className="grid h-9 w-9 place-items-center rounded border border-[#d8dbe0] text-[#768192] lg:hidden"
                 aria-label="Open admin menu"
+                onClick={() => setMobileMenuOpen(true)}
               >
                 <Menu size={18} />
               </button>
@@ -628,6 +636,62 @@ const Admin = () => {
           </div>
         </div>
       </div>
+
+      {mobileMenuOpen && (
+        <div className="fixed inset-0 z-50 lg:hidden">
+          <button
+            type="button"
+            className="absolute inset-0 bg-black/40"
+            aria-label="Close admin menu"
+            onClick={() => setMobileMenuOpen(false)}
+          />
+          <aside className="relative h-full w-72 bg-[#303c54] text-white shadow-2xl">
+            <div className="flex h-16 items-center justify-between border-b border-white/10 px-5">
+              <span className="text-xl font-semibold tracking-wide">MODE Admin</span>
+              <button
+                type="button"
+                className="grid h-9 w-9 place-items-center rounded hover:bg-white/10"
+                aria-label="Close admin menu"
+                onClick={() => setMobileMenuOpen(false)}
+              >
+                <X size={18} />
+              </button>
+            </div>
+            <nav className="space-y-1 px-3 py-4 text-sm">
+              <AdminNavItem
+                active={activeView === "dashboard"}
+                icon={<LayoutDashboard size={18} />}
+                label="Dashboard"
+                onClick={() => setView("dashboard")}
+              />
+              <AdminNavItem
+                active={activeView === "products"}
+                icon={<Boxes size={18} />}
+                label="Products"
+                onClick={() => setView("products")}
+              />
+              <AdminNavItem
+                active={activeView === "orders"}
+                icon={<ClipboardList size={18} />}
+                label="Orders"
+                onClick={() => setView("orders")}
+              />
+              <AdminNavItem
+                active={activeView === "customers"}
+                icon={<Users size={18} />}
+                label="Customers"
+                onClick={() => setView("customers")}
+              />
+              <AdminNavItem
+                active={activeView === "settings"}
+                icon={<Settings size={18} />}
+                label="Settings"
+                onClick={() => setView("settings")}
+              />
+            </nav>
+          </aside>
+        </div>
+      )}
     </main>
   );
 };

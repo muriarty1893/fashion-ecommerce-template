@@ -2,8 +2,8 @@
   "products": [
     {
       "id": "1",
-      "title": "Luxury Dress",
-      "image": "product image 1.jpg",
+      "title": "Ivory Column Dress",
+      "image": "dress/1.png",
       "category": "special-edition",
       "price": 3500,
       "popularity": 5,
@@ -20,8 +20,8 @@
     },
     {
       "id": "3",
-      "title": "Luxury Blue Dress",
-      "image": "product image 3.jpg",
+      "title": "Blue Satin Evening Dress",
+      "image": "dress/2.png",
       "category": "summer-edition",
       "price": 5000,
       "popularity": 3,
@@ -38,8 +38,8 @@
     },
     {
       "id": "5",
-      "title": "Special Luxury Dress",
-      "image": "product image 5.jpg",
+      "title": "Signature Drape Dress",
+      "image": "dress/3.png",
       "category": "unique-collection",
       "price": 5200,
       "popularity": 1,
@@ -56,8 +56,8 @@
     },
     {
       "id": "7",
-      "title": "Luxury Brown Dress",
-      "image": "product image 7.jpg",
+      "title": "Cocoa Wrap Dress",
+      "image": "dress/4.png",
       "category": "luxury-collection",
       "price": 4500,
       "popularity": 5,
@@ -74,8 +74,8 @@
     },
     {
       "id": "9",
-      "title": "Luxury White Dress",
-      "image": "product image 9.jpg",
+      "title": "White Atelier Dress",
+      "image": "dress/5.png",
       "category": "luxury-collection",
       "price": 4500,
       "popularity": 5,
@@ -83,8 +83,8 @@
     },
     {
       "id": "10",
-      "title": "Brown Limited Collection",
-      "image": "product image 10.jpg",
+      "title": "Limited Mocha Dress",
+      "image": "dress/6.png",
       "category": "unique-collection",
       "price": 4500,
       "popularity": 5,
@@ -161,6 +161,60 @@
       "price": 4500,
       "popularity": 5,
       "stock": 500
+    },
+    {
+      "id": "19",
+      "title": "Pearl Neckline Dress",
+      "image": "dress/1.png",
+      "category": "special-edition",
+      "price": 3900,
+      "popularity": 8,
+      "stock": 36
+    },
+    {
+      "id": "20",
+      "title": "Azure Resort Dress",
+      "image": "dress/2.png",
+      "category": "summer-edition",
+      "price": 3200,
+      "popularity": 9,
+      "stock": 44
+    },
+    {
+      "id": "21",
+      "title": "Evening Sculpture Dress",
+      "image": "dress/3.png",
+      "category": "unique-collection",
+      "price": 6100,
+      "popularity": 11,
+      "stock": 12
+    },
+    {
+      "id": "22",
+      "title": "Chocolate Midi Dress",
+      "image": "dress/4.png",
+      "category": "luxury-collection",
+      "price": 2800,
+      "popularity": 7,
+      "stock": 25
+    },
+    {
+      "id": "23",
+      "title": "Minimal White Gown",
+      "image": "dress/5.png",
+      "category": "special-edition",
+      "price": 5400,
+      "popularity": 10,
+      "stock": 18
+    },
+    {
+      "id": "24",
+      "title": "Mocha Occasion Dress",
+      "image": "dress/6.png",
+      "category": "unique-collection",
+      "price": 4700,
+      "popularity": 6,
+      "stock": 31
     }
   ],
   "orders": [

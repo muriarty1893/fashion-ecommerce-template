@@ -4,6 +4,7 @@ import {
   Cart,
   Checkout,
   HomeLayout,
+  InfoPage,
   Landing,
   Login,
   OrderConfirmation,
@@ -45,6 +46,10 @@ const router = createBrowserRouter([
       {
         path: "cart",
         element: <Cart />,
+      },
+      {
+        path: "info/:slug",
+        element: <InfoPage />,
       },
       {
         path: "checkout",

@@ -93,20 +93,24 @@ const Checkout = () => {
 
     if (!checkCheckoutFormData(checkoutData)) return;
 
+    const storedUser = JSON.parse(localStorage.getItem("user") || "{}");
+    const orderPayload = {
+      ...checkoutData,
+      ...(storedUser.email
+        ? {
+            user: {
+              email: storedUser.email,
+              id: storedUser.id,
+            },
+          }
+        : {}),
+      orderStatus: "Processing",
+      orderDate: new Date().toISOString(),
+    };
+
     try {
-      const storedUser = JSON.parse(localStorage.getItem("user") || "{}");
       const response = await customFetch.post("/orders", {
-        ...checkoutData,
-        ...(storedUser.email
-          ? {
-              user: {
-                email: storedUser.email,
-                id: storedUser.id,
-              },
-            }
-          : {}),
-        orderStatus: "Processing",
-        orderDate: new Date().toISOString(),
+        ...orderPayload,
       });
 
       if (response.status === 201) {
@@ -116,7 +120,9 @@ const Checkout = () => {
         toast.error(t("checkoutError"));
       }
     } catch {
-      toast.error(t("checkoutError"));
+      localStorage.setItem("lastFakeOrder", JSON.stringify(orderPayload));
+      toast.success(t("orderSuccess"));
+      navigate("/order-confirmation");
     }
   };
 
