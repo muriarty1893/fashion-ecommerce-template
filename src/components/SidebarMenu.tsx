@@ -78,6 +78,12 @@ const SidebarMenu = ({
             >
               {t("search")}
             </Link>
+            <Link
+              to="/admin"
+              className="py-2 border-y border-secondaryBrown w-full block flex justify-center"
+            >
+              Admin
+            </Link>
             {loginStatus ? (
               <>
                 <button

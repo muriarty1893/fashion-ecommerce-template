@@ -6,6 +6,16 @@ body {
   font-family: "Merriweather", serif;
 }
 
+@layer components {
+  .admin-input {
+    @apply h-10 w-full rounded border border-[#d8dbe0] bg-white px-3 text-sm text-[#3c4b64] outline-none transition focus:border-[#321fdb];
+  }
+
+  .checkout-input {
+    @apply h-11 w-full rounded-lg border border-gray-300 bg-white px-3 text-sm text-gray-950 outline-none transition focus:border-gray-950;
+  }
+}
+
 @keyframes fadeSlideIn {
   to {
     opacity: 1;

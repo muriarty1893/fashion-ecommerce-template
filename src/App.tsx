@@ -1,5 +1,6 @@
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
 import {
+  Admin,
   Cart,
   Checkout,
   HomeLayout,
@@ -82,6 +83,10 @@ const router = createBrowserRouter([
         loader: singleOrderLoader
       },
     ],
+  },
+  {
+    path: "/admin",
+    element: <Admin />,
   },
 ]);
 

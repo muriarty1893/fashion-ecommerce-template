@@ -1,7 +1,6 @@
 import { Banner, CategoriesSection, HomeCollectionSection } from "../components";
 import AnimatedCardStack from "../components/community/AnimatedCardStack";
 import CircularTestimonials from "../components/community/CircularTestimonials";
-import PixelLogoGrid from "../components/community/PixelLogoGrid";
 import { useLanguage } from "../i18n";
 
 const testimonials = [
@@ -85,7 +84,6 @@ const Landing = () => {
       <Banner />
       <HomeCollectionSection />
       <AnimatedCardStack />
-      <PixelLogoGrid />
       <CategoriesSection />
       <CircularTestimonials testimonials={localizedTestimonials[language]} />
     </>

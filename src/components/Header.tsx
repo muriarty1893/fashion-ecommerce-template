@@ -6,6 +6,7 @@ import { Link } from "react-router-dom";
 import SidebarMenu from "./SidebarMenu";
 import { useState } from "react";
 import { Language, useLanguage } from "../i18n";
+import { ShieldCheck } from "lucide-react";
 
 const Header = () => {
   const [ isSidebarOpen, setIsSidebarOpen ] = useState(false);
@@ -41,6 +42,9 @@ const Header = () => {
         </select>
         <Link to="/search" aria-label={t("search")}>
           <HiOutlineMagnifyingGlass className="text-2xl max-sm:text-xl" />
+        </Link>
+        <Link to="/admin" aria-label="Admin">
+          <ShieldCheck className="h-6 w-6 max-sm:h-5 max-sm:w-5" />
         </Link>
         <Link to="/login" aria-label={t("account")}>
           <HiOutlineUser className="text-2xl max-sm:text-xl" />

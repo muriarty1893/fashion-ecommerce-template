@@ -1,33 +1,76 @@
 import { AnimatePresence, motion } from "framer-motion";
 import { useState } from "react";
-import { useLanguage } from "../../i18n";
+import { Language, useLanguage } from "../../i18n";
 
 type Card = {
-  id: number;
   title: string;
   description: string;
   image: string;
 };
 
-const initialCards: Card[] = [
-  {
-    id: 1,
-    title: "Şık Akşam",
-    description: "Davetler, lansmanlar ve gece planları için net parçalar.",
-    image: "/assets/luxury fashion 7 1.png",
-  },
-  {
-    id: 2,
-    title: "Yumuşak Nötrler",
-    description: "Günlük kullanım için sade ve rahat temel parçalar.",
-    image: "/assets/luxury category 2.png",
-  },
-  {
-    id: 3,
-    title: "Hafta Sonu Katmanları",
-    description: "Rahat dış giyim, yumuşak dokular ve sakin renkler.",
-    image: "/assets/luxury category 4.png",
-  },
+type CardState = {
+  id: number;
+  templateIndex: number;
+};
+
+const cardTemplates: Record<Language, Card[]> = {
+  en: [
+    {
+      title: "Evening Sharp",
+      description: "Clean pieces for dinners, launches, and late plans.",
+      image: "/assets/luxury fashion 7 1.png",
+    },
+    {
+      title: "Soft Neutrals",
+      description: "Simple, comfortable essentials for everyday wear.",
+      image: "/assets/luxury category 2.png",
+    },
+    {
+      title: "Weekend Layers",
+      description: "Relaxed outerwear, soft textures, and calm colors.",
+      image: "/assets/luxury category 4.png",
+    },
+  ],
+  de: [
+    {
+      title: "Eleganter Abend",
+      description: "Klare Pieces für Dinner, Launches und späte Pläne.",
+      image: "/assets/luxury fashion 7 1.png",
+    },
+    {
+      title: "Sanfte Neutrals",
+      description: "Schlichte, bequeme Essentials für jeden Tag.",
+      image: "/assets/luxury category 2.png",
+    },
+    {
+      title: "Wochenend-Layer",
+      description: "Lässige Outerwear, weiche Texturen und ruhige Farben.",
+      image: "/assets/luxury category 4.png",
+    },
+  ],
+  tr: [
+    {
+      title: "Şık Akşam",
+      description: "Davetler, lansmanlar ve gece planları için net parçalar.",
+      image: "/assets/luxury fashion 7 1.png",
+    },
+    {
+      title: "Yumuşak Nötrler",
+      description: "Günlük kullanım için sade ve rahat temel parçalar.",
+      image: "/assets/luxury category 2.png",
+    },
+    {
+      title: "Hafta Sonu Katmanları",
+      description: "Rahat dış giyim, yumuşak dokular ve sakin renkler.",
+      image: "/assets/luxury category 4.png",
+    },
+  ],
+};
+
+const initialCards: CardState[] = [
+  { id: 1, templateIndex: 0 },
+  { id: 2, templateIndex: 1 },
+  { id: 3, templateIndex: 2 },
 ];
 
 const positionStyles = [
@@ -39,7 +82,8 @@ const positionStyles = [
 const AnimatedCardStack = () => {
   const [cards, setCards] = useState(initialCards);
   const [nextId, setNextId] = useState(4);
-  const { t } = useLanguage();
+  const { language, t } = useLanguage();
+  const localizedCards = cardTemplates[language];
 
   const handleAnimate = () => {
     const nextTemplate = cards[0];
@@ -73,6 +117,7 @@ const AnimatedCardStack = () => {
           <AnimatePresence initial={false}>
             {cards.slice(0, 3).map((card, index) => {
               const { scale, y } = positionStyles[index];
+              const localizedCard = localizedCards[card.templateIndex];
               return (
                 <motion.article
                   key={card.id}
@@ -84,15 +129,15 @@ const AnimatedCardStack = () => {
                   className="absolute bottom-0 w-[min(92vw,520px)] overflow-hidden rounded-t-xl border border-white/10 bg-white p-1 text-gray-950 shadow-2xl"
                 >
                   <img
-                    src={card.image}
-                    alt={card.title}
+                    src={localizedCard.image}
+                    alt={localizedCard.title}
                     className="h-[230px] w-full rounded-lg object-cover"
                   />
                   <div className="flex items-center justify-between gap-4 px-4 py-5">
                     <div>
-                      <h3 className="font-medium">{card.title}</h3>
+                      <h3 className="font-medium">{localizedCard.title}</h3>
                       <p className="mt-1 text-sm text-gray-500">
-                        {card.description}
+                        {localizedCard.description}
                       </p>
                     </div>
                     <span className="rounded-full bg-gray-950 px-4 py-2 text-sm text-white">

@@ -7,8 +7,8 @@ const HomeCollectionSection = () => {
 
   return (
     <div>
-      <div className="max-w-screen-2xl flex items-center justify-between mx-auto mt-24 px-5 max-[400px]:px-3">
-        <h2 className="text-black text-5xl font-normal tracking-[1.56px] max-sm:text-4xl">
+      <div className="mx-auto mt-24 flex max-w-screen-2xl items-center justify-between px-5 max-[400px]:px-3">
+        <h2 className="text-5xl font-normal tracking-[1.56px] text-black max-sm:text-4xl">
           {t("collection")}
         </h2>
       </div>

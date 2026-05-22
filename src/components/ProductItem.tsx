@@ -2,6 +2,7 @@ import { Link } from "react-router-dom";
 import { formatCategoryName } from "../utils/formatCategoryName";
 import { motion } from "framer-motion";
 import { useLanguage } from "../i18n";
+import { ArrowUpRight, ShoppingBag } from "lucide-react";
 
 const ProductItem = ({
   id,
@@ -10,7 +11,7 @@ const ProductItem = ({
   category,
   price,
   popularity: _popularity,
-  stock: _stock,
+  stock,
 }: {
   id: string;
   image: string;
@@ -26,38 +27,43 @@ const ProductItem = ({
     <motion.div
       whileHover={{ y: -6 }}
       transition={{ type: "spring", stiffness: 260, damping: 24 }}
-      className="w-[400px] flex flex-col gap-2 justify-center max-md:w-[300px]"
+      className="group w-[400px] max-md:w-[300px]"
     >
       <Link
         to={`/product/${id}`}
-        className="w-full h-[300px] max-md:h-[200px] overflow-hidden"
+        className="relative block h-[430px] w-full overflow-hidden rounded-lg bg-gray-100 max-md:h-[340px]"
       >
-        <img src={`/assets/${image}`} alt={title} />
+        <img
+          src={`/assets/${image}`}
+          alt={title}
+          className="h-full w-full object-cover transition duration-500 group-hover:scale-105"
+        />
+        <div className="absolute inset-x-0 top-0 flex items-center justify-between p-4">
+          <span className="rounded-full bg-white/90 px-3 py-1 text-xs font-medium uppercase tracking-[0.16em] text-gray-950 shadow-sm">
+            Drop
+          </span>
+          <span className="grid h-10 w-10 place-items-center rounded-full bg-gray-950 text-white shadow-sm transition group-hover:bg-secondaryBrown">
+            <ArrowUpRight size={18} />
+          </span>
+        </div>
+        <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent p-4 pt-20 text-white">
+          <p className="text-xs uppercase tracking-[0.22em] text-white/75">
+            {formatCategoryName(category, language)}
+          </p>
+          <h2 className="mt-2 text-2xl font-semibold leading-tight">{title}</h2>
+        </div>
       </Link>
-      <Link
-        to={`/product/${id}`}
-        className="text-black text-center text-3xl tracking-[1.02px] max-md:text-2xl"
-      >
-        <h2>{title}</h2>
-      </Link>
-      <p className="text-secondaryBrown text-lg tracking-wide text-center max-md:text-base">
-        {formatCategoryName(category, language)}{" "}
-      </p>
-      <p className="text-black text-2xl text-center font-bold max-md:text-xl">
-        ${price}
-      </p>
-      <div className="w-full flex flex-col gap-1">
+      <div className="mt-4 flex items-start justify-between gap-4">
+        <div>
+          <p className="text-sm text-gray-500">{stock > 0 ? `${stock} available` : "Sold out"}</p>
+          <p className="mt-1 text-2xl font-semibold text-gray-950">${price.toLocaleString()}</p>
+        </div>
         <Link
           to={`/product/${id}`}
-          className="text-white bg-secondaryBrown text-center text-xl font-normal tracking-[0.6px] leading-[72px] w-full h-12 flex items-center justify-center max-md:text-base"
+          className="inline-flex h-11 items-center gap-2 rounded-full bg-gray-950 px-4 text-sm font-medium text-white transition hover:bg-secondaryBrown"
         >
+          <ShoppingBag size={16} />
           {t("viewProduct")}
-        </Link>
-        <Link
-          to={`/product/${id}`}
-          className="bg-white text-black text-center text-xl border border-[rgba(0, 0, 0, 0.40)] font-normal tracking-[0.6px] leading-[72px] w-full h-12 flex items-center justify-center max-md:text-base"
-        >
-          {t("details")}
         </Link>
       </div>
     </motion.div>

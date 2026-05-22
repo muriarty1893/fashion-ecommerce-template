@@ -2,158 +2,332 @@ import {
   Button,
   Dropdown,
   ProductItem,
-  QuantityInput,
-  StandardSelectInput,
 } from "../components";
 import { useParams } from "react-router-dom";
-import React, { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { addProductToTheCart } from "../features/cart/cartSlice";
 import { useAppDispatch } from "../hooks";
-import WithSelectInputWrapper from "../utils/withSelectInputWrapper";
-import WithNumberInputWrapper from "../utils/withNumberInputWrapper";
 import { formatCategoryName } from "../utils/formatCategoryName";
 import toast from "react-hot-toast";
 import { useLanguage } from "../i18n";
+import db from "../data/db.json";
+import { FaStar } from "react-icons/fa";
+
+type ProductDetail = {
+  subtitle: string;
+  story: string;
+  details: string[];
+  fit: string;
+  materials: string;
+  delivery: string;
+};
+
+const fallbackProducts = db.products as Product[];
+
+const productDetails: Record<string, ProductDetail> = {
+  "special-edition": {
+    subtitle: "Limited wardrobe piece with a clean occasion-ready profile.",
+    story:
+      "Made for evenings, showroom appointments, and dressed-up weekends, this piece balances a polished silhouette with comfortable movement.",
+    details: [
+      "Lightly structured shape with a soft inner finish",
+      "Concealed fastening for a clean front",
+      "Designed to layer under long coats or cropped jackets",
+    ],
+    fit: "True to size. Choose one size up for a relaxed drape.",
+    materials: "62% viscose, 32% recycled polyester, 6% elastane.",
+    delivery: "Ships in 1-3 business days with tracked delivery and easy returns.",
+  },
+  "luxury-collection": {
+    subtitle: "Elevated everyday styling with premium texture and weight.",
+    story:
+      "A refined staple built around texture, proportion, and wearability. It works as a statement piece without making the rest of the outfit difficult.",
+    details: [
+      "Premium mid-weight fabric with a smooth hand feel",
+      "Tailored seams for a sharper shoulder and waist line",
+      "Pairs well with tonal trousers, denim, or minimal accessories",
+    ],
+    fit: "Regular fit through the body with room for movement.",
+    materials: "70% cotton, 24% modal, 6% elastane.",
+    delivery: "Prepared within 24 hours on weekdays. Free exchanges on size issues.",
+  },
+  "summer-edition": {
+    subtitle: "Lightweight color and breathable comfort for warm days.",
+    story:
+      "Cut for bright weather and long days out, this piece keeps the look crisp while staying easy to pack, style, and repeat.",
+    details: [
+      "Breathable fabric selected for warm-weather wear",
+      "Soft lining where needed to prevent transparency",
+      "Easy-care finish for travel and weekend use",
+    ],
+    fit: "Slightly relaxed. Size down for a closer silhouette.",
+    materials: "55% linen, 45% cotton.",
+    delivery: "Standard delivery arrives in 3-5 business days.",
+  },
+  "unique-collection": {
+    subtitle: "Distinctive seasonal shape with boutique-level finishing.",
+    story:
+      "This item is designed as the outfit anchor: strong enough to stand alone, simple enough to style across multiple occasions.",
+    details: [
+      "Statement cut with restrained detailing",
+      "Finished hems and seams for a premium feel",
+      "Small-batch production for a more individual wardrobe",
+    ],
+    fit: "Tailored fit. If between sizes, choose the larger size.",
+    materials: "64% rayon, 28% nylon, 8% elastane.",
+    delivery: "Ships with signature packaging and return label included.",
+  },
+};
+
+const sizes = ["XS", "S", "M", "L", "XL"];
+const colors = [
+  { id: "black", label: "Black", className: "bg-gray-950" },
+  { id: "ivory", label: "Ivory", className: "bg-stone-100" },
+  { id: "cocoa", label: "Cocoa", className: "bg-[#7C5C45]" },
+  { id: "sage", label: "Sage", className: "bg-[#8FA58A]" },
+];
 
 const SingleProduct = () => {
-  const [products, setProducts] = useState<Product[]>([]);
-  const [singleProduct, setSingleProduct] = useState<Product | null>(null);
-  // defining default values for input fields
-  const [size, setSize] = useState<string>("xs");
+  const params = useParams<{ id: string }>();
+  const localProduct =
+    fallbackProducts.find((product) => product.id === params.id) || fallbackProducts[0];
+  const [products, setProducts] = useState<Product[]>(fallbackProducts);
+  const [singleProduct, setSingleProduct] = useState<Product>(localProduct);
+  const [size, setSize] = useState<string>("M");
   const [color, setColor] = useState<string>("black");
   const [quantity, setQuantity] = useState<number>(1);
-  const params = useParams<{ id: string }>();
   const dispatch = useAppDispatch();
   const { language, t } = useLanguage();
-
-  // defining HOC instances
-  const SelectInputUpgrade = WithSelectInputWrapper(StandardSelectInput);
-  const QuantityInputUpgrade = WithNumberInputWrapper(QuantityInput);
+  const detail = productDetails[singleProduct.category] || productDetails["luxury-collection"];
+  const galleryImages = useMemo(
+    () => [
+      singleProduct.image,
+      "single product image 1.jpg",
+      "single product image 2.jpg",
+      fallbackProducts[(Number(singleProduct.id) + 2) % fallbackProducts.length].image,
+    ],
+    [singleProduct.id, singleProduct.image]
+  );
 
   useEffect(() => {
+    const nextLocalProduct =
+      fallbackProducts.find((product) => product.id === params.id) || fallbackProducts[0];
+    setSingleProduct(nextLocalProduct);
+
     const fetchSingleProduct = async () => {
-      const response = await fetch(
-        `http://localhost:3000/products/${params.id}`
-      );
-      const data = await response.json();
-      setSingleProduct(data);
+      try {
+        const response = await fetch(`http://localhost:3000/products/${params.id}`);
+        if (!response.ok) return;
+        const data = (await response.json()) as Product;
+        if (data?.id) setSingleProduct(data);
+      } catch {
+        setSingleProduct(nextLocalProduct);
+      }
     };
 
     const fetchProducts = async () => {
-      const response = await fetch("http://localhost:3000/products");
-      const data = await response.json();
-      setProducts(data);
+      try {
+        const response = await fetch("http://localhost:3000/products");
+        if (!response.ok) return;
+        const data = (await response.json()) as Product[];
+        if (data.length) setProducts(data);
+      } catch {
+        setProducts(fallbackProducts);
+      }
     };
+
     fetchSingleProduct();
     fetchProducts();
   }, [params.id]);
 
   const handleAddToCart = () => {
-    if (singleProduct) {
-      dispatch(
-        addProductToTheCart({
-          id: singleProduct.id + size + color,
-          image: singleProduct.image,
-          title: singleProduct.title,
-          category: singleProduct.category,
-          price: singleProduct.price,
-          quantity,
-          size,
-          color,
-          popularity: singleProduct.popularity,
-          stock: singleProduct.stock,
-        })
-      );
-      toast.success(t("addedCart"));
-    }
+    dispatch(
+      addProductToTheCart({
+        id: singleProduct.id + size + color,
+        image: singleProduct.image,
+        title: singleProduct.title,
+        category: singleProduct.category,
+        price: singleProduct.price,
+        quantity,
+        size,
+        color,
+        popularity: singleProduct.popularity,
+        stock: singleProduct.stock,
+      })
+    );
+    toast.success(t("addedCart"));
   };
 
   return (
-    <div className="max-w-screen-2xl mx-auto px-5 max-[400px]:px-3">
-      <div className="grid grid-cols-3 gap-x-8 max-lg:grid-cols-1">
-        <div className="lg:col-span-2">
-          <img
-            src={`/assets/${singleProduct?.image}`}
-            alt={singleProduct?.title}
-          />
+    <div className="mx-auto max-w-screen-2xl px-5 py-10 max-[400px]:px-3">
+      <div className="grid gap-10 lg:grid-cols-[1.1fr_0.9fr] xl:gap-16">
+        <div className="grid gap-4 sm:grid-cols-[96px_1fr]">
+          <div className="order-2 flex gap-3 overflow-x-auto sm:order-1 sm:flex-col">
+            {galleryImages.map((image) => (
+              <button
+                key={image}
+                type="button"
+                className="h-24 w-24 shrink-0 overflow-hidden rounded-lg border border-gray-200 bg-gray-50 p-1"
+              >
+                <img
+                  src={`/assets/${image}`}
+                  alt={singleProduct.title}
+                  className="h-full w-full rounded-md object-cover"
+                />
+              </button>
+            ))}
+          </div>
+          <div className="order-1 overflow-hidden rounded-xl bg-gray-100 sm:order-2">
+            <img
+              src={`/assets/${singleProduct.image}`}
+              alt={singleProduct.title}
+              className="h-full min-h-[460px] w-full object-cover max-md:min-h-[340px]"
+            />
+          </div>
         </div>
-        <div className="w-full flex flex-col gap-5 mt-9">
-          <div className="flex flex-col gap-2">
-            <h1 className="text-4xl">{singleProduct?.title}</h1>
-            <div className="flex justify-between items-center">
-              <p className="text-base text-secondaryBrown">
-                {formatCategoryName(singleProduct?.category || "", language)}
+
+        <div className="flex w-full flex-col gap-7 rounded-xl border border-gray-200 bg-white p-6 shadow-sm lg:sticky lg:top-6 lg:self-start">
+          <div className="flex flex-col gap-4">
+            <div className="flex flex-wrap items-center justify-between gap-3">
+              <p className="rounded-full bg-gray-950 px-3 py-1 text-xs uppercase tracking-[0.22em] text-white">
+                {formatCategoryName(singleProduct.category, language)}
               </p>
-              <p className="text-base font-bold">${ singleProduct?.price }</p>
+              <div className="flex items-center gap-1 text-sm text-secondaryBrown">
+                {[...Array(5)].map((_, index) => (
+                  <FaStar key={index} />
+                ))}
+                <span className="ml-2 text-gray-500">128 reviews</span>
+              </div>
+            </div>
+            <div>
+              <h1 className="text-4xl font-semibold leading-tight text-gray-950 md:text-5xl">
+                {singleProduct.title}
+              </h1>
+              <p className="mt-3 text-base leading-7 text-gray-600">{detail.subtitle}</p>
+            </div>
+            <div className="flex items-end justify-between gap-4 border-y border-gray-200 py-5">
+              <p className="text-4xl font-semibold text-gray-950">
+                ${singleProduct.price.toLocaleString()}
+              </p>
+              <p className="text-sm text-secondaryBrown">
+                {singleProduct.stock > 0 ? `${singleProduct.stock} in stock` : "Out of stock"}
+              </p>
             </div>
           </div>
-          <div className="flex flex-col gap-2">
-            <SelectInputUpgrade
-              selectList={[
-                { id: "xs", value: "XS" },
-                { id: "sm", value: "SM" },
-                { id: "m", value: "M" },
-                { id: "lg", value: "LG" },
-                { id: "xl", value: "XL" },
-                { id: "2xl", value: "2XL" },
-              ]}
-              value={size}
-              onChange={(e: React.ChangeEvent<HTMLSelectElement>) =>
-                setSize(() => e.target.value)
-              }
-            />
-            <SelectInputUpgrade
-              selectList={[
-                { id: "black", value: "SİYAH" },
-                { id: "red", value: "KIRMIZI" },
-                { id: "blue", value: "MAVİ" },
-                { id: "white", value: "BEYAZ" },
-                { id: "rose", value: "PUDRA" },
-                { id: "green", value: "YEŞİL" },
-              ]}
-              value={color}
-              onChange={(e: React.ChangeEvent<HTMLSelectElement>) =>
-                setColor(() => e.target.value)
-              }
-            />
 
-            <QuantityInputUpgrade
-              value={quantity}
-              onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                setQuantity(() => parseInt(e.target.value))
-              }
-            />
+          <div className="space-y-5">
+            <div>
+              <div className="mb-3 flex items-center justify-between">
+                <p className="text-sm font-medium text-gray-950">Size</p>
+                <p className="text-sm text-gray-500">Model wears M</p>
+              </div>
+              <div className="grid grid-cols-5 gap-2">
+                {sizes.map((item) => (
+                  <button
+                    key={item}
+                    type="button"
+                    onClick={() => setSize(item)}
+                    className={`h-11 rounded-lg border text-sm transition ${
+                      size === item
+                        ? "border-gray-950 bg-gray-950 text-white"
+                        : "border-gray-200 bg-white text-gray-800 hover:border-gray-950"
+                    }`}
+                  >
+                    {item}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            <div>
+              <p className="mb-3 text-sm font-medium text-gray-950">Color</p>
+              <div className="flex flex-wrap gap-3">
+                {colors.map((item) => (
+                  <button
+                    key={item.id}
+                    type="button"
+                    onClick={() => setColor(item.id)}
+                    className={`flex items-center gap-2 rounded-full border px-3 py-2 text-sm transition ${
+                      color === item.id ? "border-gray-950" : "border-gray-200"
+                    }`}
+                  >
+                    <span className={`h-5 w-5 rounded-full border border-black/10 ${item.className}`} />
+                    {item.label}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            <div>
+              <p className="mb-3 text-sm font-medium text-gray-950">Quantity</p>
+              <div className="inline-flex h-11 overflow-hidden rounded-lg border border-gray-200">
+                <button
+                  type="button"
+                  onClick={() => setQuantity((value) => Math.max(1, value - 1))}
+                  className="w-11 text-xl text-gray-700 transition hover:bg-gray-100"
+                >
+                  -
+                </button>
+                <input
+                  type="number"
+                  min={1}
+                  value={quantity}
+                  onChange={(event) =>
+                    setQuantity(Math.max(1, Number(event.target.value) || 1))
+                  }
+                  className="h-full w-16 border-x border-gray-200 text-center text-sm outline-none"
+                />
+                <button
+                  type="button"
+                  onClick={() => setQuantity((value) => value + 1)}
+                  className="w-11 text-xl text-gray-700 transition hover:bg-gray-100"
+                >
+                  +
+                </button>
+              </div>
+            </div>
           </div>
+
           <div className="flex flex-col gap-3">
             <Button mode="brown" text={t("addToCart")} onClick={handleAddToCart} />
-            <p className="text-secondaryBrown text-sm text-right">
+            <p className="text-right text-sm text-secondaryBrown">
               {t("deliveryEstimate")}
             </p>
           </div>
+
+          <div className="grid gap-3 sm:grid-cols-3">
+            {["Free returns", "Secure checkout", "Gift packaging"].map((item) => (
+              <div key={item} className="rounded-lg bg-gray-50 p-3 text-center text-sm text-gray-600">
+                {item}
+              </div>
+            ))}
+          </div>
+
           <div>
-            {/* drowdown items */}
             <Dropdown dropdownTitle={t("description")}>
-              {t("descriptionText")}
+              {detail.story}
             </Dropdown>
 
             <Dropdown dropdownTitle={t("productDetails")}>
-              {t("productDetailsText")}
+              {`${detail.details.join(" ")} ${detail.fit} ${detail.materials}`}
             </Dropdown>
 
             <Dropdown dropdownTitle={t("deliveryDetails")}>
-              {t("deliveryDetailsText")}
+              {detail.delivery}
             </Dropdown>
           </div>
         </div>
       </div>
 
-      {/* similar products */}
       <div>
-        <h2 className="text-black/90 text-5xl mt-24 mb-12 text-center max-lg:text-4xl">
+        <h2 className="mb-12 mt-24 text-center text-5xl text-black/90 max-lg:text-4xl">
           {t("similarProducts")}
         </h2>
-        <div className="flex flex-wrap justify-between items-center gap-y-8 mt-12 max-xl:justify-start max-xl:gap-5 ">
-          {products.slice(0, 3).map((product: Product) => (
+        <div className="mt-12 flex flex-wrap items-center justify-between gap-y-8 max-xl:justify-start max-xl:gap-5">
+          {products
+            .filter((product) => product.id !== singleProduct.id)
+            .slice(0, 3)
+            .map((product: Product) => (
             <ProductItem
               key={product?.id}
               id={product?.id}

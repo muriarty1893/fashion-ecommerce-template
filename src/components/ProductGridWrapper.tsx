@@ -5,6 +5,9 @@ import {
   setShowingProducts,
   setTotalProducts,
 } from "../features/shop/shopSlice";
+import db from "../data/db.json";
+
+const fallbackProducts = db.products as Product[];
 
 const ProductGridWrapper = ({
   searchQuery,
@@ -23,7 +26,7 @@ const ProductGridWrapper = ({
     | ReactElement<{ products: Product[] }>
     | ReactElement<{ products: Product[] }>[];
 }) => {
-  const [products, setProducts] = useState<Product[]>([]);
+  const [products, setProducts] = useState<Product[]>(fallbackProducts);
   const { totalProducts } = useAppSelector((state) => state.shop);
   const dispatch = useAppDispatch();
 
@@ -34,8 +37,17 @@ const ProductGridWrapper = ({
       if (!query || query.length === 0) {
         query = "";
       }
-      const response = await customFetch("/products");
-      const allProducts = await response.data;
+      let allProducts = fallbackProducts;
+
+      try {
+        const response = await customFetch("/products");
+        if (response.data?.length) {
+          allProducts = response.data;
+        }
+      } catch {
+        allProducts = fallbackProducts;
+      }
+
       let searchedProducts = allProducts.filter((product: Product) =>
         product.title.toLowerCase().includes(query.toLowerCase())
       );

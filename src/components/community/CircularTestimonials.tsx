@@ -31,7 +31,7 @@ const CircularTestimonials = ({ testimonials }: CircularTestimonialsProps) => {
   };
 
   return (
-    <section className="mx-auto grid max-w-screen-xl gap-16 px-5 py-20 md:grid-cols-[0.95fr_1.05fr] md:items-center lg:gap-24">
+    <section className="mx-auto grid max-w-screen-xl gap-16 px-5 py-20 md:grid-cols-[0.95fr_1.05fr] md:items-center md:gap-24 lg:gap-32">
       <div className="relative h-[360px] md:h-[460px]">
         {visibleImages.map((testimonialIndex, position) => {
           const testimonial = testimonials[testimonialIndex];
@@ -58,7 +58,7 @@ const CircularTestimonials = ({ testimonials }: CircularTestimonialsProps) => {
         })}
       </div>
 
-      <div>
+      <div className="md:pl-4 lg:pl-8">
         <p className="text-sm uppercase tracking-[0.28em] text-secondaryBrown">
           {t("shopperSay")}
         </p>
