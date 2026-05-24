@@ -1,6 +1,4 @@
-import React from "react";
 import ProductItem from "./ProductItem";
-import { nanoid } from "nanoid";
 import { SearchX } from "lucide-react";
 
 const ProductGrid = ({ products }: { products?: Product[] }) => {
@@ -28,12 +26,12 @@ const ProductGrid = ({ products }: { products?: Product[] }) => {
   return (
     <div
       id="gridTop"
-      className="max-w-screen-2xl flex flex-wrap justify-between items-center gap-y-8 mx-auto mt-12 max-xl:justify-start max-xl:gap-5 px-5 max-[400px]:px-3"
+      className="mx-auto mt-8 flex max-w-screen-2xl flex-wrap items-start justify-between gap-x-5 gap-y-10 px-3 max-xl:justify-start"
     >
       {products &&
         products.map((product: Product) => (
           <ProductItem
-            key={nanoid()}
+            key={product.id}
             id={product.id}
             image={product.image}
             title={product.title}
@@ -51,5 +49,4 @@ const ProductGrid = ({ products }: { products?: Product[] }) => {
     </div>
   );
 };
-// Memoize the component to prevent unnecessary re-renders because of React.cloneElement
-export default React.memo(ProductGrid);
+export default ProductGrid;

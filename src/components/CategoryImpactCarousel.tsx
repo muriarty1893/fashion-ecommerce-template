@@ -16,40 +16,43 @@ const CategoryImpactCarousel = () => {
   const [activeIndex, setActiveIndex] = useState(0);
   const { t } = useLanguage();
 
-  const categories: CategorySlide[] = [
-    {
-      title: t("specialEdition"),
-      link: "special-edition",
-      image: "luxury category 1.png",
-      pieceCount: 5,
-      mood: "Evening focus",
-      copy: "Limited wardrobe pieces with sharper shapes, polished finishes, and a dressed-up mood.",
-    },
-    {
-      title: t("luxuryCollection"),
-      link: "luxury-collection",
-      image: "luxury category 2.png",
-      pieceCount: 5,
-      mood: "Premium dailywear",
-      copy: "Elevated staples selected for texture, structure, and repeat styling through the week.",
-    },
-    {
-      title: t("summerEdition"),
-      link: "summer-edition",
-      image: "luxury category 3.png",
-      pieceCount: 2,
-      mood: "Light layers",
-      copy: "Breathable warm-weather pieces with clean color, soft movement, and easy packing.",
-    },
-    {
-      title: t("uniqueCollection"),
-      link: "unique-collection",
-      image: "luxury category 4.png",
-      pieceCount: 6,
-      mood: "Statement edit",
-      copy: "Distinctive silhouettes that anchor an outfit while staying simple to wear.",
-    },
-  ];
+  const categories: CategorySlide[] = useMemo(
+    () => [
+      {
+        title: t("specialEdition"),
+        link: "special-edition",
+        image: "luxury category 1.png",
+        pieceCount: 5,
+        mood: "Evening focus",
+        copy: "Limited wardrobe pieces with sharper shapes, polished finishes, and a dressed-up mood.",
+      },
+      {
+        title: t("luxuryCollection"),
+        link: "luxury-collection",
+        image: "luxury category 2.png",
+        pieceCount: 5,
+        mood: "Premium dailywear",
+        copy: "Elevated staples selected for texture, structure, and repeat styling through the week.",
+      },
+      {
+        title: t("summerEdition"),
+        link: "summer-edition",
+        image: "luxury category 3.png",
+        pieceCount: 2,
+        mood: "Light layers",
+        copy: "Breathable warm-weather pieces with clean color, soft movement, and easy packing.",
+      },
+      {
+        title: t("uniqueCollection"),
+        link: "unique-collection",
+        image: "luxury category 4.png",
+        pieceCount: 6,
+        mood: "Statement edit",
+        copy: "Distinctive silhouettes that anchor an outfit while staying simple to wear.",
+      },
+    ],
+    [t],
+  );
 
   const activeCategory = categories[activeIndex];
   const queuedCategories = useMemo(

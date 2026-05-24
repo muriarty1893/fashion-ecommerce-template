@@ -6,7 +6,17 @@ import { Link } from "react-router-dom";
 import SidebarMenu from "./SidebarMenu";
 import { useState } from "react";
 import { Language, useLanguage } from "../i18n";
-import { Heart, ShieldCheck } from "lucide-react";
+import { Globe2, Heart, ShieldCheck } from "lucide-react";
+
+const navItems = [
+  { label: "Kadın", to: "/shop" },
+  { label: "Genç", to: "/shop/summer-edition" },
+  { label: "Erkek", to: "/shop/luxury-collection" },
+  { label: "Çocuk", to: "/shop/special-edition" },
+  { label: "Bebek", to: "/shop/unique-collection" },
+  { label: "Fırsatlar", to: "/shop" },
+  { label: "Sürdürülebilirlik", to: "/info/sustainability" },
+];
 
 const Header = () => {
   const [ isSidebarOpen, setIsSidebarOpen ] = useState(false);
@@ -14,36 +24,65 @@ const Header = () => {
 
   return (
     <>
-    <header className="sticky top-0 z-40 mx-auto flex max-w-screen-2xl items-center justify-between border-b border-gray-200 bg-white px-5 py-4 text-center text-gray-950 shadow-sm max-sm:px-5 max-[400px]:px-3">
-      <button
-        type="button"
-        aria-label={t("menuOpen")}
-        className="mr-20 grid h-10 w-10 place-items-center rounded-lg text-gray-950 transition hover:bg-gray-100 max-lg:mr-0"
-        onClick={() => setIsSidebarOpen(true)}
-      >
-        <HiBars3 className="text-2xl max-sm:text-xl" />
-      </button>
+    <header className="sticky top-0 z-40 border-b border-gray-100 bg-white text-black">
+      <div className="mx-auto grid h-[60px] max-w-screen-2xl grid-cols-[1fr_auto_1fr] items-center px-7 max-lg:flex max-lg:justify-between max-lg:px-4">
+        <nav className="flex items-center gap-7 text-sm font-medium max-lg:hidden">
+          {navItems.map((item) => (
+            <Link
+              key={item.label}
+              to={item.to}
+              className="transition hover:text-gray-500"
+            >
+              {item.label}
+            </Link>
+          ))}
+        </nav>
+
+        <button
+          type="button"
+          aria-label={t("menuOpen")}
+          className="hidden h-10 w-10 place-items-center text-black max-lg:grid"
+          onClick={() => setIsSidebarOpen(true)}
+        >
+          <HiBars3 className="text-2xl" />
+        </button>
+
       <Link
         to="/"
-        className="text-4xl font-light tracking-[1.08px] max-sm:text-3xl max-[400px]:text-2xl"
+        className="text-4xl font-black uppercase tracking-[-0.08em] max-sm:text-3xl"
       >
         {t("brand")}
       </Link>
-      <div className="flex gap-4 items-center max-sm:gap-2">
+
+      <div className="flex items-center justify-end gap-4 text-black max-sm:gap-3">
+        <Link
+          to="/search"
+          aria-label={t("search")}
+          className="flex h-10 items-center gap-2 border-b-2 border-black px-1 max-md:border-b-0"
+        >
+          <HiOutlineMagnifyingGlass className="text-2xl max-sm:text-xl" />
+          <span className="text-sm tracking-[0.2em] max-md:hidden">Ara</span>
+        </Link>
+        <Link
+          to="/info/club"
+          className="text-center text-xs font-black uppercase leading-[0.9] tracking-[-0.04em] max-sm:hidden"
+        >
+          Fashion
+          <br />
+          Club
+        </Link>
+        <Globe2 className="h-5 w-5 max-sm:hidden" />
         <select
           value={language}
           onChange={(event) => setLanguage(event.target.value as Language)}
-          className="h-9 rounded-lg border border-gray-300 bg-white px-2 text-sm text-gray-950 outline-none"
+          className="h-9 border-0 bg-white px-1 text-sm font-semibold text-black outline-none focus:ring-0 max-sm:hidden"
           aria-label="Language"
         >
           <option value="en">EN</option>
           <option value="de">DE</option>
           <option value="tr">TR</option>
         </select>
-        <Link to="/search" aria-label={t("search")}>
-          <HiOutlineMagnifyingGlass className="text-2xl max-sm:text-xl" />
-        </Link>
-        <Link to="/admin" aria-label="Admin">
+        <Link to="/admin" aria-label="Admin" className="max-sm:hidden">
           <ShieldCheck className="h-6 w-6 max-sm:h-5 max-sm:w-5" />
         </Link>
         <Link to="/wishlist" aria-label="Wishlist">
@@ -55,6 +94,7 @@ const Header = () => {
         <Link to="/cart" aria-label={t("cart")}>
           <HiOutlineShoppingBag className="text-2xl max-sm:text-xl" />
         </Link>
+      </div>
       </div>
     </header>
     <SidebarMenu isSidebarOpen={isSidebarOpen} setIsSidebarOpen={setIsSidebarOpen} />

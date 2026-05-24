@@ -2,7 +2,7 @@ import { Link } from "react-router-dom";
 import { formatCategoryName } from "../utils/formatCategoryName";
 import { motion } from "framer-motion";
 import { useLanguage } from "../i18n";
-import { ArrowUpRight, Heart, ShoppingBag } from "lucide-react";
+import { Heart, ShoppingBag } from "lucide-react";
 import { useAppDispatch, useAppSelector } from "../hooks";
 import { toggleWishlistProduct } from "../features/wishlist/wishlistSlice";
 
@@ -59,58 +59,60 @@ const ProductItem = ({
 
   return (
     <motion.div
-      whileHover={{ y: -6 }}
+      whileHover={{ y: -3 }}
       transition={{ type: "spring", stiffness: 260, damping: 24 }}
-      className="group w-[400px] max-md:w-[300px]"
+      className="group w-[31.8%] min-w-[290px] max-lg:w-[48%] max-sm:w-full"
     >
-      <div className="relative h-[430px] w-full overflow-hidden rounded-lg bg-gray-100 max-md:h-[340px]">
+      <div className="relative h-[520px] w-full overflow-hidden bg-gray-100 max-xl:h-[430px] max-md:h-[380px]">
         <Link to={`/product/${id}`} className="block h-full w-full">
           <img
             src={`/assets/${image}`}
             alt={title}
-            className="h-full w-full object-cover transition duration-500 group-hover:scale-105"
+            className="h-full w-full object-cover object-top transition duration-500 group-hover:scale-[1.03]"
           />
-          <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent p-4 pt-20 text-white">
-            <p className="text-xs uppercase tracking-[0.22em] text-white/75">
-              {formatCategoryName(category, language)}
-            </p>
-            <h2 className="mt-2 text-2xl font-semibold leading-tight">{title}</h2>
-          </div>
         </Link>
-        <div className="absolute inset-x-0 top-0 flex items-center justify-between gap-2 p-4">
+        <div className="absolute inset-x-0 top-0 flex items-start justify-between gap-2 p-3">
           <span
-            className={`rounded-full px-3 py-1 text-xs font-medium uppercase tracking-[0.16em] shadow-sm ${
+            className={`px-3 py-1 text-xs font-bold uppercase tracking-[0.16em] shadow-sm ${
               stock <= 0
-                ? "bg-gray-950 text-white"
+                ? "bg-black text-white"
                 : discountPrice
                   ? "bg-red-600 text-white"
-                  : "bg-white/90 text-gray-950"
+                  : "bg-white text-black"
             }`}
           >
-            {stock <= 0 ? "Sold out" : discountPrice ? "Sale" : "Drop"}
+            {stock <= 0 ? "Tükendi" : discountPrice ? "İndirim" : "Yeni"}
           </span>
           <button
             type="button"
             onClick={handleWishlistToggle}
-            className={`grid h-10 w-10 place-items-center rounded-full shadow-sm transition ${
+            className={`grid h-10 w-10 place-items-center rounded-full transition ${
               isWishlisted
-                ? "bg-secondaryBrown text-white"
-                : "bg-white text-gray-950 hover:bg-gray-950 hover:text-white"
+                ? "bg-black text-white"
+                : "bg-white text-black hover:bg-black hover:text-white"
             }`}
             aria-label={`${isWishlisted ? "Remove" : "Save"} ${title}`}
           >
             <Heart size={18} fill={isWishlisted ? "currentColor" : "none"} />
           </button>
-          <span className="grid h-10 w-10 place-items-center rounded-full bg-gray-950 text-white shadow-sm transition group-hover:bg-secondaryBrown">
-            <ArrowUpRight size={18} />
-          </span>
         </div>
       </div>
-      <div className="mt-4 flex items-start justify-between gap-4">
-        <div>
-          <p className="text-sm text-gray-500">{stock > 0 ? `${stock} available` : "Sold out"}</p>
-          <div className="mt-1 flex flex-wrap items-baseline gap-2">
-            <p className="text-2xl font-semibold text-gray-950">
+      <div className="mt-3 flex items-start justify-between gap-4">
+        <div className="min-w-0">
+          <p className="text-xs font-bold uppercase tracking-[0.2em] text-gray-500">
+            {formatCategoryName(category, language)}
+          </p>
+          <Link
+            to={`/product/${id}`}
+            className="mt-1 block truncate text-base font-semibold text-black transition hover:text-gray-500"
+          >
+            {title}
+          </Link>
+          <p className="mt-1 text-xs text-gray-500">
+            {stock > 0 ? `${stock} adet stokta` : "Tükendi"}
+          </p>
+          <div className="mt-2 flex flex-wrap items-baseline gap-2">
+            <p className="text-lg font-black text-black">
               ${activePrice.toLocaleString()}
             </p>
             {discountPrice && (
@@ -122,7 +124,7 @@ const ProductItem = ({
         </div>
         <Link
           to={`/product/${id}`}
-          className="inline-flex h-11 items-center gap-2 rounded-full bg-gray-950 px-4 text-sm font-medium text-white transition hover:bg-secondaryBrown"
+          className="inline-flex h-10 shrink-0 items-center gap-2 bg-black px-4 text-xs font-bold uppercase tracking-wide text-white transition hover:bg-gray-800"
         >
           <ShoppingBag size={16} />
           {t("viewProduct")}

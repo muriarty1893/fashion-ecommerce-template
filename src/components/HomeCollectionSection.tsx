@@ -7,10 +7,15 @@ const HomeCollectionSection = () => {
 
   return (
     <div>
-      <div className="mx-auto mt-24 flex max-w-screen-2xl items-center justify-between px-5 max-[400px]:px-3">
-        <h2 className="text-5xl font-normal tracking-[1.56px] text-black max-sm:text-4xl">
-          {t("collection")}
-        </h2>
+      <div className="mx-auto mt-20 flex max-w-screen-2xl items-end justify-between px-3 max-sm:mt-14">
+        <div>
+          <p className="text-xs font-bold uppercase tracking-[0.3em] text-gray-500">
+            Yeni Gelenler
+          </p>
+          <h2 className="mt-2 text-4xl font-black uppercase tracking-[-0.04em] text-black max-sm:text-3xl">
+            {t("collection")}
+          </h2>
+        </div>
       </div>
       <ProductGridWrapper limit={6}>
         <ProductGrid />
