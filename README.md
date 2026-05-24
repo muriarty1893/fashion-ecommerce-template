@@ -1,99 +1,153 @@
-<h1>Fashion eCommerce Shop in React.js, TypeScript and JSON server</h1>
+# Fashion E-commerce Demo
 
-<p>Fashion eCommerce template is a custom <b>fashion theme</b> completely designed and created from the ground up. The theme is designed in Figma by following foundational web design practices. <b>The fashion website template</b> was created using React.js best practices and techniques. The fashion website template is mainly a luxury fashion template for women, but it can also be used for men and kids. The fashion website template can also be used for any React eCommerce template or clothing eCommerce website. You can download it for free and test it yourself.</p>
-<p>The following technologies were used in design and development:</p>
-<ul>
-  <li><p>Figma - The leading collaborative design tool for building meaningful products.</p></li>
-  <li><p>React.js - Free and open-source front-end JavaScript library for building user interfaces based on components by Facebook Inc.</p></li>
-  <li><p>TypeScript - Free and open-source high-level programming language developed by Microsoft that adds static typing with optional type annotations to JavaScript.</p></li>
-  <li><p>JSON server - A lightweight and easy-to-use Node.js tool that simulates a RESTful API using a JSON file as the data source</p></li>
-  <li><p>Redux Toolkit - The official, opinionated, batteries-included toolset for efficient Redux development</p></li>
-  <li><p>Axios - Promise-based HTTP client for the browser and Node.js.</p></li>
-  <li><p>React Router - A popular library for routing in React applications</p></li>
-  <li><p>TailwindCSS - Utility-first CSS framework for rapidly building modern websites without ever leaving your HTML</p></li>
-  <li><p>React hot toast - Beautiful notifications for React applications</p></li>
-  <li><p>Concurrently - Package that allows you to run multiple scripts at the same time</p></li>
-</ul>
+A React + TypeScript fashion e-commerce storefront demo built with Vite, Tailwind CSS, Redux Toolkit, React Router, and `json-server`.
 
-<h2>More work</h2>
-<a href="https://www.kuzmanovicaleksandar.com" target="_blank">www.kuzmanovicaleksandar.com</a><br />
-<a href="https://github.com/Kuzma02/VSD-Official-Website" target="_blank">Car Parts Company Official Website in Next.js</a><br />
-<a href="https://github.com/Kuzma02/Luxury-Cosmetics-eCommerce-NextJS" target="_blank">Luxury Cosmetics eCommerce Shop in Next.js</a><br />
-<a href="https://github.com/Kuzma02/Electronics-eCommerce-Shop-With-Admin-Dashboard-NextJS-NodeJS" target="_blank">Electronics eCommerce Shop With Admin Dashboard in Next.js and Node.js</a><br />
-<a href="https://github.com/Kuzma02/Free-Admin-Dashboard" target="_blank">Premium Custom Admin Dashboard</a>
+This project is currently a frontend/local-demo application. It is useful for validating the customer and admin flows before connecting a real backend, database, payment provider, email service, and production auth.
 
-<h2>Video instructions YouTube tutorial for running the application:</h2>
-<a href="https://www.youtube.com/watch?v=M9DHiusoPOI">https://www.youtube.com/watch?v=M9DHiusoPOI</a>
+## Current Features
 
-<h2>Instructions - The Fashion Website Template</h2>
-<ol>
-  <li><p>To run the app you first need to download and install Node.js and npm on your computer. Here is a link to the tutorial that explains how to install them: <a href="https://www.youtube.com/watch?v=4FAtFwKVhn0" target="_blank">https://www.youtube.com/watch?v=4FAtFwKVhn0</a>. Also here is the link where you can download them: <a href="https://nodejs.org/en" target="_blank">https://nodejs.org/en</a></p></li>
-  <li><p>When you install all the programs you need on your computer you need to download the project. When you download the project, you need to extract it.</p></li>
-  <li><p>After you extract the project, you need to open the project folder in the command prompt or any terminal of choice. After it write the following command:</p></li>
-</ol>
+- Home page with hero, collections, categories, testimonials, and footer
+- Product listing with category pages, search, pagination, sorting, and filters
+- Product detail page with image gallery, size/color selection, stock-aware quantity, wishlist, buy now, reviews, size guide, and related products
+- Cart page with quantity updates, remove item, stock validation, discount code demo, shipping/tax/total summary, and empty state
+- Checkout page with contact, shipping, payment-method demo, order summary, terms checkbox, and local order creation
+- Wishlist page with saved products, remove, and move-to-cart actions
+- Login, register, profile, order history, and order detail demo pages
+- Static/demo info pages for about, contact, FAQ, shipping, returns, privacy, cookies, and terms
+- Admin demo at `/admin` with dashboard metrics, products, orders, customers, settings, inventory alerts, and best-selling products
+- Local JSON API using `src/data/db.json`
 
-```
+## Tech Stack
+
+- React 18
+- TypeScript
+- Vite
+- Tailwind CSS
+- Redux Toolkit
+- React Router
+- Axios
+- Framer Motion
+- Lucide React / React Icons
+- JSON Server
+
+## Getting Started
+
+Install dependencies:
+
+```bash
 npm install
 ```
 
-<p>4. After everything is installed you need to write the following command:</p>
+Start the storefront and local JSON API:
 
-```
+```bash
 npm start
 ```
 
-<h2>Project screenshots: </h2>
+Open the app:
 
-<h3>Landing page</h3>
+```txt
+http://localhost:5173/
+```
 
+The local JSON API runs at:
 
-![landing page](https://github.com/user-attachments/assets/9e1ef65f-ca21-4615-9820-f8f00204ad85)
+```txt
+http://localhost:3000/
+```
 
+Available JSON resources:
 
-<h3>Shop page</h3>
+```txt
+http://localhost:3000/products
+http://localhost:3000/orders
+http://localhost:3000/users
+```
 
+## Scripts
 
-![shop page](https://github.com/user-attachments/assets/e2935c47-9b53-4d26-9221-05451102260c)
+```bash
+npm run dev       # Start Vite only
+npm start         # Start Vite and json-server together
+npm run build     # Type-check and build production assets
+npm run preview   # Preview the production build
+npm run lint      # Run ESLint
+```
 
+## Demo Notes
 
-<h3>Single product page</h3>
+- The app still uses `json-server` and local/imported demo data.
+- Admin product changes are in-memory preview behavior.
+- Wishlist and cart are Redux state only and are not persisted after refresh.
+- Checkout is a demo flow. It does not process real card payments.
+- `SAVE10` is the demo cart discount code.
+- Some production fields are frontend-generated fallback values, such as demo ratings, colors, sizes, discount prices, and created dates.
 
+## Backend Readiness
 
-![single product page](https://github.com/user-attachments/assets/815eaa98-150d-4847-9339-5140745c66ba)
+The project is ready for backend planning and incremental API integration, but it is not yet a production backend drop-in.
 
+Recommended backend prep:
 
-<h3>Cart page</h3>
+1. Define API models for `Product`, `ProductVariant`, `Cart`, `Order`, `User`, `Address`, `Review`, and `Coupon`.
+2. Replace direct `src/data/db.json` imports and hardcoded `http://localhost:3000` calls with an environment-based API client.
+3. Decide whether product routes should use IDs or SEO slugs.
+4. Move auth, cart persistence, order creation, stock validation, and admin CRUD to backend APIs.
+5. Replace fake checkout/card fields with payment session creation and webhook verification.
+6. Add real image storage, email notifications, role-based admin authorization, and deployment configuration.
 
-![cart page](https://github.com/user-attachments/assets/164bcf3d-7984-4cc4-8f30-978069737ef6)
+## Suggested Backend API Surface
 
-<h3>Login page</h3>
+```txt
+GET    /products
+GET    /products/:id-or-slug
+POST   /products
+PATCH  /products/:id
+DELETE /products/:id
 
-![login page](https://github.com/user-attachments/assets/4903e803-9253-4212-be4d-cfa14e010fb3)
+POST   /auth/register
+POST   /auth/login
+POST   /auth/logout
+GET    /auth/me
 
+GET    /cart
+POST   /cart/items
+PATCH  /cart/items/:id
+DELETE /cart/items/:id
 
-<h3>Register page</h3>
+POST   /orders
+GET    /orders
+GET    /orders/:id
+PATCH  /orders/:id/status
 
-![register page](https://github.com/user-attachments/assets/a2c5f5cb-d03f-46c8-b43a-edd3876e3001)
+POST   /checkout/session
+POST   /payments/webhook
+```
 
-<h3>User profile page</h3>
+## Project Structure
 
-![user profile page](https://github.com/user-attachments/assets/5786d46b-29a8-44c2-ad52-3a794ce954c9)
+```txt
+src/
+  actions/          React Router actions
+  assets/           Local demo images
+  axios/            API client
+  components/       Shared UI components
+  data/             json-server demo database
+  features/         Redux slices
+  hooks/            Typed Redux hooks
+  pages/            Route pages
+  utils/            Form and formatting helpers
+```
 
+## Production Exclusions
 
-<h3>Order history page</h3>
+Do not treat this demo as production commerce without adding:
 
-![order history page](https://github.com/user-attachments/assets/57259617-6c4e-4efd-84ad-961ee0a9b9e4)
-
-
-<h3>Single order history page</h3>
-
-![single order history page](https://github.com/user-attachments/assets/f2abffa8-9af3-478f-a888-ed3fbd007315)
-
-<h3>Checkout page</h3>
-
-![checkout page](https://github.com/user-attachments/assets/0dc47027-1bf7-4b96-bff2-73867d6892a9)
-
-
-<h3>Search page</h3>
-
-![search page](https://github.com/user-attachments/assets/a62c71be-5424-4bf5-a660-352d507764a5)
+- Real backend validation and persistence
+- Secure auth and password hashing
+- Payment provider sessions and webhook verification
+- Server-side stock validation
+- Admin role checks
+- Email notifications
+- Legal policy review
+- HTTPS, environment variables, logging, backups, and deployment hardening

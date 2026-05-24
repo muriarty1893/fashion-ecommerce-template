@@ -1,0 +1,10 @@
+# This project currently has no Python runtime dependencies.
+#
+# The application is a Node.js/Vite React demo. Use package.json for the
+# JavaScript dependency graph:
+#
+#   npm install
+#   npm start
+#
+# Keep this file so future backend work can add Python dependencies if the
+# backend is implemented with FastAPI, Django, or another Python framework.
