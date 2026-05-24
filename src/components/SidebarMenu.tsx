@@ -84,6 +84,12 @@ const SidebarMenu = ({
             >
               Admin
             </Link>
+            <Link
+              to="/wishlist"
+              className="py-2 border-y border-secondaryBrown w-full block flex justify-center"
+            >
+              Wishlist
+            </Link>
             {loginStatus ? (
               <>
                 <button

@@ -23,14 +23,16 @@ const ShowingPagination = ({
         <p className="text-xl max-sm:text-lg">
           {t("showing")} {showingProducts} {t("of")} {totalProducts} {t("productsShown")}
         </p>
-        <Button
-          text={t("showMore")}
-          mode="white"
-          onClick={() => {
-            setCurrentPage(page + 1);
-            navigate(`/shop${category ? `/${category}` : ""}?page=${page + 1}`);
-          }}
-        />
+        {showingProducts < totalProducts && (
+          <Button
+            text={t("showMore")}
+            mode="white"
+            onClick={() => {
+              setCurrentPage(page + 1);
+              navigate(`/shop${category ? `/${category}` : ""}?page=${page + 1}`);
+            }}
+          />
+        )}
         <a href="#gridTop" className="flex justify-center items-center text-xl gap-2 max-sm:text-lg">
           {t("backTop")} <HiChevronUp />
         </a>

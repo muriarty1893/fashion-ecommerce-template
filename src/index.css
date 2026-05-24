@@ -2,6 +2,10 @@
 @tailwind components;
 @tailwind utilities;
 
+.filter-input {
+  @apply h-10 rounded border border-gray-300 bg-white px-3 text-sm text-gray-950 outline-none transition focus:border-gray-950;
+}
+
 body {
   font-family: "Merriweather", serif;
 }

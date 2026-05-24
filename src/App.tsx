@@ -15,6 +15,7 @@ import {
   SingleOrderHistory,
   SingleProduct,
   UserProfile,
+  Wishlist,
 } from "./pages";
 import { checkoutAction, searchAction } from "./actions/index";
 import { shopCategoryLoader } from "./pages/Shop";
@@ -46,6 +47,10 @@ const router = createBrowserRouter([
       {
         path: "cart",
         element: <Cart />,
+      },
+      {
+        path: "wishlist",
+        element: <Wishlist />,
       },
       {
         path: "info/:slug",

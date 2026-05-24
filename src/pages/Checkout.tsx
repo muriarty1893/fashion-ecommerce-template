@@ -70,6 +70,9 @@ const Checkout = () => {
   const shipping = productsInCart.length > 0 ? selectedShippingMethod.price : 0;
   const tax = (subtotal - discount) * 0.08;
   const total = subtotal - discount + shipping + tax;
+  const hasInvalidItems = productsInCart.some(
+    (product) => product.stock <= 0 || product.quantity > product.stock
+  );
 
   const orderItems = useMemo(
     () =>
@@ -89,7 +92,21 @@ const Checkout = () => {
       data,
       products: productsInCart,
       subtotal,
+      discount,
+      shipping,
+      tax,
+      total,
     };
+
+    if (productsInCart.length === 0) {
+      toast.error("Your cart is empty.");
+      return;
+    }
+
+    if (hasInvalidItems) {
+      toast.error("Update sold-out or overstock items before checkout.");
+      return;
+    }
 
     if (!checkCheckoutFormData(checkoutData)) return;
 
@@ -554,7 +571,7 @@ const Checkout = () => {
 
           <button
             type="submit"
-            disabled={!agreeToTerms || productsInCart.length === 0}
+            disabled={!agreeToTerms || productsInCart.length === 0 || hasInvalidItems}
             className="inline-flex h-12 items-center justify-center gap-2 rounded-lg bg-gray-950 px-5 text-sm font-medium text-white transition hover:bg-secondaryBrown disabled:cursor-not-allowed disabled:bg-gray-300"
           >
             <Lock className="h-4 w-4" />

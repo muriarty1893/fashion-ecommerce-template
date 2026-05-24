@@ -105,6 +105,9 @@ const Admin = () => {
   const lowStockLimit = Number(settings.lowStockThreshold) || 20;
   const lowStockCount = products.filter((product) => product.stock < lowStockLimit).length;
   const averageOrder = orders.length > 0 ? Math.round(revenue / orders.length) : 0;
+  const bestSellingProducts = [...products]
+    .sort((a, b) => b.popularity - a.popularity)
+    .slice(0, 5);
 
   const setView = (view: AdminView) => {
     setActiveView(view);
@@ -289,7 +292,7 @@ const Admin = () => {
                   />
                 </section>
 
-                <section className="mt-5 grid gap-5 xl:grid-cols-[1.1fr_0.9fr]">
+                <section className="mt-5 grid gap-5 xl:grid-cols-3">
                   <AdminPanel
                     title="Recent Orders"
                     subtitle="Newest fake orders from local data."
@@ -329,6 +332,36 @@ const Admin = () => {
                             </span>
                           </div>
                         ))}
+                    </div>
+                  </AdminPanel>
+                  <AdminPanel
+                    title="Best-selling Products"
+                    subtitle="Demo ranking based on product popularity."
+                  >
+                    <div className="divide-y divide-[#d8dbe0]">
+                      {bestSellingProducts.map((product, index) => (
+                        <div
+                          key={product.id}
+                          className="flex items-center justify-between gap-3 py-3"
+                        >
+                          <div className="flex min-w-0 items-center gap-3">
+                            <span className="grid h-8 w-8 shrink-0 place-items-center rounded bg-[#f8f9fa] text-sm font-semibold text-[#3c4b64]">
+                              {index + 1}
+                            </span>
+                            <div className="min-w-0">
+                              <p className="truncate font-medium text-[#3c4b64]">
+                                {product.title}
+                              </p>
+                              <p className="text-sm text-[#768192]">
+                                Popularity {product.popularity}
+                              </p>
+                            </div>
+                          </div>
+                          <span className="font-medium text-[#3c4b64]">
+                            ${product.price.toLocaleString()}
+                          </span>
+                        </div>
+                      ))}
                     </div>
                   </AdminPanel>
                 </section>

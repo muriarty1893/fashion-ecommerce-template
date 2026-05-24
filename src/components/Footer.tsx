@@ -31,6 +31,9 @@ const Footer = () => {
               {t("ourBrand")}
             </Link>
             <FooterLink to="/info/company">{t("companyFooter")}</FooterLink>
+            <FooterLink to="/info/about">About</FooterLink>
+            <FooterLink to="/info/contact">Contact</FooterLink>
+            <FooterLink to="/info/faq">FAQ</FooterLink>
             <FooterLink to="/info/excellence">{t("excellence")}</FooterLink>
             <FooterLink to="/info/awards">{t("awards")}</FooterLink>
             <FooterLink to="/info/our-story">{t("ourStory")}</FooterLink>
@@ -53,7 +56,7 @@ const Footer = () => {
           <p className="flex justify-center items-center text-2xl gap-2 max-sm:text-xl">{t("locale")} <HiChevronDown /></p>
           <h2 className="text-6xl font-light text-center max-sm:text-5xl">{t("brand")}</h2>
           <p className="text-base text-center max-sm:text-sm">{t("rights")}</p>
-          <ul className="flex justify-center items-center gap-7 text-base max-sm:text-sm max-[350px]:flex-col max-[350px]:gap-5">
+          <ul className="flex flex-wrap justify-center items-center gap-7 text-base max-sm:text-sm max-[350px]:flex-col max-[350px]:gap-5">
             <li>
               <FooterLink to="/info/cookies">{t("cookies")}</FooterLink>
             </li>
@@ -61,7 +64,13 @@ const Footer = () => {
               <FooterLink to="/info/privacy">{t("privacy")}</FooterLink>
             </li>
             <li>
-              <FooterLink to="/info/legal">{t("legal")}</FooterLink>
+              <FooterLink to="/info/shipping">Shipping</FooterLink>
+            </li>
+            <li>
+              <FooterLink to="/info/returns">Returns</FooterLink>
+            </li>
+            <li>
+              <FooterLink to="/info/terms">{t("legal")}</FooterLink>
             </li>
           </ul>
         </div>

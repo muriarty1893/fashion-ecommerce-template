@@ -22,9 +22,10 @@ export const cartSlice = createSlice({
       if (product) {
         state.productsInCart = state.productsInCart.map((product) => {
           if (product.id === action.payload.id) {
+            const nextQuantity = product.quantity + action.payload.quantity;
             return {
               ...product,
-              quantity: product.quantity + action.payload.quantity,
+              quantity: Math.min(nextQuantity, product.stock),
             };
           }
           return product;
@@ -49,9 +50,12 @@ export const cartSlice = createSlice({
     ) => {
       state.productsInCart = state.productsInCart.map((product) => {
         if (product.id === action.payload.id) {
+          const nextQuantity = Number.isFinite(action.payload.quantity)
+            ? action.payload.quantity
+            : 1;
           return {
             ...product,
-            quantity: action.payload.quantity,
+            quantity: Math.min(Math.max(1, nextQuantity), product.stock || 1),
           };
         }
         return product;

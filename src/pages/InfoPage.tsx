@@ -228,6 +228,124 @@ const pages: Record<string, InfoPageContent> = {
       },
     ],
   },
+  about: {
+    title: "About MODE",
+    eyebrow: "About",
+    intro:
+      "MODE is a demo luxury fashion storefront built around edited collections, simple product comparison, and a direct checkout flow.",
+    highlights: [
+      "Curated fashion collections",
+      "Premium product presentation",
+      "Practical shopping tools",
+    ],
+    sections: [
+      {
+        title: "Our point of view",
+        body:
+          "This demo brand focuses on fewer, stronger pieces with clear imagery, fit notes, and category-led discovery.",
+      },
+      {
+        title: "Demo status",
+        body:
+          "The content is sample storefront copy and should be replaced with real brand, sourcing, and service details before launch.",
+      },
+    ],
+  },
+  contact: {
+    title: "Contact",
+    eyebrow: "Support",
+    intro:
+      "Reach the demo client service team for order questions, sizing help, return guidance, or product availability.",
+    highlights: ["hello@example.com", "Monday-Friday support", "Order and product help"],
+    sections: [
+      {
+        title: "Client service",
+        body:
+          "A production store should connect this page to a real support inbox, contact form, or help desk.",
+      },
+      {
+        title: "Response times",
+        body:
+          "Most support requests are handled within one business day in this demo policy.",
+      },
+    ],
+  },
+  faq: {
+    title: "FAQ",
+    eyebrow: "Help",
+    intro:
+      "Common demo answers for sizing, checkout, shipping, returns, and account support.",
+    highlights: ["Sizing help", "Checkout guidance", "Order support"],
+    sections: [
+      {
+        title: "Can I change my order?",
+        body:
+          "In this demo, contact support as soon as possible. Real stores should define a specific cancellation window.",
+      },
+      {
+        title: "Which payment methods are supported?",
+        body:
+          "The current storefront uses demo checkout only. Real payment providers require backend verification and webhook handling.",
+      },
+    ],
+  },
+  shipping: {
+    title: "Shipping Policy",
+    eyebrow: "Delivery",
+    intro:
+      "Demo shipping options include standard, express, and overnight delivery choices at checkout.",
+    highlights: ["Tracked delivery", "Multiple speeds", "Delivery protection"],
+    sections: [
+      {
+        title: "Processing",
+        body:
+          "Orders are usually prepared within 1-3 business days before carrier pickup in this demo policy.",
+      },
+      {
+        title: "Tracking",
+        body:
+          "A production store should send tracking by email and show tracking inside the customer account.",
+      },
+    ],
+  },
+  returns: {
+    title: "Return Policy",
+    eyebrow: "Returns",
+    intro:
+      "Demo returns are accepted for unworn items in original condition within a typical return window.",
+    highlights: ["Unworn items", "Original packaging", "Exchange support"],
+    sections: [
+      {
+        title: "Eligibility",
+        body:
+          "Items should be clean, unused, and returned with tags. Final-sale items should be clearly marked before checkout.",
+      },
+      {
+        title: "Refunds",
+        body:
+          "A real store should refund only after receiving and inspecting returned goods.",
+      },
+    ],
+  },
+  terms: {
+    title: "Terms of Service",
+    eyebrow: "Legal",
+    intro:
+      "These demo terms describe general purchasing, content, and storefront availability expectations.",
+    highlights: ["Demo checkout", "Product availability", "Store policies"],
+    sections: [
+      {
+        title: "Purchases",
+        body:
+          "Prices, stock, and promotional terms can change. Production orders should be confirmed by the backend after payment verification.",
+      },
+      {
+        title: "Use of the site",
+        body:
+          "Product images, copy, and brand assets are demo content unless replaced with licensed production materials.",
+      },
+    ],
+  },
   legal: {
     title: "Legal Notes",
     eyebrow: "Legal",

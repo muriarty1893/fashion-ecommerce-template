@@ -3,15 +3,17 @@ import {
   Dropdown,
   ProductItem,
 } from "../components";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { useEffect, useMemo, useState } from "react";
 import { addProductToTheCart } from "../features/cart/cartSlice";
-import { useAppDispatch } from "../hooks";
+import { toggleWishlistProduct } from "../features/wishlist/wishlistSlice";
+import { useAppDispatch, useAppSelector } from "../hooks";
 import { formatCategoryName } from "../utils/formatCategoryName";
 import toast from "react-hot-toast";
 import { useLanguage } from "../i18n";
 import db from "../data/db.json";
 import { FaStar } from "react-icons/fa";
+import { Heart } from "lucide-react";
 
 type ProductDetail = {
   subtitle: string;
@@ -23,6 +25,8 @@ type ProductDetail = {
 };
 
 const fallbackProducts = db.products as Product[];
+const fallbackColors = ["black", "ivory", "cocoa", "sage"];
+const fallbackSizes = ["XS", "S", "M", "L", "XL"];
 
 const productDetails: Record<string, ProductDetail> = {
   "special-edition": {
@@ -79,7 +83,6 @@ const productDetails: Record<string, ProductDetail> = {
   },
 };
 
-const sizes = ["XS", "S", "M", "L", "XL"];
 const colors = [
   { id: "black", label: "Black", className: "bg-gray-950" },
   { id: "ivory", label: "Ivory", className: "bg-stone-100" },
@@ -96,9 +99,21 @@ const SingleProduct = () => {
   const [size, setSize] = useState<string>("M");
   const [color, setColor] = useState<string>("black");
   const [quantity, setQuantity] = useState<number>(1);
+  const [selectedImage, setSelectedImage] = useState(localProduct.image);
   const dispatch = useAppDispatch();
+  const navigate = useNavigate();
+  const wishlistProducts = useAppSelector((state) => state.wishlist.products);
   const { language, t } = useLanguage();
   const detail = productDetails[singleProduct.category] || productDetails["luxury-collection"];
+  const isSoldOut = singleProduct.stock <= 0;
+  const activePrice = singleProduct.discountPrice || singleProduct.price;
+  const productSizes = singleProduct.sizes || fallbackSizes;
+  const productColors = colors.filter((item) =>
+    (singleProduct.colors || fallbackColors).includes(item.id)
+  );
+  const isWishlisted = wishlistProducts.some(
+    (product) => product.id === singleProduct.id
+  );
   const galleryImages = useMemo(
     () => [
       singleProduct.image,
@@ -113,13 +128,17 @@ const SingleProduct = () => {
     const nextLocalProduct =
       fallbackProducts.find((product) => product.id === params.id) || fallbackProducts[0];
     setSingleProduct(nextLocalProduct);
+    setSelectedImage(nextLocalProduct.image);
 
     const fetchSingleProduct = async () => {
       try {
         const response = await fetch(`http://localhost:3000/products/${params.id}`);
         if (!response.ok) return;
         const data = (await response.json()) as Product;
-        if (data?.id) setSingleProduct(data);
+        if (data?.id) {
+          setSingleProduct(data);
+          setSelectedImage(data.image);
+        }
       } catch {
         setSingleProduct(nextLocalProduct);
       }
@@ -141,14 +160,21 @@ const SingleProduct = () => {
   }, [params.id]);
 
   const handleAddToCart = () => {
+    if (isSoldOut) {
+      toast.error("This item is sold out.");
+      return;
+    }
+
+    const safeQuantity = Math.min(quantity, singleProduct.stock);
     dispatch(
       addProductToTheCart({
         id: singleProduct.id + size + color,
+        productId: singleProduct.id,
         image: singleProduct.image,
         title: singleProduct.title,
         category: singleProduct.category,
-        price: singleProduct.price,
-        quantity,
+        price: activePrice,
+        quantity: safeQuantity,
         size,
         color,
         popularity: singleProduct.popularity,
@@ -156,6 +182,11 @@ const SingleProduct = () => {
       })
     );
     toast.success(t("addedCart"));
+  };
+
+  const handleBuyNow = () => {
+    handleAddToCart();
+    if (!isSoldOut) navigate("/checkout");
   };
 
   return (
@@ -167,7 +198,10 @@ const SingleProduct = () => {
               <button
                 key={image}
                 type="button"
-                className="h-24 w-24 shrink-0 overflow-hidden rounded-lg border border-gray-200 bg-gray-50 p-1"
+                onClick={() => setSelectedImage(image)}
+                className={`h-24 w-24 shrink-0 overflow-hidden rounded-lg border bg-gray-50 p-1 ${
+                  selectedImage === image ? "border-gray-950" : "border-gray-200"
+                }`}
               >
                 <img
                   src={`/assets/${image}`}
@@ -179,7 +213,7 @@ const SingleProduct = () => {
           </div>
           <div className="order-1 overflow-hidden rounded-xl bg-gray-100 sm:order-2">
             <img
-              src={`/assets/${singleProduct.image}`}
+              src={`/assets/${selectedImage}`}
               alt={singleProduct.title}
               className="h-full min-h-[460px] w-full object-cover max-md:min-h-[340px]"
             />
@@ -206,9 +240,16 @@ const SingleProduct = () => {
               <p className="mt-3 text-base leading-7 text-gray-600">{detail.subtitle}</p>
             </div>
             <div className="flex items-end justify-between gap-4 border-y border-gray-200 py-5">
-              <p className="text-4xl font-semibold text-gray-950">
-                ${singleProduct.price.toLocaleString()}
-              </p>
+              <div>
+                <p className="text-4xl font-semibold text-gray-950">
+                  ${activePrice.toLocaleString()}
+                </p>
+                {singleProduct.discountPrice && (
+                  <p className="mt-1 text-lg text-gray-400 line-through">
+                    ${singleProduct.price.toLocaleString()}
+                  </p>
+                )}
+              </div>
               <p className="text-sm text-secondaryBrown">
                 {singleProduct.stock > 0 ? `${singleProduct.stock} in stock` : "Out of stock"}
               </p>
@@ -222,7 +263,7 @@ const SingleProduct = () => {
                 <p className="text-sm text-gray-500">Model wears M</p>
               </div>
               <div className="grid grid-cols-5 gap-2">
-                {sizes.map((item) => (
+                {productSizes.map((item) => (
                   <button
                     key={item}
                     type="button"
@@ -242,7 +283,7 @@ const SingleProduct = () => {
             <div>
               <p className="mb-3 text-sm font-medium text-gray-950">Color</p>
               <div className="flex flex-wrap gap-3">
-                {colors.map((item) => (
+                {productColors.map((item) => (
                   <button
                     key={item.id}
                     type="button"
@@ -271,15 +312,24 @@ const SingleProduct = () => {
                 <input
                   type="number"
                   min={1}
+                  max={singleProduct.stock || 1}
                   value={quantity}
                   onChange={(event) =>
-                    setQuantity(Math.max(1, Number(event.target.value) || 1))
+                    setQuantity(
+                      Math.min(
+                        singleProduct.stock || 1,
+                        Math.max(1, Number(event.target.value) || 1)
+                      )
+                    )
                   }
                   className="h-full w-16 border-x border-gray-200 text-center text-sm outline-none"
                 />
                 <button
                   type="button"
-                  onClick={() => setQuantity((value) => value + 1)}
+                  onClick={() =>
+                    setQuantity((value) => Math.min(singleProduct.stock, value + 1))
+                  }
+                  disabled={isSoldOut || quantity >= singleProduct.stock}
                   className="w-11 text-xl text-gray-700 transition hover:bg-gray-100"
                 >
                   +
@@ -289,7 +339,31 @@ const SingleProduct = () => {
           </div>
 
           <div className="flex flex-col gap-3">
-            <Button mode="brown" text={t("addToCart")} onClick={handleAddToCart} />
+            <div className="grid gap-3 sm:grid-cols-[1fr_1fr_auto]">
+              <Button mode="brown" text={isSoldOut ? "Sold out" : t("addToCart")} onClick={handleAddToCart} />
+              <Button mode="white" text="Buy now" onClick={handleBuyNow} />
+              <button
+                type="button"
+                onClick={() =>
+                  dispatch(
+                    toggleWishlistProduct({
+                      ...singleProduct,
+                      discountPrice: singleProduct.discountPrice,
+                      sizes: productSizes,
+                      colors: productColors.map((item) => item.id),
+                    })
+                  )
+                }
+                className={`grid h-12 w-12 place-items-center rounded border transition ${
+                  isWishlisted
+                    ? "border-secondaryBrown bg-secondaryBrown text-white"
+                    : "border-gray-200 text-gray-950 hover:border-gray-950"
+                }`}
+                aria-label={`${isWishlisted ? "Remove from" : "Add to"} wishlist`}
+              >
+                <Heart className="h-5 w-5" fill={isWishlisted ? "currentColor" : "none"} />
+              </button>
+            </div>
             <p className="text-right text-sm text-secondaryBrown">
               {t("deliveryEstimate")}
             </p>
@@ -315,9 +389,42 @@ const SingleProduct = () => {
             <Dropdown dropdownTitle={t("deliveryDetails")}>
               {detail.delivery}
             </Dropdown>
+
+            <Dropdown dropdownTitle="Size guide">
+              XS: 32-34, S: 36, M: 38, L: 40, XL: 42. If between sizes,
+              choose based on preferred fit: smaller for a sharp silhouette,
+              larger for easier drape.
+            </Dropdown>
           </div>
         </div>
       </div>
+
+      <section className="mt-20 grid gap-5 lg:grid-cols-3">
+        {[
+          {
+            name: "Mina Aydin",
+            text: "The fabric feels substantial and the fit notes matched what arrived.",
+          },
+          {
+            name: "Elif Kaya",
+            text: "The gallery made it easy to compare texture before ordering.",
+          },
+          {
+            name: "Sara Demir",
+            text: "Premium presentation, simple checkout, and quick delivery updates.",
+          },
+        ].map((review) => (
+          <article key={review.name} className="rounded-lg border border-gray-200 bg-white p-5">
+            <div className="mb-3 flex text-secondaryBrown">
+              {[...Array(5)].map((_, index) => (
+                <FaStar key={index} />
+              ))}
+            </div>
+            <p className="text-gray-600">"{review.text}"</p>
+            <p className="mt-4 font-semibold text-gray-950">{review.name}</p>
+          </article>
+        ))}
+      </section>
 
       <div>
         <h2 className="mb-12 mt-24 text-center text-5xl text-black/90 max-lg:text-4xl">
@@ -335,8 +442,13 @@ const SingleProduct = () => {
               title={product?.title}
               category={product?.category}
               price={product?.price}
+              discountPrice={product?.discountPrice}
               popularity={product?.popularity}
               stock={product?.stock}
+              rating={product?.rating}
+              colors={product?.colors}
+              sizes={product?.sizes}
+              createdAt={product?.createdAt}
             />
           ))}
         </div>

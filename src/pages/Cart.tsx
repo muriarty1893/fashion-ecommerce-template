@@ -3,6 +3,7 @@ import {
   HiXMark as XMarkIcon,
   HiQuestionMarkCircle as QuestionMarkCircleIcon,
 } from "react-icons/hi2";
+import { useMemo, useState } from "react";
 import { useAppDispatch, useAppSelector } from "../hooks";
 import { Link } from "react-router-dom";
 import {
@@ -16,6 +17,40 @@ const Cart = () => {
   const { productsInCart, subtotal } = useAppSelector((state) => state.cart);
   const dispatch = useAppDispatch();
   const { t } = useLanguage();
+  const [discountCode, setDiscountCode] = useState("");
+  const [appliedDiscount, setAppliedDiscount] = useState("");
+  const discount = appliedDiscount ? subtotal * 0.1 : 0;
+  const shipping = subtotal === 0 ? 0 : 5;
+  const tax = (subtotal - discount) / 5;
+  const total = subtotal === 0 ? 0 : subtotal - discount + tax + shipping;
+  const hasInvalidItems = useMemo(
+    () =>
+      productsInCart.some(
+        (product) => product.stock <= 0 || product.quantity > product.stock
+      ),
+    [productsInCart]
+  );
+
+  if (productsInCart.length === 0) {
+    return (
+      <main className="mx-auto grid min-h-[520px] max-w-screen-2xl place-items-center px-5 py-16">
+        <div className="max-w-md text-center">
+          <h1 className="text-3xl font-semibold text-gray-950">
+            Your cart is empty.
+          </h1>
+          <p className="mt-3 text-gray-500">
+            Start shopping now and build a cart from the latest collection.
+          </p>
+          <Link
+            to="/shop"
+            className="mt-7 inline-flex h-12 items-center justify-center rounded bg-gray-950 px-6 text-sm font-medium text-white transition hover:bg-secondaryBrown"
+          >
+            Start shopping
+          </Link>
+        </div>
+      </main>
+    );
+  }
 
   return (
     <div className="bg-white mx-auto max-w-screen-2xl px-5 max-[400px]:px-3">
@@ -49,7 +84,7 @@ const Cart = () => {
                         <div className="flex justify-between">
                           <h3 className="text-sm">
                             <Link
-                              to={`/product/${product.id}`}
+                              to={`/product/${product.productId || product.id}`}
                               className="font-medium text-gray-700 hover:text-gray-800"
                             >
                               {product.title}
@@ -84,7 +119,14 @@ const Cart = () => {
                               })
                             );
                           }}
+                          min={1}
+                          max={product.stock || 1}
                         />
+                        {product.quantity >= product.stock && (
+                          <p className="mt-2 text-xs text-secondaryBrown">
+                            Maximum available quantity selected.
+                          </p>
+                        )}
 
                         <div className="absolute right-0 top-0">
                           <button
@@ -145,6 +187,40 @@ const Cart = () => {
                   ${subtotal}
                 </dd>
               </div>
+              <div className="border-t border-gray-200 pt-4">
+                <label htmlFor="discountCode" className="text-sm text-gray-600">
+                  Discount code
+                </label>
+                <div className="mt-2 flex gap-2">
+                  <input
+                    id="discountCode"
+                    value={discountCode}
+                    onChange={(event) => setDiscountCode(event.target.value)}
+                    placeholder="SAVE10"
+                    className="h-10 min-w-0 flex-1 rounded border border-gray-300 px-3 text-sm outline-none focus:border-gray-950"
+                  />
+                  <button
+                    type="button"
+                    onClick={() => {
+                      if (discountCode.trim().toUpperCase() === "SAVE10") {
+                        setAppliedDiscount("SAVE10");
+                        toast.success("Discount applied.");
+                      } else {
+                        setAppliedDiscount("");
+                        toast.error("Use demo code SAVE10.");
+                      }
+                    }}
+                    className="h-10 rounded bg-gray-950 px-3 text-sm font-medium text-white"
+                  >
+                    Apply
+                  </button>
+                </div>
+                {appliedDiscount && (
+                  <p className="mt-2 text-sm text-green-700">
+                    SAVE10 applied: -${discount.toFixed(2)}
+                  </p>
+                )}
+              </div>
               <div className="flex items-center justify-between border-t border-gray-200 pt-4">
                 <dt className="flex items-center text-sm text-gray-600">
                   <span>{t("shippingEstimate")}</span>
@@ -162,7 +238,7 @@ const Cart = () => {
                   </a>
                 </dt>
                 <dd className="text-sm font-medium text-gray-900">
-                  ${subtotal === 0 ? 0 : 5.0}
+                  ${shipping.toFixed(2)}
                 </dd>
               </div>
               <div className="flex items-center justify-between border-t border-gray-200 pt-4">
@@ -182,7 +258,7 @@ const Cart = () => {
                   </a>
                 </dt>
                 <dd className="text-sm font-medium text-gray-900">
-                  ${subtotal / 5}
+                  ${tax.toFixed(2)}
                 </dd>
               </div>
               <div className="flex items-center justify-between border-t border-gray-200 pt-4">
@@ -190,21 +266,28 @@ const Cart = () => {
                   {t("orderTotal")}
                 </dt>
                 <dd className="text-base font-medium text-gray-900">
-                  ${subtotal === 0 ? 0 : subtotal + subtotal / 5 + 5}
+                  ${total.toFixed(2)}
                 </dd>
               </div>
             </dl>
 
-            {productsInCart.length > 0 && (
-              <div className="mt-6">
+              <div className="mt-6 space-y-3">
+                {hasInvalidItems && (
+                  <p className="rounded bg-red-50 p-3 text-sm text-red-700">
+                    Update sold-out or overstock items before checkout.
+                  </p>
+                )}
                 <Link
-                  to="/checkout"
-                  className="text-white bg-secondaryBrown text-center text-xl font-normal tracking-[0.6px] leading-[72px] w-full h-12 flex items-center justify-center max-md:text-base"
+                  to={hasInvalidItems ? "/cart" : "/checkout"}
+                  className={`text-white text-center text-xl font-normal tracking-[0.6px] leading-[72px] w-full h-12 flex items-center justify-center max-md:text-base ${
+                    hasInvalidItems
+                      ? "pointer-events-none bg-gray-300"
+                      : "bg-secondaryBrown"
+                  }`}
                 >
                   {t("checkout")}
                 </Link>
               </div>
-            )}
           </section>
         </form>
       </div>
