@@ -366,7 +366,7 @@ const Admin = () => {
             aria-label="Close admin menu"
             onClick={() => setMobileMenuOpen(false)}
           />
-          <aside className="relative h-full w-80 max-w-[86vw] bg-slate-950 text-white shadow-2xl">
+          <aside className="relative h-full w-80 max-w-[86vw] bg-[#0f172a] text-white shadow-2xl">
             <div className="flex h-16 items-center justify-between border-b border-white/10 px-5">
               <span className="text-lg font-black tracking-tight">MODE Admin</span>
               <button
@@ -403,11 +403,11 @@ const AdminSidebar = ({
   activeView: AdminView;
   setView: (view: AdminView) => void;
 }) => (
-  <aside className="hidden w-72 shrink-0 border-r border-slate-200 bg-slate-950 text-white lg:block">
+  <aside className="hidden w-72 shrink-0 border-r border-slate-900 bg-[#0f172a] text-white lg:block">
     <div className="flex h-16 items-center border-b border-white/10 px-6">
       <div>
-        <p className="text-lg font-black tracking-tight">MODE Admin</p>
-        <p className="text-xs text-white/45">Fashion commerce operations</p>
+        <p className="text-lg font-black tracking-tight text-white">MODE Admin</p>
+        <p className="text-xs text-slate-300">Fashion commerce operations</p>
       </div>
     </div>
     <nav className="space-y-1 px-3 py-4 text-sm">
@@ -421,11 +421,11 @@ const AdminSidebar = ({
         />
       ))}
     </nav>
-    <div className="mx-4 mt-6 rounded-3xl border border-white/10 bg-white/5 p-4">
+    <div className="mx-4 mt-6 rounded-3xl border border-slate-700 bg-slate-900 p-4">
       <p className="text-xs font-bold uppercase tracking-[0.18em] text-amber-300">
         Demo data
       </p>
-      <p className="mt-2 text-sm leading-6 text-white/68">
+      <p className="mt-2 text-sm leading-6 text-slate-200">
         Local admin tools for json-server products, orders, customers, and
         settings previews.
       </p>
@@ -832,12 +832,12 @@ const AdminNavItem = ({
     onClick={onClick}
     className={`flex w-full items-center gap-3 rounded-2xl px-3 py-3 text-left font-semibold transition ${
       active
-        ? "bg-white text-slate-950 shadow-sm"
-        : "text-white/68 hover:bg-white/10 hover:text-white"
+        ? "bg-blue-600 text-white shadow-sm shadow-blue-950/30"
+        : "text-slate-200 hover:bg-slate-800 hover:text-white"
     }`}
   >
-    {icon}
-    <span>{label}</span>
+    <span className="text-current">{icon}</span>
+    <span className="text-current">{label}</span>
   </button>
 );
 
