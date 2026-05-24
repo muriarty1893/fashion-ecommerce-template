@@ -6,6 +6,18 @@ export default {
       colors: {
         secondaryBrown: "#8A8475",
       },
+      fontFamily: {
+        sans: [
+          "Montserrat",
+          "ui-sans-serif",
+          "system-ui",
+          "-apple-system",
+          "BlinkMacSystemFont",
+          "Segoe UI",
+          "sans-serif",
+        ],
+        serif: ["Cormorant", "Georgia", "serif"],
+      },
     },
   },
   plugins: ["@tailwindcss/forms"],

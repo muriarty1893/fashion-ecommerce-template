@@ -11,20 +11,20 @@ import { ArrowRight, Mail, Phone, Smartphone } from "lucide-react";
 
 const footerColumns = [
   {
-    title: "Kurumsal",
-    links: ["Hakkımızda", "Koton Blog", "Projelerimiz", "Kariyer", "İletişim"],
+    title: "Company",
+    links: ["About", "Editorial", "Sustainability", "Careers", "Contact"],
   },
   {
-    title: "Yardım",
-    links: ["Sıkça Sorulan Sorular", "İptal & İade", "Sipariş Takibi", "Mağazalarımız", "Kampanyalar"],
+    title: "Customer Care",
+    links: ["Help Center", "Returns", "Order Tracking", "Shipping", "Size Guide"],
   },
   {
-    title: "Popüler Kategoriler",
-    links: ["Kadın Elbise", "Kadın Pantolon", "Keten Elbise", "Abiye Elbise", "Erkek Gömlek"],
+    title: "Categories",
+    links: ["Dresses", "New Arrivals", "Luxury Collection", "Essentials", "Accessories"],
   },
   {
-    title: "Koleksiyonlar",
-    links: ["Yeni Gelenler", "Çok Satanlar", "Ofis Stili", "Plaj Giyim", "Koton Jeans"],
+    title: "Collections",
+    links: ["Best Sellers", "Occasion Edit", "Atelier Drop", "Resort", "Private Sale"],
   },
 ];
 
@@ -32,26 +32,31 @@ const Footer = () => {
   const { t } = useLanguage();
 
   return (
-    <footer className="mt-20 border-t border-gray-200 bg-[#f5f5f5] text-black">
-      <div className="mx-auto grid max-w-screen-2xl grid-cols-2 gap-10 px-8 py-10 max-lg:grid-cols-1 max-sm:px-4">
+    <footer className="border-t border-stone-200 bg-[#1c1917] text-white">
+      <div className="mx-auto grid max-w-screen-2xl grid-cols-2 gap-10 px-8 py-12 max-lg:grid-cols-1 max-sm:px-4">
         <div>
-          <h2 className="text-xl font-black">En güncel moda haberleri için kaydolun</h2>
-          <p className="mt-2 text-sm text-gray-600">
-            Herkesten önce kaçırılmaması gereken haberleri alın.
+          <p className="text-xs font-bold uppercase tracking-[0.28em] text-[#ead7bd]">
+            Join the edit
           </p>
-          <form className="mt-6 flex max-w-md">
+          <h2 className="mt-3 max-w-xl font-serif text-4xl font-semibold">
+            Receive private drops, styling notes, and restock alerts.
+          </h2>
+          <p className="mt-3 max-w-lg text-sm leading-7 text-white/65">
+            Demo signup only. No production email service is connected.
+          </p>
+          <form className="mt-6 flex max-w-md rounded-full border border-white/20 bg-white/8 p-1">
             <label className="sr-only" htmlFor="newsletter-email">
               Email
             </label>
             <input
               id="newsletter-email"
               type="email"
-              placeholder="E-posta adresiniz"
-              className="h-12 min-w-0 flex-1 border border-black bg-white px-4 text-sm outline-none focus:ring-0"
+              placeholder="Email address"
+              className="h-12 min-w-0 flex-1 border-0 bg-transparent px-4 text-sm text-white placeholder:text-white/45 outline-none focus:ring-0"
             />
             <button
               type="button"
-              className="grid h-12 w-16 place-items-center bg-black text-white"
+              className="grid h-12 w-12 shrink-0 place-items-center rounded-full bg-white text-stone-950 transition hover:bg-[#ead7bd]"
               aria-label="Subscribe"
             >
               <ArrowRight className="h-5 w-5" />
@@ -61,28 +66,29 @@ const Footer = () => {
 
         <div className="flex items-start justify-between gap-8 max-sm:flex-col">
           <div>
-            <h2 className="text-xl font-black">Alışveriş Uygulamamızı İndirin</h2>
-            <p className="mt-2 text-sm text-gray-600">
-              Mobil uygulamamızı keşfedin, size özel fırsatları yakalayın.
+            <h2 className="font-serif text-3xl font-semibold">Shop anywhere</h2>
+            <p className="mt-3 max-w-md text-sm leading-7 text-white/65">
+              Keep wishlists, cart review, and order status close across your
+              demo shopping flow.
             </p>
             <div className="mt-5 flex gap-2">
-              <span className="inline-flex h-10 items-center gap-2 border border-black px-4 text-xs font-bold">
+              <span className="inline-flex h-11 items-center gap-2 rounded-full border border-white/20 px-4 text-xs font-bold">
                 <Smartphone className="h-4 w-4" />
                 App Store
               </span>
-              <span className="inline-flex h-10 items-center gap-2 border border-black px-4 text-xs font-bold">
+              <span className="inline-flex h-11 items-center gap-2 rounded-full border border-white/20 px-4 text-xs font-bold">
                 <Smartphone className="h-4 w-4" />
                 Google Play
               </span>
             </div>
           </div>
-          <div className="border-l border-gray-300 pl-8 max-sm:border-l-0 max-sm:pl-0">
-            <h3 className="text-lg font-black">Bize Ulaşın</h3>
-            <p className="mt-4 flex items-center gap-2 text-sm font-bold">
+          <div className="border-l border-white/15 pl-8 max-sm:border-l-0 max-sm:pl-0">
+            <h3 className="text-lg font-black">Contact</h3>
+            <p className="mt-4 flex items-center gap-2 text-sm font-bold text-white/82">
               <Phone className="h-4 w-4" />
               0850 208 71 71
             </p>
-            <p className="mt-3 flex items-center gap-2 text-sm font-bold">
+            <p className="mt-3 flex items-center gap-2 text-sm font-bold text-white/82">
               <Mail className="h-4 w-4" />
               ekermuratinfo@gmail.com
             </p>
@@ -90,10 +96,12 @@ const Footer = () => {
         </div>
       </div>
 
-      <div className="mx-auto grid max-w-screen-2xl grid-cols-4 gap-10 border-t border-gray-200 px-8 py-10 max-lg:grid-cols-2 max-sm:grid-cols-1 max-sm:px-4">
+      <div className="mx-auto grid max-w-screen-2xl grid-cols-4 gap-10 border-t border-white/10 px-8 py-10 max-lg:grid-cols-2 max-sm:grid-cols-1 max-sm:px-4">
         {footerColumns.map((column) => (
           <div key={column.title}>
-            <h3 className="text-sm font-black uppercase">{column.title}</h3>
+            <h3 className="text-sm font-black uppercase tracking-[0.16em] text-[#ead7bd]">
+              {column.title}
+            </h3>
             <div className="mt-4 grid gap-2">
               {column.links.map((link) => (
                 <FooterLink key={link} to="/info/about">
@@ -105,14 +113,14 @@ const Footer = () => {
         ))}
       </div>
 
-      <div className="mx-auto flex max-w-screen-2xl items-center justify-between border-t border-gray-200 px-8 py-7 max-sm:flex-col max-sm:gap-5 max-sm:px-4">
+      <div className="mx-auto flex max-w-screen-2xl items-center justify-between border-t border-white/10 px-8 py-7 max-sm:flex-col max-sm:gap-5 max-sm:px-4">
         <div className="flex items-center gap-3">
           {[FaFacebookF, FaInstagram, FaLinkedinIn, FaYoutube, FaTiktok].map(
             (Icon, index) => (
               <Link
                 key={index}
                 to="/info/social"
-                className="grid h-9 w-9 place-items-center rounded-full bg-black text-white transition hover:bg-gray-700"
+                className="grid h-10 w-10 place-items-center rounded-full bg-white/10 text-white transition hover:bg-white hover:text-stone-950"
               >
                 <Icon className="h-4 w-4" />
               </Link>
@@ -120,10 +128,10 @@ const Footer = () => {
           )}
         </div>
         <div className="text-center">
-          <h2 className="text-4xl font-black uppercase tracking-[-0.08em]">
+          <h2 className="font-serif text-4xl font-bold uppercase tracking-normal">
             {t("brand")}
           </h2>
-          <p className="mt-1 text-xs text-gray-500">{t("rights")}</p>
+          <p className="mt-1 text-xs text-white/45">{t("rights")}</p>
         </div>
       </div>
     </footer>
@@ -139,7 +147,7 @@ const FooterLink = ({
 }) => (
   <Link
     to={to}
-    className="text-sm text-gray-600 transition hover:text-black"
+    className="text-sm text-white/62 transition hover:text-white"
   >
     {children}
   </Link>

@@ -18,9 +18,9 @@ const ShowingPagination = ({
   const { t } = useLanguage();
 
   return (
-    <div className="px-5 max-[400px]:px-3 mt-12 mb-24">
-      <div className="flex flex-col gap-6 justify-center items-center w-1/2 mx-auto max-sm:w-3/4 max-sm:gap-5">
-        <p className="text-xl max-sm:text-lg">
+    <div className="mb-16 mt-12 px-5 max-[400px]:px-3">
+      <div className="mx-auto flex max-w-xl flex-col items-center justify-center gap-5 rounded-3xl border border-stone-200 bg-white p-6 text-center shadow-[0_18px_45px_rgba(28,25,23,0.05)]">
+        <p className="text-base font-semibold text-stone-700">
           {t("showing")} {showingProducts} {t("of")} {totalProducts} {t("productsShown")}
         </p>
         {showingProducts < totalProducts && (
@@ -33,7 +33,7 @@ const ShowingPagination = ({
             }}
           />
         )}
-        <a href="#gridTop" className="flex justify-center items-center text-xl gap-2 max-sm:text-lg">
+        <a href="#gridTop" className="flex items-center justify-center gap-2 text-sm font-bold text-stone-600 transition hover:text-stone-950">
           {t("backTop")} <HiChevronUp />
         </a>
       </div>

@@ -10,21 +10,22 @@ const Dropdown = ({
 }) => {
   const [isOpen, setIsOpen] = useState(false);
   return (
-    <div>
-      <div
-        className="flex justify-between items-center border-b border-black/30 h-14 cursor-pointer"
+    <div className="border-b border-stone-200">
+      <button
+        type="button"
+        className="flex h-14 w-full cursor-pointer items-center justify-between text-left transition hover:text-[#9b6b43] focus:outline-none focus:ring-2 focus:ring-stone-950 focus:ring-offset-2"
         onClick={() => setIsOpen((prev) => !prev)}
       >
-        <p className="text-black/95 text-base">{dropdownTitle}</p>
+        <span className="text-sm font-bold text-stone-950">{dropdownTitle}</span>
         {isOpen ? (
           <HiChevronUp className="text-base" />
         ) : (
           <HiChevronDown className="text-base" />
         )}
-      </div>
+      </button>
       {isOpen && (
-        <div className="mt-4">
-          <p className="text-sm">{children}</p>
+        <div className="pb-5">
+          <p className="text-sm leading-7 text-stone-600">{children}</p>
         </div>
       )}
     </div>

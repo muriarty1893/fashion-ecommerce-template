@@ -9,13 +9,12 @@ import { Language, useLanguage } from "../i18n";
 import { Globe2, Heart, ShieldCheck } from "lucide-react";
 
 const navItems = [
-  { label: "Kadın", to: "/shop" },
-  { label: "Genç", to: "/shop/summer-edition" },
-  { label: "Erkek", to: "/shop/luxury-collection" },
-  { label: "Çocuk", to: "/shop/special-edition" },
-  { label: "Bebek", to: "/shop/unique-collection" },
-  { label: "Fırsatlar", to: "/shop" },
-  { label: "Sürdürülebilirlik", to: "/info/sustainability" },
+  { label: "New Arrivals", to: "/shop" },
+  { label: "Dresses", to: "/shop/special-edition" },
+  { label: "Luxury", to: "/shop/luxury-collection" },
+  { label: "Essentials", to: "/shop/unique-collection" },
+  { label: "Accessories", to: "/shop/summer-edition" },
+  { label: "Sale", to: "/shop" },
 ];
 
 const Header = () => {
@@ -24,14 +23,14 @@ const Header = () => {
 
   return (
     <>
-    <header className="sticky top-0 z-40 border-b border-gray-100 bg-white text-black">
-      <div className="mx-auto grid h-[60px] max-w-screen-2xl grid-cols-[1fr_auto_1fr] items-center px-7 max-lg:flex max-lg:justify-between max-lg:px-4">
-        <nav className="flex items-center gap-7 text-sm font-medium max-lg:hidden">
+    <header className="sticky top-0 z-40 border-b border-stone-200/80 bg-white/95 text-stone-950 shadow-[0_1px_20px_rgba(28,25,23,0.04)] backdrop-blur">
+      <div className="mx-auto grid h-[68px] max-w-screen-2xl grid-cols-[1fr_auto_1fr] items-center px-7 max-lg:flex max-lg:justify-between max-lg:px-4">
+        <nav className="flex items-center gap-7 text-sm font-semibold max-xl:gap-5 max-lg:hidden">
           {navItems.map((item) => (
             <Link
               key={item.label}
               to={item.to}
-              className="transition hover:text-gray-500"
+              className="transition hover:text-[#9b6b43] focus:outline-none focus:ring-2 focus:ring-stone-950 focus:ring-offset-4"
             >
               {item.label}
             </Link>
@@ -49,23 +48,23 @@ const Header = () => {
 
       <Link
         to="/"
-        className="text-4xl font-black uppercase tracking-[-0.08em] max-sm:text-3xl"
+        className="font-serif text-4xl font-bold uppercase tracking-normal text-stone-950 max-sm:text-3xl"
       >
         {t("brand")}
       </Link>
 
-      <div className="flex items-center justify-end gap-4 text-black max-sm:gap-3">
+      <div className="flex items-center justify-end gap-4 text-stone-950 max-sm:gap-3">
         <Link
           to="/search"
           aria-label={t("search")}
-          className="flex h-10 items-center gap-2 border-b-2 border-black px-1 max-md:border-b-0"
+          className="flex h-10 items-center gap-2 rounded-full border border-stone-200 px-3 transition hover:border-stone-950 hover:bg-stone-50 focus:outline-none focus:ring-2 focus:ring-stone-950 focus:ring-offset-2 max-md:border-0 max-md:px-0"
         >
           <HiOutlineMagnifyingGlass className="text-2xl max-sm:text-xl" />
-          <span className="text-sm tracking-[0.2em] max-md:hidden">Ara</span>
+          <span className="text-sm font-semibold max-md:hidden">Search</span>
         </Link>
         <Link
           to="/info/club"
-          className="text-center text-xs font-black uppercase leading-[0.9] tracking-[-0.04em] max-sm:hidden"
+          className="text-center text-xs font-black uppercase leading-[0.9] tracking-wide text-[#9b6b43] max-sm:hidden"
         >
           Fashion
           <br />
@@ -75,7 +74,7 @@ const Header = () => {
         <select
           value={language}
           onChange={(event) => setLanguage(event.target.value as Language)}
-          className="h-9 border-0 bg-white px-1 text-sm font-semibold text-black outline-none focus:ring-0 max-sm:hidden"
+          className="h-9 border-0 bg-transparent px-1 text-sm font-semibold text-stone-950 outline-none focus:ring-0 max-sm:hidden"
           aria-label="Language"
         >
           <option value="en">EN</option>

@@ -1,9 +1,9 @@
 import { Link, useNavigate } from "react-router-dom";
-import { Button } from "../components";
 import { checkRegisterFormData } from "../utils/checkRegisterFormData";
 import customFetch from "../axios/custom";
 import toast from "react-hot-toast";
 import { useLanguage } from "../i18n";
+import { ArrowRight, ShieldCheck, Sparkles } from "lucide-react";
 
 const Register = () => {
   const navigate = useNavigate();
@@ -11,13 +11,10 @@ const Register = () => {
 
   const handleRegister = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    // Get form data
     const formData = new FormData(e.currentTarget);
     const data = Object.fromEntries(formData);
-    // Check if form data is valid
     if (!checkRegisterFormData(data)) return;
 
-    // Check if user with this email already exists
     const users = await customFetch.get("/users");
     const userExists = users.data.some(
       (user: { email: string }) => user.email === data.email
@@ -27,7 +24,6 @@ const Register = () => {
       return;
     }
 
-    // Register user
     const response = await customFetch.post("/users", data);
     if (response.status === 201) {
       toast.success(t("registerSuccess"));
@@ -38,76 +34,135 @@ const Register = () => {
   };
 
   return (
-    <div className="max-w-screen-2xl mx-auto pt-24 flex items-center justify-center">
-      <form
-        onSubmit={handleRegister}
-        className="max-w-5xl mx-auto flex flex-col gap-5 max-sm:gap-3 items-center justify-center max-sm:px-5"
-      >
-        <h2 className="text-5xl text-center mb-5 font-thin max-md:text-4xl max-sm:text-3xl max-[450px]:text-xl max-[450px]:font-normal">
-          {t("registerTitle")}
-        </h2>
-        <div className="flex flex-col gap-2 w-full">
-          <div className="flex flex-col gap-1">
-            <label htmlFor="name">{t("name")}</label>
-            <input
-              type="text"
-              className="bg-white border border-black text-xl py-2 px-3 w-full outline-none max-[450px]:text-base"
-              placeholder={t("namePlaceholder")}
-              id="name"
-              name="name"
-            />
+    <main className="bg-[#fbfaf8] px-5 py-10 md:px-8">
+      <div className="mx-auto grid max-w-screen-2xl gap-8 lg:grid-cols-[0.95fr_1.05fr]">
+        <section className="relative min-h-[680px] overflow-hidden rounded-[2rem] bg-stone-900 text-white">
+          <img
+            src="/assets/luxury fashion 7 2.png"
+            alt="Editorial fashion membership visual"
+            className="absolute inset-0 h-full w-full object-cover object-top opacity-70"
+          />
+          <div className="absolute inset-0 bg-gradient-to-t from-stone-950 via-stone-950/35 to-transparent" />
+          <div className="relative flex h-full min-h-[680px] flex-col justify-end p-7 sm:p-10">
+            <span className="inline-flex w-fit items-center gap-2 rounded-full bg-white/12 px-4 py-2 text-xs font-bold uppercase tracking-[0.18em] backdrop-blur">
+              <Sparkles className="h-4 w-4" />
+              Fashion Club
+            </span>
+            <h1 className="mt-5 max-w-xl font-serif text-5xl font-semibold leading-tight sm:text-6xl">
+              Create an account for faster checkout and saved edits.
+            </h1>
+            <p className="mt-4 max-w-lg leading-8 text-white/78">
+              Save wishlists, view demo orders, and move through checkout with a
+              cleaner shopping flow.
+            </p>
           </div>
-          <div className="flex flex-col gap-1">
-            <label htmlFor="lastname">{t("lastname")}</label>
-            <input
-              type="text"
-              className="bg-white border border-black text-xl py-2 px-3 w-full outline-none max-[450px]:text-base"
-              placeholder={t("lastnamePlaceholder")}
-              id="lastname"
-              name="lastname"
-            />
-          </div>
-          <div className="flex flex-col gap-1">
-            <label htmlFor="email">{t("email")}</label>
-            <input
-              type="email"
-              className="bg-white border border-black text-xl py-2 px-3 w-full outline-none max-[450px]:text-base"
-              placeholder={t("emailPlaceholder")}
-              id="email"
-              name="email"
-            />
-          </div>
-          <div className="flex flex-col gap-1">
-            <label htmlFor="password">{t("password")}</label>
-            <input
-              type="password"
-              className="bg-white border border-black text-xl py-2 px-3 w-full outline-none max-[450px]:text-base"
-              placeholder={t("passwordPlaceholder")}
-              id="password"
-              name="password"
-            />
-          </div>
-          <div className="flex flex-col gap-1">
-            <label htmlFor="confirmPassword">{t("confirmPassword")}</label>
-            <input
-              type="password"
-              className="bg-white border border-black text-xl py-2 px-3 w-full outline-none max-[450px]:text-base"
-              placeholder={t("confirmPasswordPlaceholder")}
-              id="confirmPassword"
-              name="confirmPassword"
-            />
-          </div>
-        </div>
-        <Button type="submit" text={t("register")} mode="brown" />
-        <Link
-          to="/login"
-          className="text-xl max-md:text-lg max-[450px]:text-sm"
-        >
-          {t("alreadyAccount")}{" "}
-          <span className="text-secondaryBrown">{t("loginNow")}</span>.
-        </Link>
-      </form>
-    </div>
+        </section>
+
+        <section className="flex items-center">
+          <form
+            onSubmit={handleRegister}
+            className="w-full rounded-[2rem] border border-stone-200 bg-white p-6 shadow-[0_24px_80px_rgba(28,25,23,0.07)] sm:p-8 lg:p-10"
+          >
+            <p className="text-xs font-bold uppercase tracking-[0.28em] text-[#9b6b43]">
+              New customer
+            </p>
+            <h2 className="mt-3 font-serif text-4xl font-semibold text-stone-950 sm:text-5xl">
+              {t("createAccount")}
+            </h2>
+            <p className="mt-3 leading-7 text-stone-600">
+              This is a local demo account flow connected to the json-server API.
+            </p>
+
+            <div className="mt-8 grid gap-4 sm:grid-cols-2">
+              <FormField label={t("firstName")} htmlFor="name">
+                <input
+                  type="text"
+                  className="checkout-input rounded-full border-stone-300 bg-[#fbfaf8]"
+                  placeholder={t("namePlaceholder")}
+                  id="name"
+                  name="name"
+                />
+              </FormField>
+              <FormField label={t("lastName")} htmlFor="lastname">
+                <input
+                  type="text"
+                  className="checkout-input rounded-full border-stone-300 bg-[#fbfaf8]"
+                  placeholder={t("lastnamePlaceholder")}
+                  id="lastname"
+                  name="lastname"
+                />
+              </FormField>
+              <div className="sm:col-span-2">
+                <FormField label={t("email")} htmlFor="email">
+                  <input
+                    type="email"
+                    className="checkout-input rounded-full border-stone-300 bg-[#fbfaf8]"
+                    placeholder={t("emailPlaceholder")}
+                    id="email"
+                    name="email"
+                  />
+                </FormField>
+              </div>
+              <FormField label={t("password")} htmlFor="password">
+                <input
+                  type="password"
+                  className="checkout-input rounded-full border-stone-300 bg-[#fbfaf8]"
+                  placeholder={t("passwordPlaceholder")}
+                  id="password"
+                  name="password"
+                />
+              </FormField>
+              <FormField label={t("confirmPassword")} htmlFor="confirmPassword">
+                <input
+                  type="password"
+                  className="checkout-input rounded-full border-stone-300 bg-[#fbfaf8]"
+                  placeholder={t("confirmPasswordPlaceholder")}
+                  id="confirmPassword"
+                  name="confirmPassword"
+                />
+              </FormField>
+            </div>
+
+            <button
+              type="submit"
+              className="mt-7 inline-flex h-[52px] w-full items-center justify-center gap-2 rounded-full bg-stone-950 px-7 py-4 text-sm font-bold text-white transition hover:bg-[#9b6b43] focus:outline-none focus:ring-2 focus:ring-stone-950 focus:ring-offset-4"
+            >
+              {t("register")}
+              <ArrowRight className="h-4 w-4" />
+            </button>
+
+            <div className="mt-5 flex items-center gap-2 rounded-2xl bg-[#fbfaf8] p-4 text-sm text-stone-600">
+              <ShieldCheck className="h-5 w-5 shrink-0 text-[#9b6b43]" />
+              Demo credentials stay in the local JSON server, not a production
+              auth provider.
+            </div>
+
+            <p className="mt-6 text-center text-sm text-stone-600">
+              {t("alreadyAccount")}{" "}
+              <Link to="/login" className="font-bold text-[#9b6b43]">
+                {t("loginNow")}
+              </Link>
+            </p>
+          </form>
+        </section>
+      </div>
+    </main>
   );
 };
+
+const FormField = ({
+  label,
+  htmlFor,
+  children,
+}: {
+  label: string;
+  htmlFor: string;
+  children: React.ReactNode;
+}) => (
+  <label htmlFor={htmlFor} className="grid gap-2 text-sm font-bold text-stone-700">
+    {label}
+    {children}
+  </label>
+);
+
 export default Register;

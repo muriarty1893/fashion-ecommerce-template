@@ -1,7 +1,6 @@
 import {
   HiCheck as CheckIcon,
   HiXMark as XMarkIcon,
-  HiQuestionMarkCircle as QuestionMarkCircleIcon,
 } from "react-icons/hi2";
 import { useMemo, useState } from "react";
 import { useAppDispatch, useAppSelector } from "../hooks";
@@ -12,6 +11,7 @@ import {
 } from "../features/cart/cartSlice";
 import toast from "react-hot-toast";
 import { useLanguage } from "../i18n";
+import { LockKeyhole, ShoppingBag, Tag, Truck } from "lucide-react";
 
 const Cart = () => {
   const { productsInCart, subtotal } = useAppSelector((state) => state.cart);
@@ -33,17 +33,20 @@ const Cart = () => {
 
   if (productsInCart.length === 0) {
     return (
-      <main className="mx-auto grid min-h-[520px] max-w-screen-2xl place-items-center px-5 py-16">
-        <div className="max-w-md text-center">
-          <h1 className="text-3xl font-semibold text-gray-950">
+      <main className="grid min-h-[620px] place-items-center bg-[#fbfaf8] px-5 py-16">
+        <div className="max-w-md rounded-[2rem] border border-stone-200 bg-white p-8 text-center shadow-[0_24px_80px_rgba(28,25,23,0.07)]">
+          <span className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-[#f8f0e7] text-[#9b6b43]">
+            <ShoppingBag className="h-7 w-7" />
+          </span>
+          <h1 className="mt-6 font-serif text-4xl font-semibold text-stone-950">
             Your cart is empty.
           </h1>
-          <p className="mt-3 text-gray-500">
-            Start shopping now and build a cart from the latest collection.
+          <p className="mt-3 leading-7 text-stone-600">
+            Start shopping the latest dresses, essentials, and limited drops.
           </p>
           <Link
             to="/shop"
-            className="mt-7 inline-flex h-12 items-center justify-center rounded bg-gray-950 px-6 text-sm font-medium text-white transition hover:bg-secondaryBrown"
+            className="mt-7 inline-flex h-12 items-center justify-center rounded-full bg-stone-950 px-7 text-sm font-bold text-white transition hover:bg-[#9b6b43]"
           >
             Start shopping
           </Link>
@@ -53,245 +56,226 @@ const Cart = () => {
   }
 
   return (
-    <div className="bg-white mx-auto max-w-screen-2xl px-5 max-[400px]:px-3">
-      <div className="pb-24 pt-16">
-        <h1 className="text-3xl tracking-tight text-gray-900 sm:text-4xl">
-          {t("cartTitle")}
-        </h1>
-        <form className="mt-12 lg:grid lg:grid-cols-12 lg:items-start lg:gap-x-12 xl:gap-x-16">
-          <section aria-labelledby="cart-heading" className="lg:col-span-7">
+    <main className="bg-[#fbfaf8] px-5 py-10 md:px-8">
+      <div className="mx-auto max-w-screen-2xl">
+        <div className="mb-8 rounded-[2rem] border border-stone-200 bg-white p-6 shadow-[0_24px_80px_rgba(28,25,23,0.07)] sm:p-8">
+          <p className="text-xs font-bold uppercase tracking-[0.28em] text-[#9b6b43]">
+            Secure checkout
+          </p>
+          <div className="mt-3 flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
+            <div>
+              <h1 className="font-serif text-5xl font-semibold text-stone-950 max-sm:text-4xl">
+                {t("cartTitle")}
+              </h1>
+              <p className="mt-3 text-stone-600">
+                Review sizing, stock, and totals before moving to checkout.
+              </p>
+            </div>
+            <Link
+              to="/shop"
+              className="inline-flex w-fit items-center rounded-full border border-stone-300 bg-white px-5 py-3 text-sm font-bold text-stone-950 transition hover:border-stone-950 hover:bg-stone-50"
+            >
+              Continue shopping
+            </Link>
+          </div>
+        </div>
+
+        <div className="grid gap-8 lg:grid-cols-[1fr_420px]">
+          <section aria-labelledby="cart-heading">
             <h2 id="cart-heading" className="sr-only">
               {t("cartItems")}
             </h2>
-
-            <ul
-              role="list"
-              className="divide-y divide-gray-200 border-b border-t border-gray-200"
-            >
+            <ul className="grid gap-4">
               {productsInCart.map((product) => (
-                <li key={product.id} className="flex py-6 sm:py-10">
-                  <div className="flex-shrink-0">
+                <li
+                  key={product.id}
+                  className="grid gap-4 rounded-3xl border border-stone-200 bg-white p-4 shadow-[0_18px_45px_rgba(28,25,23,0.05)] sm:grid-cols-[160px_1fr]"
+                >
+                  <Link
+                    to={`/product/${product.productId || product.id}`}
+                    className="overflow-hidden rounded-2xl bg-stone-100"
+                  >
                     <img
                       src={`/assets/${product.image}`}
                       alt={product.title}
-                      className="h-24 w-24 object-cover object-center sm:h-48 sm:w-48"
+                      className="h-56 w-full object-cover object-top transition duration-500 hover:scale-[1.03] sm:h-full"
                     />
-                  </div>
+                  </Link>
 
-                  <div className="ml-4 flex flex-1 flex-col justify-between sm:ml-6">
-                    <div className="relative pr-9 sm:grid sm:grid-cols-2 sm:gap-x-6 sm:pr-0">
-                      <div>
-                        <div className="flex justify-between">
-                          <h3 className="text-sm">
-                            <Link
-                              to={`/product/${product.productId || product.id}`}
-                              className="font-medium text-gray-700 hover:text-gray-800"
-                            >
-                              {product.title}
-                            </Link>
-                          </h3>
-                        </div>
-                        <div className="mt-1 flex text-sm">
-                          <p className="text-gray-500">{product.color}</p>
-                          {product.size ? (
-                            <p className="ml-4 border-l border-gray-200 pl-4 text-gray-500">
-                              {product.size}
-                            </p>
-                          ) : null}
-                        </div>
-                        <p className="mt-1 text-sm font-medium text-gray-900">
-                          ${product.price}
+                  <div className="flex min-w-0 flex-col justify-between gap-5">
+                    <div className="flex items-start justify-between gap-4">
+                      <div className="min-w-0">
+                        <Link
+                          to={`/product/${product.productId || product.id}`}
+                          className="block truncate font-serif text-2xl font-semibold text-stone-950 transition hover:text-[#9b6b43]"
+                        >
+                          {product.title}
+                        </Link>
+                        <p className="mt-2 text-sm font-semibold text-stone-500">
+                          {product.color} / {product.size}
+                        </p>
+                        <p className="mt-3 text-xl font-black text-stone-950">
+                          ${product.price.toLocaleString()}
                         </p>
                       </div>
+                      <button
+                        type="button"
+                        className="grid h-10 w-10 shrink-0 place-items-center rounded-full border border-stone-200 text-stone-500 transition hover:border-red-200 hover:text-red-600"
+                        onClick={() => {
+                          dispatch(removeProductFromTheCart({ id: product.id }));
+                          toast.error(t("removedCart"));
+                        }}
+                        aria-label={`${t("remove")} ${product.title}`}
+                      >
+                        <XMarkIcon className="h-5 w-5" aria-hidden="true" />
+                      </button>
+                    </div>
 
-                      <div className="mt-4 sm:mt-0 sm:pr-9">
-                        <label htmlFor="quantity mr-5">{t("quantity")}: </label>
+                    <div className="flex flex-wrap items-center justify-between gap-4">
+                      <label className="flex items-center gap-3 text-sm font-bold text-stone-700">
+                        {t("quantity")}
                         <input
                           type="number"
-                          id="quantity"
-                          className="w-16 h-7 indent-1 bg-white border"
-                          value={product?.quantity}
-                          onChange={(e) => {
+                          className="h-11 w-20 rounded-full border border-stone-300 bg-[#fbfaf8] px-3 text-center text-sm font-semibold outline-none focus:border-stone-950"
+                          value={product.quantity}
+                          onChange={(event) => {
                             dispatch(
                               updateProductQuantity({
-                                id: product?.id,
-                                quantity: parseInt(e.target.value),
+                                id: product.id,
+                                quantity: parseInt(event.target.value),
                               })
                             );
                           }}
                           min={1}
                           max={product.stock || 1}
                         />
-                        {product.quantity >= product.stock && (
-                          <p className="mt-2 text-xs text-secondaryBrown">
-                            Maximum available quantity selected.
-                          </p>
+                      </label>
+                      <p className="flex items-center gap-2 text-sm font-semibold text-stone-600">
+                        {product.stock ? (
+                          <CheckIcon className="h-5 w-5 text-green-600" />
+                        ) : (
+                          <XMarkIcon className="h-5 w-5 text-red-600" />
                         )}
-
-                        <div className="absolute right-0 top-0">
-                          <button
-                            type="button"
-                            className="-m-2 inline-flex p-2 text-gray-400 hover:text-gray-500"
-                            onClick={() =>{
-                              dispatch(
-                                removeProductFromTheCart({ id: product?.id })
-                              ); toast.error(t("removedCart"));}
-                            }
-                          >
-                            <span className="sr-only">{t("remove")}</span>
-                            <XMarkIcon className="h-5 w-5" aria-hidden="true" />
-                          </button>
-                        </div>
-                      </div>
+                        {product.stock ? t("inStock") : t("outStock")}
+                      </p>
                     </div>
-
-                    <p className="mt-4 flex space-x-2 text-sm text-gray-700">
-                      {product?.stock ? (
-                        <CheckIcon
-                          className="h-5 w-5 flex-shrink-0 text-green-500"
-                          aria-hidden="true"
-                        />
-                      ) : (
-                        <XMarkIcon
-                          className="h-5 w-5 flex-shrink-0 text-red-600"
-                          aria-hidden="true"
-                        />
-                      )}
-
-                      <span>
-                        {product?.stock ? t("inStock") : t("outStock")}
-                      </span>
-                    </p>
                   </div>
                 </li>
               ))}
             </ul>
           </section>
 
-          {/* Sipariş özeti */}
-          <section
+          <aside
             aria-labelledby="summary-heading"
-            className="mt-16 bg-gray-50 px-4 py-6 sm:p-6 lg:col-span-5 lg:mt-0 lg:p-8"
+            className="h-fit rounded-[2rem] border border-stone-200 bg-white p-6 shadow-[0_24px_80px_rgba(28,25,23,0.07)] lg:sticky lg:top-24"
           >
             <h2
               id="summary-heading"
-              className="text-lg font-medium text-gray-900"
+              className="font-serif text-3xl font-semibold text-stone-950"
             >
               {t("orderSummary")}
             </h2>
 
-            <dl className="mt-6 space-y-4">
-              <div className="flex items-center justify-between">
-                <dt className="text-sm text-gray-600">{t("subtotal")}</dt>
-                <dd className="text-sm font-medium text-gray-900">
-                  ${subtotal}
-                </dd>
+            <div className="mt-6 rounded-2xl bg-[#fbfaf8] p-4">
+              <label
+                htmlFor="discountCode"
+                className="flex items-center gap-2 text-sm font-bold text-stone-700"
+              >
+                <Tag className="h-4 w-4 text-[#9b6b43]" />
+                Discount code
+              </label>
+              <div className="mt-3 flex gap-2">
+                <input
+                  id="discountCode"
+                  value={discountCode}
+                  onChange={(event) => setDiscountCode(event.target.value)}
+                  placeholder="SAVE10"
+                  className="h-11 min-w-0 flex-1 rounded-full border border-stone-300 bg-white px-4 text-sm outline-none focus:border-stone-950"
+                />
+                <button
+                  type="button"
+                  onClick={() => {
+                    if (discountCode.trim().toUpperCase() === "SAVE10") {
+                      setAppliedDiscount("SAVE10");
+                      toast.success("Discount applied.");
+                    } else {
+                      setAppliedDiscount("");
+                      toast.error("Use demo code SAVE10.");
+                    }
+                  }}
+                  className="h-11 rounded-full bg-stone-950 px-4 text-sm font-bold text-white transition hover:bg-[#9b6b43]"
+                >
+                  Apply
+                </button>
               </div>
-              <div className="border-t border-gray-200 pt-4">
-                <label htmlFor="discountCode" className="text-sm text-gray-600">
-                  Discount code
-                </label>
-                <div className="mt-2 flex gap-2">
-                  <input
-                    id="discountCode"
-                    value={discountCode}
-                    onChange={(event) => setDiscountCode(event.target.value)}
-                    placeholder="SAVE10"
-                    className="h-10 min-w-0 flex-1 rounded border border-gray-300 px-3 text-sm outline-none focus:border-gray-950"
-                  />
-                  <button
-                    type="button"
-                    onClick={() => {
-                      if (discountCode.trim().toUpperCase() === "SAVE10") {
-                        setAppliedDiscount("SAVE10");
-                        toast.success("Discount applied.");
-                      } else {
-                        setAppliedDiscount("");
-                        toast.error("Use demo code SAVE10.");
-                      }
-                    }}
-                    className="h-10 rounded bg-gray-950 px-3 text-sm font-medium text-white"
-                  >
-                    Apply
-                  </button>
-                </div>
-                {appliedDiscount && (
-                  <p className="mt-2 text-sm text-green-700">
-                    SAVE10 applied: -${discount.toFixed(2)}
-                  </p>
-                )}
-              </div>
-              <div className="flex items-center justify-between border-t border-gray-200 pt-4">
-                <dt className="flex items-center text-sm text-gray-600">
-                  <span>{t("shippingEstimate")}</span>
-                  <a
-                    href="#"
-                    className="ml-2 flex-shrink-0 text-gray-400 hover:text-gray-500"
-                  >
-                    <span className="sr-only">
-                      {t("shippingEstimate")}
-                    </span>
-                    <QuestionMarkCircleIcon
-                      className="h-5 w-5 text-secondaryBrown"
-                      aria-hidden="true"
-                    />
-                  </a>
-                </dt>
-                <dd className="text-sm font-medium text-gray-900">
-                  ${shipping.toFixed(2)}
-                </dd>
-              </div>
-              <div className="flex items-center justify-between border-t border-gray-200 pt-4">
-                <dt className="flex text-sm text-gray-600">
-                  <span>{t("taxEstimate")}</span>
-                  <a
-                    href="#"
-                    className="ml-2 flex-shrink-0 text-gray-400 hover:text-gray-500"
-                  >
-                    <span className="sr-only">
-                      {t("taxEstimate")}
-                    </span>
-                    <QuestionMarkCircleIcon
-                      className="h-5 w-5 text-secondaryBrown"
-                      aria-hidden="true"
-                    />
-                  </a>
-                </dt>
-                <dd className="text-sm font-medium text-gray-900">
-                  ${tax.toFixed(2)}
-                </dd>
-              </div>
-              <div className="flex items-center justify-between border-t border-gray-200 pt-4">
-                <dt className="text-base font-medium text-gray-900">
+              {appliedDiscount && (
+                <p className="mt-2 text-sm font-semibold text-green-700">
+                  SAVE10 applied: -${discount.toFixed(2)}
+                </p>
+              )}
+            </div>
+
+            <dl className="mt-6 space-y-4 text-sm">
+              <SummaryRow label={t("subtotal")} value={`$${subtotal.toFixed(2)}`} />
+              <SummaryRow
+                label={t("shippingEstimate")}
+                value={`$${shipping.toFixed(2)}`}
+              />
+              <SummaryRow
+                label={t("taxEstimate")}
+                value={`$${tax.toFixed(2)}`}
+              />
+              {appliedDiscount && (
+                <SummaryRow label="Discount" value={`-$${discount.toFixed(2)}`} />
+              )}
+              <div className="flex items-center justify-between border-t border-stone-200 pt-5">
+                <dt className="text-base font-bold text-stone-950">
                   {t("orderTotal")}
                 </dt>
-                <dd className="text-base font-medium text-gray-900">
+                <dd className="font-serif text-3xl font-semibold text-stone-950">
                   ${total.toFixed(2)}
                 </dd>
               </div>
             </dl>
 
-              <div className="mt-6 space-y-3">
-                {hasInvalidItems && (
-                  <p className="rounded bg-red-50 p-3 text-sm text-red-700">
-                    Update sold-out or overstock items before checkout.
-                  </p>
-                )}
-                <Link
-                  to={hasInvalidItems ? "/cart" : "/checkout"}
-                  className={`text-white text-center text-xl font-normal tracking-[0.6px] leading-[72px] w-full h-12 flex items-center justify-center max-md:text-base ${
-                    hasInvalidItems
-                      ? "pointer-events-none bg-gray-300"
-                      : "bg-secondaryBrown"
-                  }`}
-                >
-                  {t("checkout")}
-                </Link>
-              </div>
-          </section>
-        </form>
+            {hasInvalidItems && (
+              <p className="mt-6 rounded-2xl bg-red-50 p-3 text-sm font-semibold text-red-700">
+                Update sold-out or overstock items before checkout.
+              </p>
+            )}
+            <Link
+              to={hasInvalidItems ? "/cart" : "/checkout"}
+              className={`mt-6 inline-flex h-[52px] w-full items-center justify-center rounded-full px-6 py-4 text-sm font-bold text-white transition ${
+                hasInvalidItems
+                  ? "pointer-events-none bg-stone-300 text-stone-600"
+                  : "bg-stone-950 hover:bg-[#9b6b43]"
+              }`}
+            >
+              {t("checkout")}
+            </Link>
+
+            <div className="mt-5 grid gap-3 text-sm text-stone-600">
+              <p className="flex items-center gap-2">
+                <LockKeyhole className="h-4 w-4 text-[#9b6b43]" />
+                Secure encrypted checkout
+              </p>
+              <p className="flex items-center gap-2">
+                <Truck className="h-4 w-4 text-[#9b6b43]" />
+                Tracked shipping and easy returns
+              </p>
+            </div>
+          </aside>
+        </div>
       </div>
-    </div>
+    </main>
   );
 };
+
+const SummaryRow = ({ label, value }: { label: string; value: string }) => (
+  <div className="flex items-center justify-between">
+    <dt className="text-stone-600">{label}</dt>
+    <dd className="font-bold text-stone-950">{value}</dd>
+  </div>
+);
+
 export default Cart;

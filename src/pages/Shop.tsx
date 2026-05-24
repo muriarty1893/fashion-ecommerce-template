@@ -15,13 +15,13 @@ const Shop = () => {
   const category = useLoaderData() as string;
   const [searchParams] = useSearchParams();
   return (
-    <div className="max-w-screen-2xl mx-auto pt-10">
+    <main className="mx-auto max-w-screen-2xl bg-[#fbfaf8] pt-6">
       <ShopBanner category={category} />
       <ShopPageContent
         category={category}
         page={parseInt(searchParams.get("page") || "1")}
       />
-    </div>
+    </main>
   );
 };
 export default Shop;

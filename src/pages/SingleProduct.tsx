@@ -190,7 +190,8 @@ const SingleProduct = () => {
   };
 
   return (
-    <div className="mx-auto max-w-screen-2xl px-5 py-10 max-[400px]:px-3">
+    <main className="bg-[#fbfaf8] px-5 py-10 md:px-8 max-[400px]:px-3">
+    <div className="mx-auto max-w-screen-2xl">
       <div className="grid gap-10 lg:grid-cols-[1.1fr_0.9fr] xl:gap-16">
         <div className="grid gap-4 sm:grid-cols-[96px_1fr]">
           <div className="order-2 flex gap-3 overflow-x-auto sm:order-1 sm:flex-col">
@@ -199,19 +200,19 @@ const SingleProduct = () => {
                 key={image}
                 type="button"
                 onClick={() => setSelectedImage(image)}
-                className={`h-24 w-24 shrink-0 overflow-hidden rounded-lg border bg-gray-50 p-1 ${
-                  selectedImage === image ? "border-gray-950" : "border-gray-200"
+                className={`h-24 w-24 shrink-0 overflow-hidden rounded-2xl border bg-white p-1 transition ${
+                  selectedImage === image ? "border-stone-950" : "border-stone-200"
                 }`}
               >
                 <img
                   src={`/assets/${image}`}
                   alt={singleProduct.title}
-                  className="h-full w-full rounded-md object-cover"
+                  className="h-full w-full rounded-xl object-cover"
                 />
               </button>
             ))}
           </div>
-          <div className="order-1 overflow-hidden rounded-xl bg-gray-100 sm:order-2">
+          <div className="order-1 overflow-hidden rounded-[2rem] bg-stone-100 shadow-[0_24px_80px_rgba(28,25,23,0.08)] sm:order-2">
             <img
               src={`/assets/${selectedImage}`}
               alt={singleProduct.title}
@@ -220,37 +221,37 @@ const SingleProduct = () => {
           </div>
         </div>
 
-        <div className="flex w-full flex-col gap-7 rounded-xl border border-gray-200 bg-white p-6 shadow-sm lg:sticky lg:top-6 lg:self-start">
+        <div className="flex w-full flex-col gap-7 rounded-[2rem] border border-stone-200 bg-white p-6 shadow-[0_24px_80px_rgba(28,25,23,0.07)] lg:sticky lg:top-24 lg:self-start">
           <div className="flex flex-col gap-4">
             <div className="flex flex-wrap items-center justify-between gap-3">
-              <p className="rounded-full bg-gray-950 px-3 py-1 text-xs uppercase tracking-[0.22em] text-white">
+              <p className="rounded-full bg-stone-950 px-3 py-1 text-xs font-bold uppercase tracking-[0.22em] text-white">
                 {formatCategoryName(singleProduct.category, language)}
               </p>
-              <div className="flex items-center gap-1 text-sm text-secondaryBrown">
+              <div className="flex items-center gap-1 text-sm text-[#9b6b43]">
                 {[...Array(5)].map((_, index) => (
                   <FaStar key={index} />
                 ))}
-                <span className="ml-2 text-gray-500">128 reviews</span>
+                <span className="ml-2 text-stone-500">128 reviews</span>
               </div>
             </div>
             <div>
-              <h1 className="text-4xl font-semibold leading-tight text-gray-950 md:text-5xl">
+              <h1 className="font-serif text-4xl font-semibold leading-tight text-stone-950 md:text-5xl">
                 {singleProduct.title}
               </h1>
-              <p className="mt-3 text-base leading-7 text-gray-600">{detail.subtitle}</p>
+              <p className="mt-3 text-base leading-7 text-stone-600">{detail.subtitle}</p>
             </div>
-            <div className="flex items-end justify-between gap-4 border-y border-gray-200 py-5">
+            <div className="flex items-end justify-between gap-4 border-y border-stone-200 py-5">
               <div>
-                <p className="text-4xl font-semibold text-gray-950">
+                <p className="text-4xl font-semibold text-stone-950">
                   ${activePrice.toLocaleString()}
                 </p>
                 {singleProduct.discountPrice && (
-                  <p className="mt-1 text-lg text-gray-400 line-through">
+                  <p className="mt-1 text-lg text-stone-400 line-through">
                     ${singleProduct.price.toLocaleString()}
                   </p>
                 )}
               </div>
-              <p className="text-sm text-secondaryBrown">
+              <p className="text-sm font-bold text-[#9b6b43]">
                 {singleProduct.stock > 0 ? `${singleProduct.stock} in stock` : "Out of stock"}
               </p>
             </div>
@@ -259,8 +260,8 @@ const SingleProduct = () => {
           <div className="space-y-5">
             <div>
               <div className="mb-3 flex items-center justify-between">
-                <p className="text-sm font-medium text-gray-950">Size</p>
-                <p className="text-sm text-gray-500">Model wears M</p>
+                <p className="text-sm font-bold text-stone-950">Size</p>
+                <p className="text-sm text-stone-500">Model wears M</p>
               </div>
               <div className="grid grid-cols-5 gap-2">
                 {productSizes.map((item) => (
@@ -268,10 +269,10 @@ const SingleProduct = () => {
                     key={item}
                     type="button"
                     onClick={() => setSize(item)}
-                    className={`h-11 rounded-lg border text-sm transition ${
+                    className={`h-11 rounded-full border text-sm font-bold transition ${
                       size === item
-                        ? "border-gray-950 bg-gray-950 text-white"
-                        : "border-gray-200 bg-white text-gray-800 hover:border-gray-950"
+                        ? "border-stone-950 bg-stone-950 text-white"
+                        : "border-stone-200 bg-white text-stone-800 hover:border-stone-950"
                     }`}
                   >
                     {item}
@@ -281,15 +282,15 @@ const SingleProduct = () => {
             </div>
 
             <div>
-              <p className="mb-3 text-sm font-medium text-gray-950">Color</p>
+              <p className="mb-3 text-sm font-bold text-stone-950">Color</p>
               <div className="flex flex-wrap gap-3">
                 {productColors.map((item) => (
                   <button
                     key={item.id}
                     type="button"
                     onClick={() => setColor(item.id)}
-                    className={`flex items-center gap-2 rounded-full border px-3 py-2 text-sm transition ${
-                      color === item.id ? "border-gray-950" : "border-gray-200"
+                    className={`flex items-center gap-2 rounded-full border px-3 py-2 text-sm font-semibold transition ${
+                      color === item.id ? "border-stone-950" : "border-stone-200"
                     }`}
                   >
                     <span className={`h-5 w-5 rounded-full border border-black/10 ${item.className}`} />
@@ -300,12 +301,12 @@ const SingleProduct = () => {
             </div>
 
             <div>
-              <p className="mb-3 text-sm font-medium text-gray-950">Quantity</p>
-              <div className="inline-flex h-11 overflow-hidden rounded-lg border border-gray-200">
+              <p className="mb-3 text-sm font-bold text-stone-950">Quantity</p>
+              <div className="inline-flex h-11 overflow-hidden rounded-full border border-stone-200 bg-[#fbfaf8]">
                 <button
                   type="button"
                   onClick={() => setQuantity((value) => Math.max(1, value - 1))}
-                  className="w-11 text-xl text-gray-700 transition hover:bg-gray-100"
+                  className="w-11 text-xl text-stone-700 transition hover:bg-stone-100"
                 >
                   -
                 </button>
@@ -322,7 +323,7 @@ const SingleProduct = () => {
                       )
                     )
                   }
-                  className="h-full w-16 border-x border-gray-200 text-center text-sm outline-none"
+                  className="h-full w-16 border-x border-stone-200 bg-white text-center text-sm outline-none"
                 />
                 <button
                   type="button"
@@ -330,7 +331,7 @@ const SingleProduct = () => {
                     setQuantity((value) => Math.min(singleProduct.stock, value + 1))
                   }
                   disabled={isSoldOut || quantity >= singleProduct.stock}
-                  className="w-11 text-xl text-gray-700 transition hover:bg-gray-100"
+                  className="w-11 text-xl text-stone-700 transition hover:bg-stone-100 disabled:text-stone-300"
                 >
                   +
                 </button>
@@ -354,24 +355,24 @@ const SingleProduct = () => {
                     })
                   )
                 }
-                className={`grid h-12 w-12 place-items-center rounded border transition ${
+                className={`grid h-12 w-12 place-items-center rounded-full border transition ${
                   isWishlisted
-                    ? "border-secondaryBrown bg-secondaryBrown text-white"
-                    : "border-gray-200 text-gray-950 hover:border-gray-950"
+                    ? "border-[#9b6b43] bg-[#9b6b43] text-white"
+                    : "border-stone-200 text-stone-950 hover:border-stone-950"
                 }`}
                 aria-label={`${isWishlisted ? "Remove from" : "Add to"} wishlist`}
               >
                 <Heart className="h-5 w-5" fill={isWishlisted ? "currentColor" : "none"} />
               </button>
             </div>
-            <p className="text-right text-sm text-secondaryBrown">
+            <p className="text-right text-sm font-semibold text-[#9b6b43]">
               {t("deliveryEstimate")}
             </p>
           </div>
 
           <div className="grid gap-3 sm:grid-cols-3">
             {["Free returns", "Secure checkout", "Gift packaging"].map((item) => (
-              <div key={item} className="rounded-lg bg-gray-50 p-3 text-center text-sm text-gray-600">
+              <div key={item} className="rounded-2xl bg-[#fbfaf8] p-3 text-center text-sm font-semibold text-stone-600">
                 {item}
               </div>
             ))}
@@ -414,20 +415,20 @@ const SingleProduct = () => {
             text: "Premium presentation, simple checkout, and quick delivery updates.",
           },
         ].map((review) => (
-          <article key={review.name} className="rounded-lg border border-gray-200 bg-white p-5">
-            <div className="mb-3 flex text-secondaryBrown">
+          <article key={review.name} className="rounded-3xl border border-stone-200 bg-white p-6 shadow-[0_18px_45px_rgba(28,25,23,0.05)]">
+            <div className="mb-3 flex text-[#9b6b43]">
               {[...Array(5)].map((_, index) => (
                 <FaStar key={index} />
               ))}
             </div>
-            <p className="text-gray-600">"{review.text}"</p>
-            <p className="mt-4 font-semibold text-gray-950">{review.name}</p>
+            <p className="text-stone-600">"{review.text}"</p>
+            <p className="mt-4 font-semibold text-stone-950">{review.name}</p>
           </article>
         ))}
       </section>
 
       <div>
-        <h2 className="mb-12 mt-24 text-center text-5xl text-black/90 max-lg:text-4xl">
+        <h2 className="mb-12 mt-24 text-center font-serif text-5xl font-semibold text-stone-950 max-lg:text-4xl">
           {t("similarProducts")}
         </h2>
         <div className="mt-12 flex flex-wrap items-center justify-between gap-y-8 max-xl:justify-start max-xl:gap-5">
@@ -454,6 +455,7 @@ const SingleProduct = () => {
         </div>
       </div>
     </div>
+    </main>
   );
 };
 export default SingleProduct;
