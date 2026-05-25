@@ -21,3 +21,4 @@ export { default as SidebarMenu } from "./SidebarMenu";
 export { default as Dropdown } from "./Dropdown";
 export { default as ScrollToTop } from "./ScrollToTop";
 export { default as ShowingSearchPagination } from "./ShowingSearchPagination";
+export { ToastProvider, useToast } from "./ToastProvider";

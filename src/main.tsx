@@ -6,13 +6,16 @@ import { store } from "./store.ts";
 import { Provider } from "react-redux";
 import { Toaster } from "react-hot-toast";
 import { LanguageProvider } from "./i18n.tsx";
+import { ToastProvider } from "./components/ToastProvider.tsx";
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
     <Provider store={store}>
       <LanguageProvider>
-        <Toaster />
-        <App />
+        <ToastProvider>
+          <Toaster />
+          <App />
+        </ToastProvider>
       </LanguageProvider>
     </Provider>
   </React.StrictMode>

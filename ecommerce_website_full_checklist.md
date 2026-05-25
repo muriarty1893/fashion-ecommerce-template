@@ -249,6 +249,22 @@ Empty state
 Error state
 ```
 
+Toast notification requirements:
+
+```txt
+Provider-based toast management
+Reusable showToast hook
+Title and optional subtitle
+Custom leading icon
+Auto-dismiss
+Manual dismiss
+Swipe / gesture dismiss
+Multiple concurrent toasts
+Stable key/id for replacing duplicate notifications
+```
+
+In this demo, unfinished or fake controls should show a clear "Coming soon" toast instead of failing silently. Examples include newsletter signup, app download buttons, social links, order tracking, size guide, private sale, and other footer links that do not have a real feature behind them yet.
+
 Example empty state:
 
 ```txt
@@ -914,4 +930,3 @@ Admin dashboard
 ```
 
 This stack is modern, clean, and good for portfolio/job applications too.
-

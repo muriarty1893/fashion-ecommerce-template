@@ -1,5 +1,6 @@
 import {
   ArrowRight,
+  Clock3,
   CreditCard,
   Headphones,
   Heart,
@@ -11,6 +12,7 @@ import {
   Truck,
 } from "lucide-react";
 import { Link } from "react-router-dom";
+import { useToast } from "./ToastProvider";
 
 const categories = [
   {
@@ -69,6 +71,17 @@ const trustItems = [
 ];
 
 const KotonStyleLanding = () => {
+  const { showToast } = useToast();
+
+  const showComingSoonToast = (feature: string) => {
+    showToast({
+      key: `coming-soon-${feature.toLowerCase().replace(/\s+/g, "-")}`,
+      title: "Coming soon",
+      subtitle: `${feature} is not ready yet.`,
+      leading: () => <Clock3 className="h-5 w-5" />,
+    });
+  };
+
   return (
     <main className="bg-[#fbfaf8] text-stone-950">
       <section className="mx-auto grid max-w-screen-2xl gap-6 px-5 py-6 md:px-8 lg:grid-cols-[0.95fr_1.05fr] lg:py-10">
@@ -377,6 +390,7 @@ const KotonStyleLanding = () => {
               />
               <button
                 type="button"
+                onClick={() => showComingSoonToast("Early access signup")}
                 className="inline-flex h-14 items-center justify-center gap-2 rounded-full bg-stone-950 px-7 text-sm font-bold text-white transition hover:bg-[#9b6b43] focus:outline-none focus:ring-2 focus:ring-stone-950 focus:ring-offset-4"
               >
                 Sign Up

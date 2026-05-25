@@ -7,29 +7,75 @@ import {
   FaTiktok,
   FaYoutube,
 } from "react-icons/fa6";
-import { ArrowRight, Mail, Phone, Smartphone } from "lucide-react";
+import { ArrowRight, Clock3, Mail, Phone, Smartphone } from "lucide-react";
+import { useToast } from "./ToastProvider";
 
-const footerColumns = [
+type FooterLinkItem = {
+  label: string;
+  to?: string;
+  comingSoon?: boolean;
+};
+
+type FooterColumn = {
+  title: string;
+  links: FooterLinkItem[];
+};
+
+const footerColumns: FooterColumn[] = [
   {
     title: "Company",
-    links: ["About", "Editorial", "Sustainability", "Careers", "Contact"],
+    links: [
+      { label: "About", to: "/info/about" },
+      { label: "Editorial", comingSoon: true },
+      { label: "Sustainability", comingSoon: true },
+      { label: "Careers", comingSoon: true },
+      { label: "Contact", to: "/info/contact" },
+    ],
   },
   {
     title: "Customer Care",
-    links: ["Help Center", "Returns", "Order Tracking", "Shipping", "Size Guide"],
+    links: [
+      { label: "Help Center", to: "/info/faq" },
+      { label: "Returns", to: "/info/returns" },
+      { label: "Order Tracking", comingSoon: true },
+      { label: "Shipping", to: "/info/shipping" },
+      { label: "Size Guide", comingSoon: true },
+    ],
   },
   {
     title: "Categories",
-    links: ["Dresses", "New Arrivals", "Luxury Collection", "Essentials", "Accessories"],
+    links: [
+      { label: "Dresses", to: "/shop/special-edition" },
+      { label: "New Arrivals", to: "/shop" },
+      { label: "Luxury Collection", to: "/shop/luxury-collection" },
+      { label: "Essentials", to: "/shop/unique-collection" },
+      { label: "Accessories", to: "/shop/summer-edition" },
+    ],
   },
   {
     title: "Collections",
-    links: ["Best Sellers", "Occasion Edit", "Atelier Drop", "Resort", "Private Sale"],
+    links: [
+      { label: "Best Sellers", to: "/shop" },
+      { label: "Occasion Edit", comingSoon: true },
+      { label: "Atelier Drop", comingSoon: true },
+      { label: "Resort", comingSoon: true },
+      { label: "Private Sale", comingSoon: true },
+    ],
   },
 ];
 
 const Footer = () => {
   const { t } = useLanguage();
+  const { showToast } = useToast();
+
+  const showComingSoonToast = (feature: string) => {
+    showToast({
+      key: `coming-soon-${feature.toLowerCase().replace(/\s+/g, "-")}`,
+      title: "Coming soon",
+      subtitle: `${feature} is not ready yet.`,
+      leading: () => <Clock3 className="h-5 w-5" />,
+    });
+  };
 
   return (
     <footer className="border-t border-stone-200 bg-[#1c1917] text-white">
@@ -56,6 +102,7 @@ const Footer = () => {
             />
             <button
               type="button"
+              onClick={() => showComingSoonToast("Newsletter signup")}
               className="grid h-12 w-12 shrink-0 place-items-center rounded-full bg-white text-stone-950 transition hover:bg-[#ead7bd]"
               aria-label="Subscribe"
             >
@@ -72,14 +119,22 @@ const Footer = () => {
               demo shopping flow.
             </p>
             <div className="mt-5 flex gap-2">
-              <span className="inline-flex h-11 items-center gap-2 rounded-full border border-white/20 px-4 text-xs font-bold">
+              <button
+                type="button"
+                onClick={() => showComingSoonToast("App Store download")}
+                className="inline-flex h-11 items-center gap-2 rounded-full border border-white/20 px-4 text-xs font-bold transition hover:bg-white hover:text-stone-950"
+              >
                 <Smartphone className="h-4 w-4" />
                 App Store
-              </span>
-              <span className="inline-flex h-11 items-center gap-2 rounded-full border border-white/20 px-4 text-xs font-bold">
+              </button>
+              <button
+                type="button"
+                onClick={() => showComingSoonToast("Google Play download")}
+                className="inline-flex h-11 items-center gap-2 rounded-full border border-white/20 px-4 text-xs font-bold transition hover:bg-white hover:text-stone-950"
+              >
                 <Smartphone className="h-4 w-4" />
                 Google Play
-              </span>
+              </button>
             </div>
           </div>
           <div className="border-l border-white/15 pl-8 max-sm:border-l-0 max-sm:pl-0">
@@ -104,8 +159,16 @@ const Footer = () => {
             </h3>
             <div className="mt-4 grid gap-2">
               {column.links.map((link) => (
-                <FooterLink key={link} to="/info/about">
-                  {link}
+                <FooterLink
+                  key={link.label}
+                  to={link.to}
+                  onComingSoon={
+                    link.comingSoon
+                      ? () => showComingSoonToast(link.label)
+                      : undefined
+                  }
+                >
+                  {link.label}
                 </FooterLink>
               ))}
             </div>
@@ -115,17 +178,23 @@ const Footer = () => {
 
       <div className="mx-auto flex max-w-screen-2xl items-center justify-between border-t border-white/10 px-8 py-7 max-sm:flex-col max-sm:gap-5 max-sm:px-4">
         <div className="flex items-center gap-3">
-          {[FaFacebookF, FaInstagram, FaLinkedinIn, FaYoutube, FaTiktok].map(
-            (Icon, index) => (
-              <Link
-                key={index}
-                to="/info/social"
-                className="grid h-10 w-10 place-items-center rounded-full bg-white/10 text-white transition hover:bg-white hover:text-stone-950"
-              >
-                <Icon className="h-4 w-4" />
-              </Link>
-            ),
-          )}
+          {[
+            { label: "Facebook", icon: FaFacebookF },
+            { label: "Instagram", icon: FaInstagram },
+            { label: "LinkedIn", icon: FaLinkedinIn },
+            { label: "YouTube", icon: FaYoutube },
+            { label: "TikTok", icon: FaTiktok },
+          ].map(({ label, icon: Icon }) => (
+            <button
+              key={label}
+              type="button"
+              onClick={() => showComingSoonToast(`${label} social link`)}
+              className="grid h-10 w-10 place-items-center rounded-full bg-white/10 text-white transition hover:bg-white hover:text-stone-950"
+              aria-label={`${label} social link`}
+            >
+              <Icon className="h-4 w-4" />
+            </button>
+          ))}
         </div>
         <div className="text-center">
           <h2 className="font-serif text-4xl font-bold uppercase tracking-normal">
@@ -140,17 +209,28 @@ const Footer = () => {
 
 const FooterLink = ({
   to,
+  onComingSoon,
   children,
 }: {
-  to: string;
+  to?: string;
+  onComingSoon?: () => void;
   children: React.ReactNode;
-}) => (
-  <Link
-    to={to}
-    className="text-sm text-white/62 transition hover:text-white"
-  >
-    {children}
-  </Link>
-);
+}) => {
+  const className = "text-left text-sm text-white/62 transition hover:text-white";
+
+  if (!to) {
+    return (
+      <button type="button" onClick={onComingSoon} className={className}>
+        {children}
+      </button>
+    );
+  }
+
+  return (
+    <Link to={to} className={className}>
+      {children}
+    </Link>
+  );
+};
 
 export default Footer;

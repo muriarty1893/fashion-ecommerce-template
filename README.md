@@ -15,6 +15,8 @@ This project is currently a frontend/local-demo application. It is useful for va
 - Login, register, profile, order history, and order detail demo pages
 - Static/demo info pages for about, contact, FAQ, shipping, returns, privacy, cookies, and terms
 - Admin demo at `/admin` with dashboard metrics, products, orders, customers, settings, inventory alerts, and best-selling products
+- Custom toast notifications with icons, auto-dismiss, and swipe-to-dismiss gesture support
+- "Coming soon" notifications for placeholder controls such as newsletter signup, app download buttons, social links, and unfinished footer links
 - Local JSON API using `src/data/db.json`
 
 ## Tech Stack
@@ -82,6 +84,43 @@ npm run lint      # Run ESLint
 - Checkout is a demo flow. It does not process real card payments.
 - `SAVE10` is the demo cart discount code.
 - Some production fields are frontend-generated fallback values, such as demo ratings, colors, sizes, discount prices, and created dates.
+- Placeholder controls that are not backed by a real service should call `useToast().showToast(...)` with a "Coming soon" message instead of silently doing nothing.
+- Newsletter signup, app downloads, social links, order tracking, size guide, private sale, and similar unfinished footer links currently show "Coming soon" notifications.
+
+## Toast Notifications
+
+The app includes a local toast system in `src/components/ToastProvider.tsx`.
+
+Wrap app content with the provider once:
+
+```tsx
+<ToastProvider>
+  <App />
+</ToastProvider>
+```
+
+Show a notification from any child component:
+
+```tsx
+const { showToast } = useToast();
+
+showToast({
+  title: "Coming soon",
+  subtitle: "This feature is not ready yet.",
+  leading: () => <Clock3 className="h-5 w-5" />,
+});
+```
+
+Supported toast behavior:
+
+- Multiple concurrent toasts, capped to the newest four
+- Optional `subtitle`
+- Optional custom `key`/`id` for replacing an existing toast
+- `autodismiss` enabled by default
+- Manual dismiss button
+- Horizontal swipe-to-dismiss gesture
+
+Existing `react-hot-toast` usage remains in place for cart, checkout, auth, and validation feedback.
 
 ## Backend Readiness
 
