@@ -4,6 +4,8 @@ A Next.js + React + TypeScript fashion e-commerce storefront demo built with the
 
 This project is currently a local-demo application. It is useful for validating the customer and admin flows before connecting a production database, payment provider, email service, and production auth.
 
+[Live Demo](https://fashion-ecommerce-template-two.vercel.app/)
+
 ## Current Features
 
 - Home page with hero, collections, categories, testimonials, and footer
