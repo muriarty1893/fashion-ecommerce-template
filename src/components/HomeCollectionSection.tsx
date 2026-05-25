@@ -1,5 +1,5 @@
 import { ArrowRight } from "lucide-react";
-import { Link } from "react-router-dom";
+import Link from "next/link";
 import ProductGrid from "./ProductGrid";
 import ProductGridWrapper from "./ProductGridWrapper";
 
@@ -20,7 +20,7 @@ const HomeCollectionSection = () => {
           </p>
         </div>
         <Link
-          to="/shop"
+          href="/shop"
           className="inline-flex w-fit items-center gap-2 rounded-full border border-stone-300 bg-white px-6 py-3 text-sm font-bold text-stone-950 transition hover:border-stone-950 hover:bg-stone-50 focus:outline-none focus:ring-2 focus:ring-stone-950 focus:ring-offset-4"
         >
           View all products

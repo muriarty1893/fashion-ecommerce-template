@@ -5,9 +5,11 @@ type AuthState = {
 };
 
 const initialState: AuthState = {
-  loginStatus: JSON.parse(localStorage.getItem("user") || "{}").id
-    ? true
-    : false,
+  loginStatus:
+    typeof window !== "undefined" &&
+    JSON.parse(localStorage.getItem("user") || "{}").id
+      ? true
+      : false,
 };
 
 export const authSlice = createSlice({

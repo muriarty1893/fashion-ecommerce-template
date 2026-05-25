@@ -1,6 +1,6 @@
 import { HiChevronUp } from "react-icons/hi2";
 import Button from "./Button";
-import { useNavigate } from "react-router-dom";
+import { useRouter } from "next/navigation";
 import { useAppSelector } from "../hooks";
 import { useLanguage } from "../i18n";
 
@@ -14,7 +14,7 @@ const ShowingPagination = ({
   setCurrentPage: (page: number) => void;
 }) => {
   const { totalProducts, showingProducts } = useAppSelector(state => state.shop);
-  const navigate = useNavigate();
+  const router = useRouter();
   const { t } = useLanguage();
 
   return (
@@ -29,7 +29,7 @@ const ShowingPagination = ({
             mode="white"
             onClick={() => {
               setCurrentPage(page + 1);
-              navigate(`/shop${category ? `/${category}` : ""}?page=${page + 1}`);
+              router.push(`/shop${category ? `/${category}` : ""}?page=${page + 1}`);
             }}
           />
         )}

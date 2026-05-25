@@ -1,6 +1,6 @@
 import { HiChevronUp } from "react-icons/hi2";
 import Button from "./Button";
-import { useNavigate, useSearchParams } from "react-router-dom";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useAppSelector } from "../hooks";
 import { useLanguage } from "../i18n";
 
@@ -12,8 +12,8 @@ const ShowingSearchPagination = ({
   setCurrentPage: (page: number) => void;
 }) => {
   const { totalProducts, showingProducts } = useAppSelector(state => state.shop);
-  const navigate = useNavigate();
-  const [searchParams] = useSearchParams();
+  const router = useRouter();
+  const searchParams = useSearchParams();
   const { t } = useLanguage();
   const canShowMore = showingProducts < totalProducts;
 
@@ -22,7 +22,7 @@ const ShowingSearchPagination = ({
     const nextParams = new URLSearchParams(searchParams);
     nextParams.set("page", String(nextPage));
     setCurrentPage(nextPage);
-    navigate(`/search?${nextParams.toString()}`);
+    router.push(`/search?${nextParams.toString()}`);
   };
 
   return (

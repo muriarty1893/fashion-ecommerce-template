@@ -4,7 +4,7 @@ import { FaTiktok } from "react-icons/fa6";
 import { FaLinkedinIn } from "react-icons/fa6";
 import { FaPinterestP } from "react-icons/fa6";
 import { FaYoutube } from "react-icons/fa6";
-import { Link } from "react-router-dom";
+import Link from "next/link";
 
 const socialLinks = [
   { label: "Facebook", to: "/info/facebook", icon: FaFacebookF, className: "w-3" },
@@ -24,7 +24,7 @@ const SocialMediaFooter = () => {
         {socialLinks.map(({ label, to, icon: Icon, className }) => (
           <Link
             key={label}
-            to={to}
+            href={to}
             aria-label={label}
             className="grid h-8 w-8 place-items-center rounded-full transition hover:bg-white/15"
           >

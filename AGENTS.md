@@ -1,14 +1,14 @@
 # Agent Instructions
 
-This repository is a Vite React + TypeScript fashion e-commerce demo. Keep changes scoped, frontend-first, and consistent with the existing component/page structure.
+This repository is a Next.js + React + TypeScript fashion e-commerce demo. Keep changes scoped, frontend-first, and consistent with the existing component/view structure.
 
 ## Project Context
 
 - Current app type: local demo storefront, not production commerce.
-- Local API: `json-server` backed by `src/data/db.json`.
-- Frontend route root: `src/App.tsx`.
+- Local API: Next route handlers under `src/app/api/`, backed by `src/data/db.json`.
+- Frontend route root: `src/app/`.
 - Shared UI: `src/components/`.
-- Route pages: `src/pages/`.
+- Route views: `src/views/`.
 - Redux slices: `src/features/`.
 - API client: `src/axios/custom.ts`.
 
@@ -22,7 +22,7 @@ npm run build
 npm run lint
 ```
 
-`npm start` runs both Vite and `json-server`. The storefront is expected at `http://localhost:5173/`; the demo API is expected at `http://localhost:3000/`.
+`npm start` runs the Next.js dev server. The storefront is expected at `http://localhost:5173/`; the demo API is expected under `http://localhost:5173/api/`.
 
 ## Coding Guidelines
 
@@ -38,7 +38,7 @@ npm run lint
 
 Before connecting a real backend, normalize the API layer:
 
-- Replace hardcoded `http://localhost:3000` values with environment configuration.
+- Keep API access centralized through `src/axios/custom.ts`; it defaults to `/api` and can be overridden with `NEXT_PUBLIC_API_BASE_URL`.
 - Remove direct imports from `src/data/db.json` in production paths.
 - Define stable contracts for products, variants, cart items, orders, users, addresses, reviews, and coupons.
 - Move stock validation, order creation, payment verification, and admin authorization to the backend.

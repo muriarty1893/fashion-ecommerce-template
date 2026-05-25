@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import Link from "next/link";
 import { formatCategoryName } from "../utils/formatCategoryName";
 import { motion } from "framer-motion";
 import { useLanguage } from "../i18n";
@@ -96,7 +96,7 @@ const ProductItem = ({
       className="group w-[31.8%] min-w-[290px] overflow-hidden rounded-3xl border border-stone-200 bg-white shadow-[0_18px_45px_rgba(28,25,23,0.06)] max-lg:w-[48%] max-sm:w-full"
     >
       <div className="relative h-[500px] w-full overflow-hidden bg-stone-100 max-xl:h-[430px] max-md:h-[380px]">
-        <Link to={`/product/${id}`} className="block h-full w-full">
+        <Link href={`/product/${id}`} className="block h-full w-full">
           <img
             src={`/assets/${image}`}
             alt={title}
@@ -135,7 +135,7 @@ const ProductItem = ({
             {formatCategoryName(category, language)}
           </p>
           <Link
-            to={`/product/${id}`}
+            href={`/product/${id}`}
             className="mt-2 block truncate font-serif text-2xl font-semibold text-stone-950 transition hover:text-[#9b6b43]"
           >
             {title}
@@ -169,7 +169,7 @@ const ProductItem = ({
             {t("addToCart")}
           </button>
           <Link
-            to={`/product/${id}`}
+            href={`/product/${id}`}
             className="inline-flex h-11 shrink-0 items-center justify-center rounded-full border border-stone-300 px-4 text-xs font-bold uppercase tracking-wide text-stone-950 transition hover:border-stone-950 hover:bg-stone-50 focus:outline-none focus:ring-2 focus:ring-stone-950 focus:ring-offset-2"
           >
             {t("viewProduct")}

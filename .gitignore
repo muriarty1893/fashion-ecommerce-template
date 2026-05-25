@@ -5,6 +5,7 @@ node_modules/
 dist/
 dist-ssr/
 build/
+.next/
 coverage/
 
 # Logs
@@ -21,7 +22,7 @@ lerna-debug.log*
 !.env.example
 *.local
 
-# Vite / TypeScript
+# Next / TypeScript
 *.tsbuildinfo
 vite.config.*.timestamp-*
 vite.config.*.mtime-*

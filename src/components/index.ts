@@ -19,6 +19,7 @@ export { default as CategoryItem } from "./CategoryItem";
 export { default as CategoriesSection } from "./CategoriesSection";
 export { default as SidebarMenu } from "./SidebarMenu";
 export { default as Dropdown } from "./Dropdown";
+export { default as LanguageSelectorDropdown } from "./LanguageSelectorDropdown";
 export { default as ScrollToTop } from "./ScrollToTop";
 export { default as ShowingSearchPagination } from "./ShowingSearchPagination";
 export { ToastProvider, useToast } from "./ToastProvider";

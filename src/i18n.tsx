@@ -16,6 +16,13 @@ const translations = {
     home: "Home",
     shop: "Shop",
     search: "Search",
+    newArrivals: "New Arrivals",
+    navDresses: "Dresses",
+    navLuxury: "Luxury",
+    navEssentials: "Essentials",
+    navAccessories: "Accessories",
+    navSale: "Sale",
+    fashionClub: "Fashion Club",
     account: "Account",
     cart: "Cart",
     signIn: "Sign In",
@@ -170,6 +177,13 @@ const translations = {
     home: "Startseite",
     shop: "Shop",
     search: "Suchen",
+    newArrivals: "Neuheiten",
+    navDresses: "Kleider",
+    navLuxury: "Luxus",
+    navEssentials: "Essentials",
+    navAccessories: "Accessoires",
+    navSale: "Sale",
+    fashionClub: "Fashion Club",
     account: "Konto",
     cart: "Warenkorb",
     signIn: "Einloggen",
@@ -324,6 +338,13 @@ const translations = {
     home: "Ana Sayfa",
     shop: "Mağaza",
     search: "Ara",
+    newArrivals: "Yeni Gelenler",
+    navDresses: "Elbiseler",
+    navLuxury: "Lüks",
+    navEssentials: "Temel Parçalar",
+    navAccessories: "Aksesuarlar",
+    navSale: "İndirim",
+    fashionClub: "Moda Kulübü",
     account: "Hesap",
     cart: "Sepet",
     signIn: "Giriş Yap",
@@ -485,14 +506,21 @@ type LanguageContextValue = {
 const LanguageContext = createContext<LanguageContextValue | null>(null);
 
 export const LanguageProvider = ({ children }: { children: ReactNode }) => {
-  const [language, setLanguageState] = useState<Language>(() => {
-    const saved = localStorage.getItem("language");
-    return saved === "de" || saved === "tr" || saved === "en" ? saved : "en";
-  });
+  const [language, setLanguageState] = useState<Language>("en");
+  const [hasLoadedSavedLanguage, setHasLoadedSavedLanguage] = useState(false);
 
   useEffect(() => {
+    const saved = localStorage.getItem("language");
+    if (saved === "de" || saved === "tr" || saved === "en") {
+      setLanguageState(saved);
+    }
+    setHasLoadedSavedLanguage(true);
+  }, []);
+
+  useEffect(() => {
+    if (!hasLoadedSavedLanguage) return;
     localStorage.setItem("language", language);
-  }, [language]);
+  }, [hasLoadedSavedLanguage, language]);
 
   const value = useMemo(
     () => ({

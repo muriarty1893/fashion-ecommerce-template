@@ -1,5 +1,5 @@
 import { useMemo, useState } from "react";
-import { Link } from "react-router-dom";
+import Link from "next/link";
 import { ArrowLeft, ArrowRight, ArrowUpRight } from "lucide-react";
 import { useLanguage } from "../i18n";
 
@@ -100,7 +100,7 @@ const CategoryImpactCarousel = () => {
 
       <div className="grid overflow-hidden rounded-lg border border-gray-200 bg-white lg:grid-cols-[1.1fr_0.9fr]">
         <Link
-          to={`/shop/${activeCategory.link}`}
+          href={`/shop/${activeCategory.link}`}
           className="relative block min-h-[520px] overflow-hidden bg-gray-100 max-md:min-h-[380px]"
         >
           <img
@@ -149,7 +149,7 @@ const CategoryImpactCarousel = () => {
                 {activeCategory.copy}
               </p>
               <Link
-                to={`/shop/${activeCategory.link}`}
+                href={`/shop/${activeCategory.link}`}
                 className="mt-7 inline-flex h-11 items-center gap-2 rounded-full bg-gray-950 px-5 text-sm font-medium text-white transition hover:bg-secondaryBrown"
               >
                 {t("seeCollection")}

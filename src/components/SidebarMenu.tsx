@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { HiXMark } from "react-icons/hi2";
-import { Link, useNavigate } from "react-router-dom";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useAppSelector } from "../hooks";
 import { setLoginStatus } from "../features/auth/authSlice";
 import { store } from "../store";
@@ -16,14 +17,14 @@ const SidebarMenu = ({
 }) => {
   const [isAnimating, setIsAnimating] = useState(false);
   const { loginStatus } = useAppSelector((state) => state.auth);
-  const navigate = useNavigate();
+  const router = useRouter();
   const { t } = useLanguage();
 
   const logout = () => {
     toast.error(t("logoutSuccess"));
     localStorage.removeItem("user");
     store.dispatch(setLoginStatus(false));
-    navigate("/login");
+    router.push("/login");
   };
 
   useEffect(() => {
@@ -53,7 +54,7 @@ const SidebarMenu = ({
           </div>
           <div className="flex justify-center mt-2">
             <Link
-              to="/"
+              href="/"
               className="text-4xl font-light tracking-[1.08px] max-sm:text-3xl max-[400px]:text-2xl"
             >
               {t("brand")}
@@ -61,31 +62,31 @@ const SidebarMenu = ({
           </div>
           <div className="flex flex-col items-center gap-1 mt-7">
             <Link
-              to="/"
+              href="/"
               className="py-2 border-y border-secondaryBrown w-full block flex justify-center"
             >
               {t("home")}
             </Link>
             <Link
-              to="/shop"
+              href="/shop"
               className="py-2 border-y border-secondaryBrown w-full block flex justify-center"
             >
               {t("shop")}
             </Link>
             <Link
-              to="/search"
+              href="/search"
               className="py-2 border-y border-secondaryBrown w-full block flex justify-center"
             >
               {t("search")}
             </Link>
             <Link
-              to="/admin"
+              href="/admin"
               className="py-2 border-y border-secondaryBrown w-full block flex justify-center"
             >
               Admin
             </Link>
             <Link
-              to="/wishlist"
+              href="/wishlist"
               className="py-2 border-y border-secondaryBrown w-full block flex justify-center"
             >
               Wishlist
@@ -102,13 +103,13 @@ const SidebarMenu = ({
             ) : (
               <>
                 <Link
-                  to="/login"
+                  href="/login"
                   className="py-2 border-y border-secondaryBrown w-full block flex justify-center"
                 >
                   {t("signIn")}
                 </Link>
                 <Link
-                  to="/register"
+                  href="/register"
                   className="py-2 border-y border-secondaryBrown w-full block flex justify-center"
                 >
                   {t("signUp")}
@@ -116,7 +117,7 @@ const SidebarMenu = ({
               </>
             )}
             <Link
-              to="/cart"
+              href="/cart"
               className="py-2 border-y border-secondaryBrown w-full block flex justify-center"
             >
               {t("cart")}

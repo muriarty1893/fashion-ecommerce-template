@@ -159,7 +159,7 @@ const ProductGridWrapper = ({
         dispatch(setShowingProducts(searchedProducts.length));
       }
     },
-    [category, dispatch, filters, totalProducts]
+    [category, dispatch, filters, limit, totalProducts]
   );
 
   useEffect(() => {
