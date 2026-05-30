@@ -12,7 +12,8 @@ const UserProfile = () => {
   const router = useRouter();
   const [user, setUser] = useState<User>();
 
-  const logout = () => {
+  const logout = async () => {
+    await customFetch.post("/auth/logout").catch(() => null);
     toast.error("Logged out successfully");
     localStorage.removeItem("user");
     store.dispatch(setLoginStatus(false));

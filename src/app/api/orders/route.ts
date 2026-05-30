@@ -1,21 +1,37 @@
 import { NextResponse } from "next/server";
-import { getNextNumericId, readDemoDb, writeDemoDb } from "../../../lib/demoDb";
+import { readSession, requireSession } from "../../../lib/auth";
+import { createOrder, getOrders } from "../../../lib/storeDb";
 
-export const GET = async () => {
-  const db = await readDemoDb();
-  return NextResponse.json(db.orders);
+export const GET = async (request: Request) => {
+  const auth = requireSession(request);
+  if (auth.response) return auth.response;
+
+  const orders = await getOrders(
+    auth.session?.role === "admin" ? undefined : auth.session?.id,
+  );
+  return NextResponse.json(orders);
 };
 
 export const POST = async (request: Request) => {
-  const db = await readDemoDb();
+  const session = readSession(request);
   const body = await request.json();
-  const order = {
-    ...body,
-    id: getNextNumericId(db.orders),
-  } as Order;
 
-  db.orders.push(order);
-  await writeDemoDb(db);
+  try {
+    const order = await createOrder({
+      products: body.products || [],
+      data: body.data || {},
+      subtotal: Number(body.subtotal || 0),
+      discount: Number(body.discount || 0),
+      shipping: Number(body.shipping || 0),
+      tax: Number(body.tax || 0),
+      total: Number(body.total || 0),
+      userId: session?.id || body.user?.id,
+      userEmail: session?.email || body.user?.email,
+    });
 
-  return NextResponse.json(order, { status: 201 });
+    return NextResponse.json(order, { status: 201 });
+  } catch (error) {
+    const message = error instanceof Error ? error.message : "Order creation failed";
+    return NextResponse.json({ message }, { status: 400 });
+  }
 };

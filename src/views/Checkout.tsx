@@ -136,10 +136,13 @@ const Checkout = () => {
       } else {
         toast.error(t("checkoutError"));
       }
-    } catch {
-      localStorage.setItem("lastFakeOrder", JSON.stringify(orderPayload));
-      toast.success(t("orderSuccess"));
-      router.push("/order-confirmation");
+    } catch (error: unknown) {
+      const message =
+        typeof error === "object" && error !== null && "response" in error
+          ? (error as { response?: { data?: { message?: string } } }).response
+              ?.data?.message
+          : undefined;
+      toast.error(message || t("checkoutError"));
     }
   };
 

@@ -11,7 +11,6 @@ import { useAppDispatch, useAppSelector } from "../hooks";
 import { formatCategoryName } from "../utils/formatCategoryName";
 import toast from "react-hot-toast";
 import { useLanguage } from "../i18n";
-import db from "../data/db.json";
 import { FaStar } from "react-icons/fa";
 import { Heart } from "lucide-react";
 
@@ -24,7 +23,15 @@ type ProductDetail = {
   delivery: string;
 };
 
-const fallbackProducts = db.products as Product[];
+const emptyProduct: Product = {
+  id: "",
+  title: "Loading product",
+  image: "product image 1.jpg",
+  category: "luxury-collection",
+  price: 0,
+  popularity: 1,
+  stock: 0,
+};
 const fallbackColors = ["black", "ivory", "cocoa", "sage"];
 const fallbackSizes = ["XS", "S", "M", "L", "XL"];
 
@@ -92,14 +99,12 @@ const colors = [
 
 const SingleProduct = () => {
   const params = useParams<{ id: string }>();
-  const localProduct =
-    fallbackProducts.find((product) => product.id === params.id) || fallbackProducts[0];
-  const [products, setProducts] = useState<Product[]>(fallbackProducts);
-  const [singleProduct, setSingleProduct] = useState<Product>(localProduct);
+  const [products, setProducts] = useState<Product[]>([]);
+  const [singleProduct, setSingleProduct] = useState<Product>(emptyProduct);
   const [size, setSize] = useState<string>("M");
   const [color, setColor] = useState<string>("black");
   const [quantity, setQuantity] = useState<number>(1);
-  const [selectedImage, setSelectedImage] = useState(localProduct.image);
+  const [selectedImage, setSelectedImage] = useState(emptyProduct.image);
   const dispatch = useAppDispatch();
   const router = useRouter();
   const wishlistProducts = useAppSelector((state) => state.wishlist.products);
@@ -115,21 +120,17 @@ const SingleProduct = () => {
     (product) => product.id === singleProduct.id
   );
   const galleryImages = useMemo(
-    () => [
-      singleProduct.image,
-      "single product image 1.jpg",
-      "single product image 2.jpg",
-      fallbackProducts[(Number(singleProduct.id) + 2) % fallbackProducts.length].image,
-    ],
-    [singleProduct.id, singleProduct.image]
+    () =>
+      [
+        singleProduct.image,
+        "single product image 1.jpg",
+        "single product image 2.jpg",
+        products.find((product) => product.id !== singleProduct.id)?.image,
+      ].filter(Boolean) as string[],
+    [products, singleProduct.id, singleProduct.image]
   );
 
   useEffect(() => {
-    const nextLocalProduct =
-      fallbackProducts.find((product) => product.id === params.id) || fallbackProducts[0];
-    setSingleProduct(nextLocalProduct);
-    setSelectedImage(nextLocalProduct.image);
-
     const fetchSingleProduct = async () => {
       try {
         const response = await fetch(`/api/products/${params.id}`);
@@ -140,7 +141,7 @@ const SingleProduct = () => {
           setSelectedImage(data.image);
         }
       } catch {
-        setSingleProduct(nextLocalProduct);
+        setSingleProduct(emptyProduct);
       }
     };
 
@@ -151,7 +152,7 @@ const SingleProduct = () => {
         const data = (await response.json()) as Product[];
         if (data.length) setProducts(data);
       } catch {
-        setProducts(fallbackProducts);
+        setProducts([]);
       }
     };
 

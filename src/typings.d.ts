@@ -45,11 +45,17 @@ interface Order {
   orderDate: string;
   data: {
     email: string;
+    emailAddress?: string;
+    [key: string]: unknown;
   };
   products: ProductInCart[];
   subtotal: number;
+  discount?: number;
+  shipping?: number;
+  tax?: number;
+  total?: number;
   user: {
     email: string;
-    id: number;
+    id: number | string;
   };
 }

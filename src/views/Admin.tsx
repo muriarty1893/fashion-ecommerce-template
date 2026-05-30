@@ -1,5 +1,6 @@
-import { FormEvent, ReactNode, useMemo, useState } from "react";
+import { FormEvent, ReactNode, useEffect, useMemo, useState } from "react";
 import Link from "next/link";
+import toast from "react-hot-toast";
 import {
   Activity,
   Bell,
@@ -20,7 +21,7 @@ import {
   Users,
   X,
 } from "lucide-react";
-import db from "../data/db.json";
+import customFetch from "../axios/custom";
 import { formatCategoryName } from "../utils/formatCategoryName";
 import { Language, useLanguage } from "../i18n";
 
@@ -39,7 +40,7 @@ type AdminOrder = {
 };
 
 type AdminUser = {
-  id: number;
+  id: number | string;
   name: string;
   lastname: string;
   email: string;
@@ -98,11 +99,9 @@ const salesSeries = [
 ];
 
 const Admin = () => {
-  const [products, setProducts] = useState<Product[]>(db.products as Product[]);
-  const [orders, setOrders] = useState<AdminOrder[]>(
-    db.orders as unknown as AdminOrder[]
-  );
-  const [users] = useState<AdminUser[]>(db.users as unknown as AdminUser[]);
+  const [products, setProducts] = useState<Product[]>([]);
+  const [orders, setOrders] = useState<AdminOrder[]>([]);
+  const [users, setUsers] = useState<AdminUser[]>([]);
   const [query, setQuery] = useState("");
   const [form, setForm] = useState<ProductForm>(initialForm);
   const [activeView, setActiveView] = useState<AdminView>("dashboard");
@@ -116,6 +115,25 @@ const Admin = () => {
     emailNotifications: true,
   });
   const { language } = useLanguage();
+
+  useEffect(() => {
+    const fetchAdminData = async () => {
+      try {
+        const [productsResponse, ordersResponse, usersResponse] = await Promise.all([
+          customFetch.get("/products"),
+          customFetch.get("/orders"),
+          customFetch.get("/users"),
+        ]);
+        setProducts(productsResponse.data);
+        setOrders(ordersResponse.data);
+        setUsers(usersResponse.data);
+      } catch {
+        toast.error("Login as an admin to manage inventory and orders.");
+      }
+    };
+
+    fetchAdminData();
+  }, []);
 
   const filteredProducts = useMemo(
     () =>
@@ -171,7 +189,7 @@ const Admin = () => {
     setMobileMenuOpen(false);
   };
 
-  const handleProductSubmit = (event: FormEvent<HTMLFormElement>) => {
+  const handleProductSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const nextProduct: Product = {
       id: String(Date.now()),
@@ -184,11 +202,17 @@ const Admin = () => {
     };
 
     if (!nextProduct.title || !nextProduct.price) return;
-    setProducts((currentProducts) => [nextProduct, ...currentProducts]);
-    setForm(initialForm);
+    try {
+      const response = await customFetch.post("/products", nextProduct);
+      setProducts((currentProducts) => [response.data, ...currentProducts]);
+      setForm(initialForm);
+      toast.success("Product added.");
+    } catch {
+      toast.error("Product could not be added.");
+    }
   };
 
-  const updateProduct = (
+  const updateProduct = async (
     id: string,
     field: "price" | "stock",
     value: number
@@ -198,14 +222,37 @@ const Admin = () => {
         product.id === id ? { ...product, [field]: value } : product
       )
     );
+    try {
+      await customFetch.put(`/products/${id}`, { [field]: value });
+    } catch {
+      toast.error("Product update failed.");
+    }
   };
 
-  const updateOrderStatus = (id: number, orderStatus: string) => {
+  const removeProduct = async (id: string) => {
+    const previousProducts = products;
+    setProducts((currentProducts) =>
+      currentProducts.filter((item) => item.id !== id)
+    );
+    try {
+      await customFetch.delete(`/products/${id}`);
+    } catch {
+      setProducts(previousProducts);
+      toast.error("Product removal failed.");
+    }
+  };
+
+  const updateOrderStatus = async (id: number, orderStatus: string) => {
     setOrders((currentOrders) =>
       currentOrders.map((order) =>
         order.id === id ? { ...order, orderStatus } : order
       )
     );
+    try {
+      await customFetch.put(`/orders/${id}`, { orderStatus });
+    } catch {
+      toast.error("Order status update failed.");
+    }
   };
 
   return (
@@ -325,9 +372,9 @@ const Admin = () => {
                 filteredProducts={filteredProducts}
                 form={form}
                 setForm={setForm}
-                setProducts={setProducts}
                 handleProductSubmit={handleProductSubmit}
                 updateProduct={updateProduct}
+                removeProduct={removeProduct}
                 lowStockCount={lowStockCount}
                 language={language}
               />
@@ -592,9 +639,9 @@ const ProductsView = ({
   filteredProducts,
   form,
   setForm,
-  setProducts,
   handleProductSubmit,
   updateProduct,
+  removeProduct,
   lowStockCount,
   language,
 }: {
@@ -602,9 +649,9 @@ const ProductsView = ({
   filteredProducts: Product[];
   form: ProductForm;
   setForm: (form: ProductForm) => void;
-  setProducts: React.Dispatch<React.SetStateAction<Product[]>>;
   handleProductSubmit: (event: FormEvent<HTMLFormElement>) => void;
   updateProduct: (id: string, field: "price" | "stock", value: number) => void;
+  removeProduct: (id: string) => void;
   lowStockCount: number;
   language: Language;
 }) => (
@@ -693,11 +740,7 @@ const ProductsView = ({
         products={filteredProducts}
         language={language}
         updateProduct={updateProduct}
-        removeProduct={(id) =>
-          setProducts((currentProducts) =>
-            currentProducts.filter((item) => item.id !== id)
-          )
-        }
+        removeProduct={removeProduct}
       />
     </AdminPanel>
   </section>

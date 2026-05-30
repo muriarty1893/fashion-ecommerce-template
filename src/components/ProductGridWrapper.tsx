@@ -5,9 +5,8 @@ import {
   setShowingProducts,
   setTotalProducts,
 } from "../features/shop/shopSlice";
-import db from "../data/db.json";
 
-const fallbackProducts = db.products as Product[];
+const fallbackProducts: Product[] = [];
 const fallbackColors = ["black", "ivory", "cocoa", "sage"];
 const fallbackSizes = ["XS", "S", "M", "L", "XL"];
 

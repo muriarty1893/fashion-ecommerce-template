@@ -20,26 +20,14 @@ const Login = () => {
     // Check if form data is valid
     if (!checkLoginFormData(data)) return;
     
-    // Check if user with the email and password exists
-    const users = await customFetch.get("/users");
-    let userId: number = 0; // Initialize userId with a default value
-    const userExists = users.data.some(
-      (user: { id: number; email: string; password: string }) => {
-        if (user.email === data.email) {
-          userId = user.id;
-        }
-        return user.email === data.email && user.password === data.password;
-      }
-    );
-    
-    // if user exists, show success message
-    if (userExists) {
+    try {
+      const response = await customFetch.post("/auth/login", data);
       toast.success(t("loginSuccess"));
-      localStorage.setItem("user", JSON.stringify({...data, id: userId}));
+      localStorage.setItem("user", JSON.stringify(response.data));
       store.dispatch(setLoginStatus(true));
       router.push("/user-profile");
       return;
-    } else {
+    } catch {
       toast.error(t("loginError"));
     }
   };

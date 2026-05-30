@@ -16,21 +16,17 @@ const Register = () => {
     const data = Object.fromEntries(formData);
     if (!checkRegisterFormData(data)) return;
 
-    const users = await customFetch.get("/users");
-    const userExists = users.data.some(
-      (user: { email: string }) => user.email === data.email
-    );
-    if (userExists) {
-      toast.error(t("userExists"));
-      return;
-    }
-
-    const response = await customFetch.post("/users", data);
-    if (response.status === 201) {
+    try {
+      const response = await customFetch.post("/auth/register", data);
       toast.success(t("registerSuccess"));
-      router.push("/login");
-    } else {
-      toast.error(t("genericError"));
+      localStorage.setItem("user", JSON.stringify(response.data));
+      router.push("/user-profile");
+    } catch (error: unknown) {
+      const status =
+        typeof error === "object" && error !== null && "response" in error
+          ? (error as { response?: { status?: number } }).response?.status
+          : undefined;
+      toast.error(status === 409 ? t("userExists") : t("genericError"));
     }
   };
 
@@ -134,8 +130,8 @@ const Register = () => {
 
             <div className="mt-5 flex items-center gap-2 rounded-2xl bg-[#fbfaf8] p-4 text-sm text-stone-600">
               <ShieldCheck className="h-5 w-5 shrink-0 text-[#9b6b43]" />
-              Demo credentials stay in the local JSON server, not a production
-              auth provider.
+              Demo credentials are stored through the backend with hashed
+              passwords and an HTTP-only session cookie.
             </div>
 
             <p className="mt-6 text-center text-sm text-stone-600">

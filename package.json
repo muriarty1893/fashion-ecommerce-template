@@ -8,12 +8,14 @@
     "start": "next dev -p 5173",
     "build": "next build",
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
-    "preview": "next start -p 5173"
+    "preview": "next start -p 5173",
+    "db:seed": "node scripts/seed-db.mjs"
   },
   "dependencies": {
     "@headlessui/react": "^2.1.2",
     "@reduxjs/toolkit": "^2.2.7",
     "@tailwindcss/forms": "^0.5.7",
+    "@vercel/postgres": "^0.10.0",
     "axios": "^1.7.2",
     "framer-motion": "^12.40.0",
     "lucide-react": "^1.16.0",
