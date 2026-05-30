@@ -50,8 +50,7 @@ export const createSessionToken = (user: SessionUser) => {
   return `${payload}.${sign(payload)}`;
 };
 
-export const readSession = (request: Request): SessionUser | null => {
-  const cookie = request.headers.get("cookie") || "";
+export const readSessionFromCookieHeader = (cookie: string): SessionUser | null => {
   const token = cookie
     .split(";")
     .map((part) => part.trim())
@@ -75,6 +74,9 @@ export const readSession = (request: Request): SessionUser | null => {
     return null;
   }
 };
+
+export const readSession = (request: Request): SessionUser | null =>
+  readSessionFromCookieHeader(request.headers.get("cookie") || "");
 
 export const setSessionCookie = (response: NextResponse, user: SessionUser) => {
   response.cookies.set(sessionCookieName, createSessionToken(user), {
@@ -120,4 +122,3 @@ export const requireAdmin = (request: Request) => {
 
   return sessionResult;
 };
-

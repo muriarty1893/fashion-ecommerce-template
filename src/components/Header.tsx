@@ -4,10 +4,11 @@ import { HiOutlineMagnifyingGlass } from "react-icons/hi2";
 import { HiOutlineShoppingBag } from "react-icons/hi2";
 import Link from "next/link";
 import SidebarMenu from "./SidebarMenu";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useLanguage } from "../i18n";
 import { Heart, ShieldCheck } from "lucide-react";
 import LanguageSelectorDropdown from "./LanguageSelectorDropdown";
+import customFetch from "../axios/custom";
 
 const navItems = [
   { labelKey: "newArrivals", to: "/shop" },
@@ -20,7 +21,21 @@ const navItems = [
 
 const Header = () => {
   const [ isSidebarOpen, setIsSidebarOpen ] = useState(false);
+  const [isAdmin, setIsAdmin] = useState(false);
   const { t } = useLanguage();
+
+  useEffect(() => {
+    const fetchSession = async () => {
+      try {
+        const response = await customFetch.get("/auth/me");
+        setIsAdmin(response.data?.role === "admin");
+      } catch {
+        setIsAdmin(false);
+      }
+    };
+
+    fetchSession();
+  }, []);
 
   return (
     <>
@@ -72,9 +87,11 @@ const Header = () => {
           {t("fashionClub").split(" ").slice(1).join(" ")}
         </Link>
         <LanguageSelectorDropdown className="max-sm:hidden" />
-        <Link href="/admin" aria-label="Admin" className="max-sm:hidden">
-          <ShieldCheck className="h-6 w-6 max-sm:h-5 max-sm:w-5" />
-        </Link>
+        {isAdmin && (
+          <Link href="/admin" aria-label="Admin" className="max-sm:hidden">
+            <ShieldCheck className="h-6 w-6 max-sm:h-5 max-sm:w-5" />
+          </Link>
+        )}
         <Link href="/wishlist" aria-label="Wishlist">
           <Heart className="h-6 w-6 max-sm:h-5 max-sm:w-5" />
         </Link>
@@ -87,7 +104,11 @@ const Header = () => {
       </div>
       </div>
     </header>
-    <SidebarMenu isSidebarOpen={isSidebarOpen} setIsSidebarOpen={setIsSidebarOpen} />
+    <SidebarMenu
+      isSidebarOpen={isSidebarOpen}
+      setIsSidebarOpen={setIsSidebarOpen}
+      isAdmin={isAdmin}
+    />
     </>
   );
 };

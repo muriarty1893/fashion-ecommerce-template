@@ -7,20 +7,24 @@ import { useAppSelector } from "../hooks";
 import { setLoginStatus } from "../features/auth/authSlice";
 import { store } from "../store";
 import { useLanguage } from "../i18n";
+import customFetch from "../axios/custom";
 
 const SidebarMenu = ({
   isSidebarOpen,
   setIsSidebarOpen,
+  isAdmin,
 }: {
   isSidebarOpen: boolean;
   setIsSidebarOpen: (prev: boolean) => void;
+  isAdmin: boolean;
 }) => {
   const [isAnimating, setIsAnimating] = useState(false);
   const { loginStatus } = useAppSelector((state) => state.auth);
   const router = useRouter();
   const { t } = useLanguage();
 
-  const logout = () => {
+  const logout = async () => {
+    await customFetch.post("/auth/logout").catch(() => null);
     toast.error(t("logoutSuccess"));
     localStorage.removeItem("user");
     store.dispatch(setLoginStatus(false));
@@ -79,12 +83,14 @@ const SidebarMenu = ({
             >
               {t("search")}
             </Link>
-            <Link
-              href="/admin"
-              className="py-2 border-y border-secondaryBrown w-full block flex justify-center"
-            >
-              Admin
-            </Link>
+            {isAdmin && (
+              <Link
+                href="/admin"
+                className="py-2 border-y border-secondaryBrown w-full block flex justify-center"
+              >
+                Admin
+              </Link>
+            )}
             <Link
               href="/wishlist"
               className="py-2 border-y border-secondaryBrown w-full block flex justify-center"
