@@ -88,6 +88,19 @@ const productDetails: Record<string, ProductDetail> = {
     materials: "64% rayon, 28% nylon, 8% elastane.",
     delivery: "Ships with signature packaging and return label included.",
   },
+  "editorial-collection": {
+    subtitle: "Concept-led styling with a showroom mannequin mood.",
+    story:
+      "A sharper capsule built around halo details, uniform references, and collectible display styling for visual impact.",
+    details: [
+      "Editorial silhouette designed as a statement outfit",
+      "Polished trim details with costume-inspired structure",
+      "Best styled as a full look with minimal accessories",
+    ],
+    fit: "Structured fit. Choose your usual size for the intended shape.",
+    materials: "Mixed textile composition with coated and satin-finish elements.",
+    delivery: "Ships in 1-3 business days with tracked delivery and careful packaging.",
+  },
 };
 
 const colors = [

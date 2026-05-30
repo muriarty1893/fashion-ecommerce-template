@@ -39,6 +39,7 @@ type FooterLinkKey =
   | "luxuryCollection"
   | "essentials"
   | "accessories"
+  | "editorialCollection"
   | "bestSellers"
   | "occasionEdit"
   | "atelierDrop"
@@ -74,6 +75,7 @@ const footerColumns: FooterColumn[] = [
       { labelKey: "luxuryCollection", to: "/shop/luxury-collection" },
       { labelKey: "essentials", to: "/shop/unique-collection" },
       { labelKey: "accessories", to: "/shop/summer-edition" },
+      { labelKey: "editorialCollection", to: "/shop/editorial-collection" },
     ],
   },
   {
@@ -147,6 +149,7 @@ const footerCopy: Record<
       luxuryCollection: "Luxury Collection",
       essentials: "Essentials",
       accessories: "Accessories",
+      editorialCollection: "Editorial Collection",
       bestSellers: "Best Sellers",
       occasionEdit: "Occasion Edit",
       atelierDrop: "Atelier Drop",
@@ -195,6 +198,7 @@ const footerCopy: Record<
       luxuryCollection: "Luxuskollektion",
       essentials: "Essentials",
       accessories: "Accessoires",
+      editorialCollection: "Editorial-Kollektion",
       bestSellers: "Bestseller",
       occasionEdit: "Anlass-Edit",
       atelierDrop: "Atelier Drop",
@@ -243,6 +247,7 @@ const footerCopy: Record<
       luxuryCollection: "Lüks Koleksiyon",
       essentials: "Temel Parçalar",
       accessories: "Aksesuarlar",
+      editorialCollection: "Editoryal Koleksiyon",
       bestSellers: "Çok Satanlar",
       occasionEdit: "Davet Seçkisi",
       atelierDrop: "Atölye Serisi",

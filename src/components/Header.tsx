@@ -16,6 +16,7 @@ const navItems = [
   { labelKey: "navLuxury", to: "/shop/luxury-collection" },
   { labelKey: "navEssentials", to: "/shop/unique-collection" },
   { labelKey: "navAccessories", to: "/shop/summer-edition" },
+  { labelKey: "navEditorial", to: "/shop/editorial-collection" },
   { labelKey: "navSale", to: "/shop" },
 ] as const;
 

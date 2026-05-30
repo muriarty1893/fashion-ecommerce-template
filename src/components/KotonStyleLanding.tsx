@@ -41,6 +41,11 @@ const categories = [
     image: "/assets/luxury category 4.png",
     to: "/shop/summer-edition",
   },
+  {
+    key: "editorialCollection",
+    image: "/assets/generated/editorial-orbit-tailoring.png",
+    to: "/shop/editorial-collection",
+  },
 ] as const;
 
 const trustItems = [
@@ -150,6 +155,10 @@ const landingCopy: Record<
         title: "Accessories",
         text: "Finishing details for day-to-night styling.",
       },
+      editorialCollection: {
+        title: "Editorial Collection",
+        text: "Concept mannequin looks with halo details and uniform styling.",
+      },
     },
     saleEyebrow: "Seasonal private sale",
     saleTitle: "Up to 30 percent off selected occasion pieces.",
@@ -235,6 +244,10 @@ const landingCopy: Record<
         title: "Accessoires",
         text: "Feine Details für Looks von Tag bis Abend.",
       },
+      editorialCollection: {
+        title: "Editorial-Kollektion",
+        text: "Konzeptuelle Mannequin-Looks mit Halo-Details und Uniform-Styling.",
+      },
     },
     saleEyebrow: "Saisonaler Private Sale",
     saleTitle: "Bis zu 30 Prozent auf ausgewählte Anlassstücke.",
@@ -319,6 +332,10 @@ const landingCopy: Record<
       accessories: {
         title: "Aksesuarlar",
         text: "Gündüzden geceye geçişi tamamlayan son dokunuşlar.",
+      },
+      editorialCollection: {
+        title: "Editoryal Koleksiyon",
+        text: "Halo detaylı ve üniforma etkili konsept vitrin görünümleri.",
       },
     },
     saleEyebrow: "Sezonluk özel indirim",

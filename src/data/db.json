@@ -215,6 +215,39 @@
       "price": 4700,
       "popularity": 6,
       "stock": 31
+    },
+    {
+      "id": "25",
+      "title": "Saint Lily Halo Dress",
+      "image": "generated/editorial-saint-lily-dress.png",
+      "category": "editorial-collection",
+      "price": 2400,
+      "popularity": 12,
+      "stock": 12,
+      "colors": ["ivory", "black"],
+      "sizes": ["XS", "S", "M", "L"]
+    },
+    {
+      "id": "26",
+      "title": "Orbit Guard Tailoring",
+      "image": "generated/editorial-orbit-tailoring.png",
+      "category": "editorial-collection",
+      "price": 5200,
+      "popularity": 11,
+      "stock": 8,
+      "colors": ["black", "ivory", "cocoa"],
+      "sizes": ["S", "M", "L"]
+    },
+    {
+      "id": "27",
+      "title": "Blue Halo Sailor Set",
+      "image": "generated/editorial-blue-halo-set.png",
+      "category": "editorial-collection",
+      "price": 2480,
+      "popularity": 10,
+      "stock": 15,
+      "colors": ["blue", "black", "ivory"],
+      "sizes": ["XS", "S", "M", "L", "XL"]
     }
   ],
   "orders": [

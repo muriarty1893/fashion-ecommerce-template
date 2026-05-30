@@ -64,6 +64,7 @@ const categoryOptions = [
   "luxury-collection",
   "summer-edition",
   "unique-collection",
+  "editorial-collection",
 ];
 
 const initialForm: ProductForm = {

@@ -50,6 +50,14 @@ const CategoryImpactCarousel = () => {
         mood: "Statement edit",
         copy: "Distinctive silhouettes that anchor an outfit while staying simple to wear.",
       },
+      {
+        title: t("editorialCollection"),
+        link: "editorial-collection",
+        image: "generated/editorial-saint-lily-dress.png",
+        pieceCount: 3,
+        mood: "Concept capsule",
+        copy: "Mannequin-led editorial looks with halo details, uniform tailoring, and collectible styling.",
+      },
     ],
     [t],
   );
