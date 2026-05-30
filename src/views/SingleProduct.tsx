@@ -13,6 +13,7 @@ import toast from "react-hot-toast";
 import { useLanguage } from "../i18n";
 import { FaStar } from "react-icons/fa";
 import { Heart } from "lucide-react";
+import { productImageSrc } from "../utils/productImageSrc";
 
 type ProductDetail = {
   subtitle: string;
@@ -219,7 +220,7 @@ const SingleProduct = () => {
                 }`}
               >
                 <img
-                  src={`/assets/${image}`}
+                  src={productImageSrc(image)}
                   alt={singleProduct.title}
                   className="h-full w-full rounded-xl object-cover"
                 />
@@ -228,7 +229,7 @@ const SingleProduct = () => {
           </div>
           <div className="order-1 overflow-hidden rounded-[2rem] bg-stone-100 shadow-[0_24px_80px_rgba(28,25,23,0.08)] sm:order-2">
             <img
-              src={`/assets/${selectedImage}`}
+              src={productImageSrc(selectedImage)}
               alt={singleProduct.title}
               className="h-full min-h-[460px] w-full object-cover max-md:min-h-[340px]"
             />

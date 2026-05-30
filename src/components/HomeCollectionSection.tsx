@@ -27,7 +27,7 @@ const HomeCollectionSection = () => {
           <ArrowRight className="h-4 w-4" />
         </Link>
       </div>
-      <ProductGridWrapper limit={6}>
+      <ProductGridWrapper sortCriteria="popularity" limit={6}>
         <ProductGrid />
       </ProductGridWrapper>
     </section>

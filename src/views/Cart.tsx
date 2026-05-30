@@ -12,6 +12,7 @@ import {
 import toast from "react-hot-toast";
 import { useLanguage } from "../i18n";
 import { LockKeyhole, ShoppingBag, Tag, Truck } from "lucide-react";
+import { productImageSrc } from "../utils/productImageSrc";
 
 const Cart = () => {
   const { productsInCart, subtotal } = useAppSelector((state) => state.cart);
@@ -96,7 +97,7 @@ const Cart = () => {
                     className="overflow-hidden rounded-2xl bg-stone-100"
                   >
                     <img
-                      src={`/assets/${product.image}`}
+                      src={productImageSrc(product.image)}
                       alt={product.title}
                       className="h-56 w-full object-cover object-top transition duration-500 hover:scale-[1.03] sm:h-full"
                     />

@@ -7,6 +7,7 @@ import { useAppDispatch, useAppSelector } from "../hooks";
 import { toggleWishlistProduct } from "../features/wishlist/wishlistSlice";
 import { addProductToTheCart } from "../features/cart/cartSlice";
 import toast from "react-hot-toast";
+import { productImageSrc } from "../utils/productImageSrc";
 
 const ProductItem = ({
   id,
@@ -98,7 +99,7 @@ const ProductItem = ({
       <div className="relative h-[500px] w-full overflow-hidden bg-stone-100 max-xl:h-[430px] max-md:h-[380px]">
         <Link href={`/product/${id}`} className="block h-full w-full">
           <img
-            src={`/assets/${image}`}
+            src={productImageSrc(image)}
             alt={title}
             className="h-full w-full object-cover object-top transition duration-500 group-hover:scale-[1.03]"
           />

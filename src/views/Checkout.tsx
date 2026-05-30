@@ -24,6 +24,7 @@ import { removeProductFromTheCart } from "../features/cart/cartSlice";
 import { useAppDispatch, useAppSelector } from "../hooks";
 import { checkCheckoutFormData } from "../utils/checkCheckoutFormData";
 import { useLanguage } from "../i18n";
+import { productImageSrc } from "../utils/productImageSrc";
 
 type ShippingMethod = {
   id: string;
@@ -485,7 +486,7 @@ const Checkout = () => {
                   <div key={item.id} className="flex gap-3">
                     <div className="relative h-14 w-14 shrink-0">
                       <img
-                        src={`/assets/${item.image}`}
+                        src={productImageSrc(item.image)}
                         alt={item.title}
                         className="h-full w-full rounded-md object-cover"
                       />

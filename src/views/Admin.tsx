@@ -25,6 +25,7 @@ import {
 } from "lucide-react";
 import customFetch from "../axios/custom";
 import { formatCategoryName } from "../utils/formatCategoryName";
+import { productImageSrc } from "../utils/productImageSrc";
 import { Language, useLanguage } from "../i18n";
 
 type AdminOrder = {
@@ -209,7 +210,7 @@ const Admin = () => {
       const response = await customFetch.post("/products", nextProduct);
       setProducts((currentProducts) => [response.data, ...currentProducts]);
       setForm(initialForm);
-      toast.success("Product added.");
+      toast.success("Product added to the storefront.");
     } catch {
       toast.error("Product could not be added.");
     }
@@ -371,7 +372,6 @@ const Admin = () => {
 
             {activeView === "products" && (
               <ProductsView
-                products={products}
                 filteredProducts={filteredProducts}
                 form={form}
                 setForm={setForm}
@@ -638,7 +638,6 @@ const DashboardView = ({
 );
 
 const ProductsView = ({
-  products,
   filteredProducts,
   form,
   setForm,
@@ -648,7 +647,6 @@ const ProductsView = ({
   lowStockCount,
   language,
 }: {
-  products: Product[];
   filteredProducts: Product[];
   form: ProductForm;
   setForm: (form: ProductForm) => void;
@@ -661,7 +659,7 @@ const ProductsView = ({
   <section className="grid gap-5 xl:grid-cols-[360px_1fr]">
     <AdminPanel
       title="Add Product"
-      subtitle="Create local preview products for the storefront."
+      subtitle="Create database-backed products for the storefront."
     >
       <form onSubmit={handleProductSubmit} className="grid gap-4">
         <div className="flex items-center gap-3 rounded-2xl bg-blue-50 p-3">
@@ -669,7 +667,8 @@ const ProductsView = ({
             <PackagePlus size={18} />
           </span>
           <p className="text-sm text-slate-600">
-            Changes are stored in browser state for this preview.
+            Add an asset path such as generated/editorial-blue-halo-set.png or
+            paste a full image URL.
           </p>
         </div>
         <AdminField label="Product name">
@@ -713,19 +712,23 @@ const ProductsView = ({
             ))}
           </select>
         </AdminField>
-        <AdminField label="Image file">
-          <select
+        <AdminField label="Image path or URL">
+          <input
             value={form.image}
             onChange={(event) => setForm({ ...form, image: event.target.value })}
             className="admin-input"
-          >
-            {products.slice(0, 12).map((product) => (
-              <option key={product.image} value={product.image}>
-                {product.image}
-              </option>
-            ))}
-          </select>
+            placeholder="generated/editorial-blue-halo-set.png"
+          />
         </AdminField>
+        {form.image && (
+          <div className="overflow-hidden rounded-2xl border border-slate-200 bg-slate-50">
+            <img
+              src={productImageSrc(form.image)}
+              alt="New product preview"
+              className="h-48 w-full object-cover object-top"
+            />
+          </div>
+        )}
         <button
           type="submit"
           className="h-11 rounded-full bg-blue-700 px-4 text-sm font-bold text-white transition hover:bg-blue-800"
@@ -1080,7 +1083,7 @@ const InventoryTable = ({
             <td className="px-4 py-4">
               <div className="flex items-center gap-3">
                 <img
-                  src={`/assets/${product.image}`}
+                  src={productImageSrc(product.image)}
                   alt={product.title}
                   className="h-12 w-12 rounded-2xl object-cover object-top"
                 />
@@ -1145,8 +1148,8 @@ const LowStockList = ({
         className="flex items-center justify-between gap-3 rounded-2xl border border-slate-200 p-3"
       >
         <div className="flex min-w-0 items-center gap-3">
-          <img
-            src={`/assets/${product.image}`}
+            <img
+            src={productImageSrc(product.image)}
             alt={product.title}
             className="h-12 w-12 rounded-2xl object-cover object-top"
           />

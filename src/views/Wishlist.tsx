@@ -6,6 +6,7 @@ import { removeWishlistProduct } from "../features/wishlist/wishlistSlice";
 import { useAppDispatch, useAppSelector } from "../hooks";
 import { formatCategoryName } from "../utils/formatCategoryName";
 import { useLanguage } from "../i18n";
+import { productImageSrc } from "../utils/productImageSrc";
 
 const Wishlist = () => {
   const { products } = useAppSelector((state) => state.wishlist);
@@ -93,7 +94,7 @@ const Wishlist = () => {
                 className="h-56 overflow-hidden rounded-2xl bg-stone-100 sm:h-full"
               >
                 <img
-                  src={`/assets/${product.image}`}
+                  src={productImageSrc(product.image)}
                   alt={product.title}
                   className="h-full w-full object-cover object-top transition duration-500 hover:scale-[1.03]"
                 />
