@@ -84,6 +84,16 @@ const viewLabels: Record<AdminView, string> = {
   settings: "Settings",
 };
 
+const maxUploadedImageSize = 3 * 1024 * 1024;
+
+const readImageFileAsDataUrl = (file: File) =>
+  new Promise<string>((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = () => resolve(String(reader.result));
+    reader.onerror = () => reject(new Error("Image upload failed."));
+    reader.readAsDataURL(file);
+  });
+
 const navItems: Array<{ view: AdminView; icon: ReactNode; label: string }> = [
   { view: "dashboard", icon: <LayoutDashboard size={18} />, label: "Dashboard" },
   { view: "products", icon: <Boxes size={18} />, label: "Products" },
@@ -667,8 +677,8 @@ const ProductsView = ({
             <PackagePlus size={18} />
           </span>
           <p className="text-sm text-slate-600">
-            Add an asset path such as generated/editorial-blue-halo-set.png or
-            paste a full image URL.
+            Upload an image from your device, paste a full image URL, or use an
+            existing asset path.
           </p>
         </div>
         <AdminField label="Product name">
@@ -712,12 +722,36 @@ const ProductsView = ({
             ))}
           </select>
         </AdminField>
+        <AdminField label="Upload image">
+          <input
+            type="file"
+            accept="image/png,image/jpeg,image/webp"
+            onChange={async (event) => {
+              const file = event.target.files?.[0];
+              if (!file) return;
+              if (file.size > maxUploadedImageSize) {
+                toast.error("Image must be 3 MB or smaller.");
+                event.target.value = "";
+                return;
+              }
+
+              try {
+                const image = await readImageFileAsDataUrl(file);
+                setForm({ ...form, image });
+              } catch {
+                toast.error("Image upload failed.");
+              }
+            }}
+            className="admin-input file:mr-3 file:rounded-full file:border-0 file:bg-blue-700 file:px-3 file:py-1.5 file:text-sm file:font-bold file:text-white"
+          />
+        </AdminField>
         <AdminField label="Image path or URL">
           <input
-            value={form.image}
+            value={form.image.startsWith("data:image/") ? "Uploaded image" : form.image}
             onChange={(event) => setForm({ ...form, image: event.target.value })}
             className="admin-input"
             placeholder="generated/editorial-blue-halo-set.png"
+            readOnly={form.image.startsWith("data:image/")}
           />
         </AdminField>
         {form.image && (
