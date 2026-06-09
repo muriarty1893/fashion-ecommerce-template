@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { ShoppingBag } from "lucide-react";
+import { ArrowRight, ShoppingBag } from "lucide-react";
 import toast from "react-hot-toast";
 import { addProductToTheCart } from "../features/cart/cartSlice";
 import { toggleWishlistProduct } from "../features/wishlist/wishlistSlice";
@@ -152,6 +152,7 @@ const HomeBestSellerCard = ({ product }: { product: Product }) => {
                 className="best-seller-card-view-button"
               >
                 View Page
+                <ArrowRight size={16} />
               </Link>
             </div>
           </div>
