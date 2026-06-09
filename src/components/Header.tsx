@@ -9,7 +9,6 @@ import { useLanguage } from "../i18n";
 import { Heart, ShieldCheck } from "lucide-react";
 import LanguageSelectorDropdown from "./LanguageSelectorDropdown";
 import customFetch from "../axios/custom";
-import { useAppSelector } from "../hooks";
 
 const navItems = [
   { labelKey: "newArrivals", to: "/shop" },
@@ -24,15 +23,17 @@ const navItems = [
 const Header = () => {
   const [ isSidebarOpen, setIsSidebarOpen ] = useState(false);
   const [isAdmin, setIsAdmin] = useState(false);
-  const { loginStatus } = useAppSelector((state) => state.auth);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
   const { t } = useLanguage();
 
   useEffect(() => {
     const fetchSession = async () => {
       try {
         const response = await customFetch.get("/auth/me");
+        setIsLoggedIn(Boolean(response.data?.id));
         setIsAdmin(response.data?.role === "admin");
       } catch {
+        setIsLoggedIn(false);
         setIsAdmin(false);
       }
     };
@@ -99,8 +100,8 @@ const Header = () => {
           <Heart className="h-6 w-6 max-sm:h-5 max-sm:w-5" />
         </Link>
         <Link
-          href={loginStatus ? "/user-profile" : "/login"}
-          aria-label={loginStatus ? "Profile" : t("account")}
+          href={isLoggedIn ? "/user-profile" : "/login"}
+          aria-label={isLoggedIn ? "Profile" : t("account")}
         >
           <HiOutlineUser className="text-2xl max-sm:text-xl" />
         </Link>
@@ -114,6 +115,11 @@ const Header = () => {
       isSidebarOpen={isSidebarOpen}
       setIsSidebarOpen={setIsSidebarOpen}
       isAdmin={isAdmin}
+      isLoggedIn={isLoggedIn}
+      onLogout={() => {
+        setIsLoggedIn(false);
+        setIsAdmin(false);
+      }}
     />
     </>
   );

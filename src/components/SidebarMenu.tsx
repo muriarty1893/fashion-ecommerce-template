@@ -3,7 +3,6 @@ import toast from "react-hot-toast";
 import { HiXMark } from "react-icons/hi2";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useAppSelector } from "../hooks";
 import { setLoginStatus } from "../features/auth/authSlice";
 import { store } from "../store";
 import { useLanguage } from "../i18n";
@@ -13,13 +12,16 @@ const SidebarMenu = ({
   isSidebarOpen,
   setIsSidebarOpen,
   isAdmin,
+  isLoggedIn,
+  onLogout,
 }: {
   isSidebarOpen: boolean;
   setIsSidebarOpen: (prev: boolean) => void;
   isAdmin: boolean;
+  isLoggedIn: boolean;
+  onLogout: () => void;
 }) => {
   const [isAnimating, setIsAnimating] = useState(false);
-  const { loginStatus } = useAppSelector((state) => state.auth);
   const router = useRouter();
   const { t } = useLanguage();
 
@@ -28,6 +30,7 @@ const SidebarMenu = ({
     toast.error(t("logoutSuccess"));
     localStorage.removeItem("user");
     store.dispatch(setLoginStatus(false));
+    onLogout();
     router.push("/login");
   };
 
@@ -97,7 +100,7 @@ const SidebarMenu = ({
             >
               Wishlist
             </Link>
-            {loginStatus ? (
+            {isLoggedIn ? (
               <>
                 <Link
                   href="/user-profile"

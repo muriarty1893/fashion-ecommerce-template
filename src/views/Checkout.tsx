@@ -576,10 +576,38 @@ const Checkout = () => {
           <button
             type="submit"
             disabled={!agreeToTerms || productsInCart.length === 0 || hasInvalidItems}
-            className="inline-flex h-12 items-center justify-center gap-2 rounded-lg bg-gray-950 px-5 text-sm font-medium text-white transition hover:bg-secondaryBrown disabled:cursor-not-allowed disabled:bg-gray-300"
+            className="checkout-transaction-button"
           >
-            <Lock className="h-4 w-4" />
-            {t("confirmOrder")} ${total.toFixed(2)}
+            <span className="checkout-transaction-left" aria-hidden="true">
+              <span className="checkout-transaction-card">
+                <span className="checkout-transaction-card-line" />
+                <span className="checkout-transaction-card-buttons" />
+              </span>
+              <span className="checkout-transaction-post">
+                <span className="checkout-transaction-post-line" />
+                <span className="checkout-transaction-screen">
+                  <span className="checkout-transaction-dollar">$</span>
+                </span>
+                <span className="checkout-transaction-numbers" />
+                <span className="checkout-transaction-numbers-line2" />
+              </span>
+            </span>
+            <span className="checkout-transaction-right">
+              <span className="checkout-transaction-text">
+                {t("confirmOrder")} ${total.toFixed(2)}
+              </span>
+              <svg
+                viewBox="0 0 451.846 451.847"
+                xmlns="http://www.w3.org/2000/svg"
+                className="checkout-transaction-arrow"
+                aria-hidden="true"
+              >
+                <path
+                  fill="currentColor"
+                  d="M345.441 248.292L151.154 442.573c-12.359 12.365-32.397 12.365-44.75 0-12.354-12.354-12.354-32.391 0-44.744L278.318 225.92 106.409 54.017c-12.354-12.359-12.354-32.394 0-44.748 12.354-12.359 32.391-12.359 44.75 0l194.287 194.284c6.177 6.18 9.262 14.271 9.262 22.366 0 8.099-3.091 16.196-9.267 22.373z"
+                />
+              </svg>
+            </span>
           </button>
         </aside>
       </form>

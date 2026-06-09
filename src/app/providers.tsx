@@ -10,7 +10,19 @@ const Providers = ({ children }: { children: React.ReactNode }) => (
   <Provider store={store}>
     <LanguageProvider>
       <ToastProvider>
-        <Toaster />
+        <Toaster
+          position="top-right"
+          toastOptions={{
+            duration: 4200,
+            className: "app-hot-toast",
+            success: {
+              className: "app-hot-toast app-hot-toast-success",
+            },
+            error: {
+              className: "app-hot-toast app-hot-toast-error",
+            },
+          }}
+        />
         {children}
       </ToastProvider>
     </LanguageProvider>

@@ -1,7 +1,7 @@
 import { ArrowRight } from "lucide-react";
 import Link from "next/link";
-import ProductGrid from "./ProductGrid";
 import ProductGridWrapper from "./ProductGridWrapper";
+import HomeBestSellerGrid from "./HomeBestSellerGrid";
 
 const HomeCollectionSection = () => {
   return (
@@ -28,7 +28,7 @@ const HomeCollectionSection = () => {
         </Link>
       </div>
       <ProductGridWrapper sortCriteria="popularity" limit={6}>
-        <ProductGrid />
+        <HomeBestSellerGrid />
       </ProductGridWrapper>
     </section>
   );

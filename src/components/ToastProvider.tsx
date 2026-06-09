@@ -8,7 +8,6 @@ import {
   useState,
 } from "react";
 import { AnimatePresence, PanInfo, motion } from "framer-motion";
-import { X } from "lucide-react";
 
 export type ToastType = {
   id: string;
@@ -124,27 +123,30 @@ const ToastCard = ({
       animate={{ opacity: 1, x: 0, scale: 1 }}
       exit={{ opacity: 0, x: 40, scale: 0.98 }}
       transition={{ type: "spring", stiffness: 360, damping: 30 }}
-      className="pointer-events-auto flex cursor-grab items-start gap-3 rounded-2xl border border-stone-200 bg-white p-4 text-stone-950 shadow-[0_18px_60px_rgba(28,25,23,0.18)] active:cursor-grabbing"
+      className="pointer-events-auto w-80 cursor-grab rounded-md bg-green-50 p-4 text-sm leading-5 shadow-[0_18px_60px_rgba(22,101,52,0.16)] active:cursor-grabbing"
       role="status"
       aria-live="polite"
     >
-      <div className="mt-0.5 grid h-10 w-10 shrink-0 place-items-center rounded-full bg-stone-950 text-white">
-        {toast.leading()}
+      <div className="flex">
+        <div className="shrink-0 text-green-400">{toast.leading()}</div>
+        <div className="ml-3">
+          <p className="font-bold text-green-800">{toast.title}</p>
+          {toast.subtitle && (
+            <div className="mt-2 text-green-700">
+              <p>{toast.subtitle}</p>
+            </div>
+          )}
+          <div className="-mx-2 -mb-1.5 mt-3.5 flex">
+            <button
+              type="button"
+              onClick={onRemove}
+              className="rounded-md border-0 bg-green-50 px-2 py-1.5 text-sm font-bold leading-5 text-green-800 transition hover:bg-green-100"
+            >
+              Dismiss
+            </button>
+          </div>
+        </div>
       </div>
-      <div className="min-w-0 flex-1">
-        <p className="text-sm font-black">{toast.title}</p>
-        {toast.subtitle && (
-          <p className="mt-1 text-sm leading-5 text-stone-600">{toast.subtitle}</p>
-        )}
-      </div>
-      <button
-        type="button"
-        onClick={onRemove}
-        className="grid h-8 w-8 shrink-0 place-items-center rounded-full text-stone-500 transition hover:bg-stone-100 hover:text-stone-950"
-        aria-label="Dismiss notification"
-      >
-        <X className="h-4 w-4" />
-      </button>
     </motion.div>
   );
 };
