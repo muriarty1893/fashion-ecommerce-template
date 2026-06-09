@@ -3,8 +3,9 @@ import { HiOutlineUser } from "react-icons/hi2";
 import { HiOutlineMagnifyingGlass } from "react-icons/hi2";
 import { HiOutlineShoppingBag } from "react-icons/hi2";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import SidebarMenu from "./SidebarMenu";
-import { useEffect, useState } from "react";
+import { FormEvent, useEffect, useState } from "react";
 import { useLanguage } from "../i18n";
 import { Heart, ShieldCheck } from "lucide-react";
 import LanguageSelectorDropdown from "./LanguageSelectorDropdown";
@@ -25,6 +26,7 @@ const Header = () => {
   const [isAdmin, setIsAdmin] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const { t } = useLanguage();
+  const router = useRouter();
 
   useEffect(() => {
     const fetchSession = async () => {
@@ -40,6 +42,15 @@ const Header = () => {
 
     fetchSession();
   }, []);
+
+  const handleHeaderSearch = (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+
+    const formData = new FormData(event.currentTarget);
+    const query = String(formData.get("headerSearch") || "").trim();
+
+    router.push(query ? `/search?query=${encodeURIComponent(query)}` : "/search");
+  };
 
   return (
     <>
@@ -74,14 +85,27 @@ const Header = () => {
       </Link>
 
       <div className="flex items-center justify-end gap-4 text-stone-950 max-sm:gap-3">
-        <Link
-          href="/search"
-          aria-label={t("search")}
-          className="flex h-10 items-center gap-2 rounded-full border border-stone-200 px-3 transition hover:border-stone-950 hover:bg-stone-50 focus:outline-none focus:ring-2 focus:ring-stone-950 focus:ring-offset-2 max-md:border-0 max-md:px-0"
+        <form
+          className="header-search"
+          role="search"
+          onSubmit={handleHeaderSearch}
         >
-          <HiOutlineMagnifyingGlass className="text-2xl max-sm:text-xl" />
-          <span className="text-sm font-semibold max-md:hidden">{t("search")}</span>
-        </Link>
+          <input
+            type="text"
+            name="headerSearch"
+            className="header-search-input"
+            required
+            placeholder="Type to search..."
+            aria-label={t("search")}
+          />
+          <button
+            type="submit"
+            className="header-search-icon"
+            aria-label={t("search")}
+          >
+            <HiOutlineMagnifyingGlass />
+          </button>
+        </form>
         <Link
           href="/info/club"
           className="text-center text-xs font-black uppercase leading-[0.9] tracking-wide text-[#9b6b43] max-sm:hidden"
