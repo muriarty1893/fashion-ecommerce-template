@@ -20,7 +20,7 @@ const Register = () => {
       const response = await customFetch.post("/auth/register", data);
       toast.success(t("registerSuccess"));
       localStorage.setItem("user", JSON.stringify(response.data));
-      router.push("/user-profile");
+      router.push("/");
     } catch (error: unknown) {
       const status =
         typeof error === "object" && error !== null && "response" in error

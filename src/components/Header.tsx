@@ -9,6 +9,7 @@ import { useLanguage } from "../i18n";
 import { Heart, ShieldCheck } from "lucide-react";
 import LanguageSelectorDropdown from "./LanguageSelectorDropdown";
 import customFetch from "../axios/custom";
+import { useAppSelector } from "../hooks";
 
 const navItems = [
   { labelKey: "newArrivals", to: "/shop" },
@@ -23,6 +24,7 @@ const navItems = [
 const Header = () => {
   const [ isSidebarOpen, setIsSidebarOpen ] = useState(false);
   const [isAdmin, setIsAdmin] = useState(false);
+  const { loginStatus } = useAppSelector((state) => state.auth);
   const { t } = useLanguage();
 
   useEffect(() => {
@@ -96,7 +98,10 @@ const Header = () => {
         <Link href="/wishlist" aria-label="Wishlist">
           <Heart className="h-6 w-6 max-sm:h-5 max-sm:w-5" />
         </Link>
-        <Link href="/login" aria-label={t("account")}>
+        <Link
+          href={loginStatus ? "/user-profile" : "/login"}
+          aria-label={loginStatus ? "Profile" : t("account")}
+        >
           <HiOutlineUser className="text-2xl max-sm:text-xl" />
         </Link>
         <Link href="/cart" aria-label={t("cart")}>

@@ -99,6 +99,12 @@ const SidebarMenu = ({
             </Link>
             {loginStatus ? (
               <>
+                <Link
+                  href="/user-profile"
+                  className="py-2 border-y border-secondaryBrown w-full block flex justify-center"
+                >
+                  Profile
+                </Link>
                 <button
                   onClick={logout}
                   className="py-2 border-y border-secondaryBrown w-full block flex justify-center"

@@ -25,7 +25,7 @@ const Login = () => {
       toast.success(t("loginSuccess"));
       localStorage.setItem("user", JSON.stringify(response.data));
       store.dispatch(setLoginStatus(true));
-      router.push("/user-profile");
+      router.push("/");
       return;
     } catch {
       toast.error(t("loginError"));
@@ -36,7 +36,7 @@ const Login = () => {
     const user = localStorage.getItem("user");
     if (user) {
       toast.success(t("alreadyLoggedIn"));
-      router.push("/user-profile");
+      router.push("/");
     }
   }, [router, t]);
 
