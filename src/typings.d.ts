@@ -58,4 +58,12 @@ interface Order {
     email: string;
     id: number | string;
   };
+  payment?: {
+    provider: string;
+    providerToken: string;
+    providerConversationId: string;
+    providerPaymentId: string;
+    status: string;
+    rawResponse?: Record<string, unknown>;
+  };
 }

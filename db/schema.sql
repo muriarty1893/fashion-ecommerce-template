@@ -55,8 +55,22 @@ CREATE TABLE IF NOT EXISTS order_items (
   color TEXT
 );
 
+CREATE TABLE IF NOT EXISTS payments (
+  id SERIAL PRIMARY KEY,
+  order_id INTEGER NOT NULL UNIQUE REFERENCES orders(id) ON DELETE CASCADE,
+  provider TEXT NOT NULL,
+  provider_token TEXT UNIQUE,
+  provider_conversation_id TEXT UNIQUE,
+  provider_payment_id TEXT,
+  payment_status TEXT NOT NULL DEFAULT 'pending',
+  provider_response JSONB,
+  created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+  updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+);
+
 CREATE INDEX IF NOT EXISTS idx_products_category ON products(category);
 CREATE INDEX IF NOT EXISTS idx_products_deleted_at ON products(deleted_at);
 CREATE INDEX IF NOT EXISTS idx_orders_user_id ON orders(user_id);
 CREATE INDEX IF NOT EXISTS idx_order_items_order_id ON order_items(order_id);
-
+CREATE INDEX IF NOT EXISTS idx_payments_provider_token ON payments(provider_token);
+CREATE INDEX IF NOT EXISTS idx_payments_provider_conversation_id ON payments(provider_conversation_id);

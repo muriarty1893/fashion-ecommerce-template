@@ -40,6 +40,11 @@ type AdminOrder = {
     emailAddress?: string;
     email?: string;
   };
+  payment?: {
+    provider?: string;
+    status?: string;
+    providerPaymentId?: string;
+  };
 };
 
 type AdminUser = {
@@ -1063,7 +1068,15 @@ const OrdersTable = ({
                 ${order.subtotal.toLocaleString()}
               </td>
               <td className="px-4 py-4">
-                <StatusBadge status={index % 4 === 0 ? "Pending" : "Paid"} />
+                <StatusBadge
+                  status={
+                    order.payment?.status
+                      ? `${order.payment.provider || "Payment"} ${order.payment.status}`
+                      : index % 4 === 0
+                        ? "Pending"
+                        : "Paid"
+                  }
+                />
               </td>
               <td className="px-4 py-4">
                 <select
@@ -1074,6 +1087,9 @@ const OrdersTable = ({
                   className="h-9 rounded-full border border-slate-200 bg-white px-3 text-sm font-semibold text-slate-700 outline-none focus:border-blue-700"
                 >
                   <option>Processing</option>
+                  <option>Payment Pending</option>
+                  <option>Payment Review</option>
+                  <option>Payment Failed</option>
                   <option>Pending</option>
                   <option>Paid</option>
                   <option>Shipped</option>

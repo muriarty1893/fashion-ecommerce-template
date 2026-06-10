@@ -1,12 +1,10 @@
-import { FormEvent, useMemo, useState } from "react";
+import { FormEvent, useEffect, useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
 import {
-  Building2,
   Check,
   ChevronLeft,
   CreditCard,
-  Lock,
   Mail,
   MapPin,
   Percent,
@@ -16,7 +14,6 @@ import {
   Trash2,
   Truck,
   User,
-  Wallet,
   X,
 } from "lucide-react";
 import customFetch from "../axios/custom";
@@ -60,9 +57,10 @@ const Checkout = () => {
   const router = useRouter();
   const { t } = useLanguage();
   const [selectedShipping, setSelectedShipping] = useState("standard");
-  const [selectedPaymentType, setSelectedPaymentType] = useState("card");
+  const [selectedPaymentType] = useState("iyzico");
   const [appliedPromo, setAppliedPromo] = useState("SAVE10");
   const [agreeToTerms, setAgreeToTerms] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const selectedShippingMethod =
     shippingMethods.find((method) => method.id === selectedShipping) ||
@@ -83,6 +81,12 @@ const Checkout = () => {
       })),
     [productsInCart]
   );
+
+  useEffect(() => {
+    if (new URLSearchParams(window.location.search).get("payment") === "failed") {
+      toast.error("iyzico payment could not be verified. Please try again.");
+    }
+  }, []);
 
   const handleCheckoutSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -122,20 +126,19 @@ const Checkout = () => {
             },
           }
         : {}),
-      orderStatus: "Processing",
-      orderDate: new Date().toISOString(),
     };
 
     try {
-      const response = await customFetch.post("/orders", {
+      setIsSubmitting(true);
+      const response = await customFetch.post("/payments/iyzico/initialize", {
         ...orderPayload,
       });
 
-      if (response.status === 201) {
-        toast.success(t("orderSuccess"));
-        router.push("/order-confirmation");
+      if (response.data?.paymentPageUrl) {
+        window.location.href = response.data.paymentPageUrl;
       } else {
         toast.error(t("checkoutError"));
+        setIsSubmitting(false);
       }
     } catch (error: unknown) {
       const message =
@@ -144,6 +147,7 @@ const Checkout = () => {
               ?.data?.message
           : undefined;
       toast.error(message || t("checkoutError"));
+      setIsSubmitting(false);
     }
   };
 
@@ -315,11 +319,11 @@ const Checkout = () => {
                     name="country"
                     required
                     className="checkout-input"
-                    defaultValue="United States"
+                    defaultValue="Turkey"
                   >
-                    <option>United States</option>
-                    <option>Germany</option>
                     <option>Turkey</option>
+                    <option>Germany</option>
+                    <option>United States</option>
                   </select>
                 </CheckoutField>
               </div>
@@ -355,7 +359,7 @@ const Checkout = () => {
                           </span>
                         </div>
                         <span className="font-semibold text-gray-950">
-                          ${method.price.toFixed(2)}
+                          {method.price.toFixed(2)} TRY
                         </span>
                       </div>
                     </button>
@@ -373,89 +377,25 @@ const Checkout = () => {
               </h2>
             </div>
             <div className="flex flex-col gap-5 p-5">
-              <div className="grid gap-3 sm:grid-cols-3">
-                {[
-                  { id: "card", label: "Credit Card", icon: CreditCard },
-                  { id: "paypal", label: "PayPal", icon: Wallet },
-                  { id: "bank", label: "Bank Transfer", icon: Building2 },
-                ].map(({ id, label, icon: Icon }) => (
-                  <button
-                    key={id}
-                    type="button"
-                    onClick={() => setSelectedPaymentType(id)}
-                    className={`flex items-center gap-3 rounded-lg border-2 p-4 text-left transition ${
-                      selectedPaymentType === id
-                        ? "border-gray-950 bg-gray-950/[0.03]"
-                        : "border-gray-200 hover:border-gray-400"
-                    }`}
-                  >
-                    <Icon className="h-5 w-5 text-secondaryBrown" />
-                    <span className="text-sm font-medium text-gray-950">{label}</span>
-                  </button>
-                ))}
+              <div className="rounded-lg border-2 border-gray-950 bg-gray-950/[0.03] p-4">
+                <div className="flex items-start gap-3">
+                  <span className="mt-1 grid h-5 w-5 place-items-center rounded-full bg-gray-950">
+                    <Check className="h-3 w-3 text-white" />
+                  </span>
+                  <div>
+                    <p className="font-semibold text-gray-950">
+                      iyzico Checkout Form
+                    </p>
+                    <p className="mt-1 text-sm leading-6 text-gray-600">
+                      You will be redirected to iyzico sandbox to complete this
+                      demo payment in TRY. Card number and CVC are collected only
+                      by iyzico, not by this storefront.
+                    </p>
+                  </div>
+                </div>
               </div>
 
               <input type="hidden" name="paymentType" value={selectedPaymentType} />
-
-              {selectedPaymentType === "card" ? (
-                <div className="grid gap-4 border-t border-gray-200 pt-5">
-                  <CheckoutField label={t("nameOnCard")} htmlFor="nameOnCard">
-                    <IconInput icon={<User className="h-4 w-4" />}>
-                      <input
-                        id="nameOnCard"
-                        name="nameOnCard"
-                        placeholder="John Doe"
-                        required
-                        className="checkout-input pl-10"
-                      />
-                    </IconInput>
-                  </CheckoutField>
-                  <CheckoutField label={t("cardNumber")} htmlFor="cardNumber">
-                    <IconInput icon={<CreditCard className="h-4 w-4" />}>
-                      <input
-                        id="cardNumber"
-                        name="cardNumber"
-                        placeholder="1234 5678 9012 3456"
-                        required
-                        className="checkout-input pl-10"
-                      />
-                    </IconInput>
-                  </CheckoutField>
-                  <div className="grid grid-cols-2 gap-4">
-                    <CheckoutField label={t("expiry")} htmlFor="expirationDate">
-                      <input
-                        id="expirationDate"
-                        name="expirationDate"
-                        placeholder="MM / YY"
-                        required
-                        className="checkout-input"
-                      />
-                    </CheckoutField>
-                    <CheckoutField label="CVC" htmlFor="cvc">
-                      <IconInput icon={<Lock className="h-4 w-4" />}>
-                        <input
-                          id="cvc"
-                          name="cvc"
-                          placeholder="123"
-                          required
-                          className="checkout-input pl-10"
-                        />
-                      </IconInput>
-                    </CheckoutField>
-                  </div>
-                </div>
-              ) : (
-                <>
-                  <input type="hidden" name="nameOnCard" value={selectedPaymentType} />
-                  <input type="hidden" name="cardNumber" value={selectedPaymentType} />
-                  <input type="hidden" name="expirationDate" value={selectedPaymentType} />
-                  <input type="hidden" name="cvc" value={selectedPaymentType} />
-                  <div className="rounded-lg border border-blue-200 bg-blue-50 p-4 text-sm text-blue-800">
-                    You can complete payment with {selectedPaymentType} after placing
-                    the order.
-                  </div>
-                </>
-              )}
 
               <label className="flex items-start gap-3 border-t border-gray-200 pt-4 text-sm text-gray-600">
                 <input
@@ -502,7 +442,7 @@ const Checkout = () => {
                         {item.size} / {item.color}
                       </p>
                       <p className="mt-1 text-sm font-semibold text-gray-950">
-                        ${item.price}
+                        {item.price} TRY
                       </p>
                     </div>
                     <div className="flex flex-col items-end justify-between">
@@ -517,7 +457,7 @@ const Checkout = () => {
                         <Trash2 className="h-4 w-4" />
                       </button>
                       <span className="text-sm font-semibold text-gray-950">
-                        ${item.lineTotal.toFixed(2)}
+                        {item.lineTotal.toFixed(2)} TRY
                       </span>
                     </div>
                   </div>
@@ -543,19 +483,19 @@ const Checkout = () => {
               )}
 
               <dl className="flex flex-col gap-2 border-t border-gray-200 pt-4">
-                <SummaryRow label={t("subtotal")} value={`$${subtotal.toFixed(2)}`} />
+                <SummaryRow label={t("subtotal")} value={`${subtotal.toFixed(2)} TRY`} />
                 {discount > 0 && (
                   <SummaryRow
                     label="Discount"
-                    value={`-$${discount.toFixed(2)}`}
+                    value={`-${discount.toFixed(2)} TRY`}
                     tone="success"
                   />
                 )}
-                <SummaryRow label={t("shipping")} value={`$${shipping.toFixed(2)}`} />
-                <SummaryRow label={t("taxes")} value={`$${tax.toFixed(2)}`} />
+                <SummaryRow label={t("shipping")} value={`${shipping.toFixed(2)} TRY`} />
+                <SummaryRow label={t("taxes")} value={`${tax.toFixed(2)} TRY`} />
                 <div className="mt-2 flex justify-between border-t border-gray-200 pt-3 text-lg font-semibold text-gray-950">
                   <dt>{t("total")}</dt>
-                  <dd>${total.toFixed(2)}</dd>
+                  <dd>{total.toFixed(2)} TRY</dd>
                 </div>
               </dl>
             </div>
@@ -575,7 +515,12 @@ const Checkout = () => {
 
           <button
             type="submit"
-            disabled={!agreeToTerms || productsInCart.length === 0 || hasInvalidItems}
+            disabled={
+              isSubmitting ||
+              !agreeToTerms ||
+              productsInCart.length === 0 ||
+              hasInvalidItems
+            }
             className="checkout-transaction-button"
           >
             <span className="checkout-transaction-left" aria-hidden="true">
@@ -594,7 +539,9 @@ const Checkout = () => {
             </span>
             <span className="checkout-transaction-right">
               <span className="checkout-transaction-text">
-                {t("confirmOrder")} ${total.toFixed(2)}
+                {isSubmitting
+                  ? "Redirecting to iyzico..."
+                  : `${t("confirmOrder")} ${total.toFixed(2)} TRY`}
               </span>
               <svg
                 viewBox="0 0 451.846 451.847"
