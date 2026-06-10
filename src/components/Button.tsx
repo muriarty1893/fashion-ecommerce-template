@@ -7,7 +7,7 @@ interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
 
 const Button = ({ mode, text, ...props }: ButtonProps) => {
   const baseClass =
-    "inline-flex h-12 w-full items-center justify-center rounded-full px-5 text-sm font-bold transition focus:outline-none focus:ring-2 focus:ring-stone-950 focus:ring-offset-4 disabled:cursor-not-allowed disabled:opacity-60";
+    "inline-flex h-[52px] w-full items-center justify-center rounded-full px-7 py-4 text-sm font-bold transition focus:outline-none focus:ring-2 focus:ring-stone-950 focus:ring-offset-4 disabled:cursor-not-allowed disabled:opacity-60";
 
   return (
     <>

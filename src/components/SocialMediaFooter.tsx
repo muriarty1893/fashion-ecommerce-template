@@ -17,23 +17,24 @@ const socialLinks = [
 
 const SocialMediaFooter = () => {
   return (
-    <div className="mx-auto max-w-screen-2xl">
-    <div className="bg-secondaryBrown flex justify-center items-center flex-col py-9 gap-3 mt-24 mx-5 max-[400px]:mx-3">
-      <p className="text-base text-white font-light">Follow us on:</p>
-      <div className="flex gap-2 text-white">
-        {socialLinks.map(({ label, to, icon: Icon, className }) => (
-          <Link
-            key={label}
-            href={to}
-            aria-label={label}
-            className="grid h-8 w-8 place-items-center rounded-full transition hover:bg-white/15"
-          >
-            <Icon className={className} />
-          </Link>
-        ))}
+    <div className="mx-auto mt-20 max-w-screen-2xl px-5">
+      <div className="flex flex-col items-center justify-center gap-4 rounded-[2rem] border border-stone-200 bg-white px-5 py-8 text-center shadow-[0_18px_45px_rgba(28,25,23,0.05)]">
+        <p className="text-xs font-bold uppercase tracking-[0.28em] text-[#9b6b43]">
+          Follow us on
+        </p>
+        <div className="flex flex-wrap justify-center gap-2 text-stone-950">
+          {socialLinks.map(({ label, to, icon: Icon, className }) => (
+            <Link
+              key={label}
+              href={to}
+              aria-label={label}
+              className="grid h-10 w-10 place-items-center rounded-full border border-stone-200 bg-[#fbfaf8] transition hover:border-stone-950 hover:bg-white"
+            >
+              <Icon className={className} />
+            </Link>
+          ))}
+        </div>
       </div>
-    </div>
-
     </div>
   )
 }

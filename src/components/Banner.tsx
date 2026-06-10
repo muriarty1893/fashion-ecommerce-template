@@ -5,19 +5,27 @@ const Banner = () => {
   const { t } = useLanguage();
 
   return (
-    <div className="banner w-full flex flex-col justify-end items-center max-sm:h-[550px] max-sm:gap-2">
-      <h2 className="text-white text-center text-6xl font-bold tracking-[1.86px] leading-[60px] max-sm:text-4xl max-[400px]:text-3xl">
+    <div className="banner flex w-full flex-col items-center justify-end px-5 pb-10 text-center max-sm:h-[550px]">
+      <h2 className="max-w-3xl font-serif text-5xl font-semibold leading-tight text-white sm:text-6xl">
         {t("heroTitle").split("\n")[0]} <br />
         {t("heroTitle").split("\n")[1]}
       </h2>
-      <h3 className="text-white text-3xl font-normal leading-[72px] tracking-[0.9px] max-sm:text-xl max-[400px]:text-lg">
+      <h3 className="mt-4 text-xl font-medium text-white/90 sm:text-2xl">
         {t("heroSubtitle")}
       </h3>
-      <div className="flex justify-center items-center gap-3 pb-10 max-[400px]:flex-col max-[400px]:gap-1 w-[420px] max-sm:w-[350px] max-[400px]:w-[300px]">
-      <Link href="/shop" className="bg-white text-black text-center text-xl border border-[rgba(0, 0, 0, 0.40)] font-normal tracking-[0.6px] leading-[72px] w-full h-12 flex items-center justify-center">
+      <div className="mt-7 flex w-full max-w-md items-center justify-center gap-3 max-[430px]:flex-col">
+        <Link
+          href="/shop"
+          className="inline-flex h-12 w-full items-center justify-center rounded-full bg-white px-6 text-sm font-bold text-stone-950 transition hover:bg-[#f8f0e7]"
+        >
           {t("shopNow")}
         </Link>
-        <Link href="/shop" className="text-white border-white border-2 text-center text-xl font-normal tracking-[0.6px] leading-[72px] w-full h-12 flex items-center justify-center">{t("seeCollection")}</Link>
+        <Link
+          href="/shop"
+          className="inline-flex h-12 w-full items-center justify-center rounded-full border border-white/80 px-6 text-sm font-bold text-white transition hover:bg-white hover:text-stone-950"
+        >
+          {t("seeCollection")}
+        </Link>
       </div>
     </div>
   );
