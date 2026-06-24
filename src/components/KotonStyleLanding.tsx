@@ -12,6 +12,9 @@ import {
   Truck,
 } from "lucide-react";
 import Link from "next/link";
+import { useState } from "react";
+import { SlotText } from "slot-text/react";
+import CustomerFeedbackSection from "./community/CustomerFeedbackSection";
 import HomeBestSellerGrid from "./HomeBestSellerGrid";
 import ProductGridWrapper from "./ProductGridWrapper";
 import { useToast } from "./ToastProvider";
@@ -68,6 +71,46 @@ const trustItems = [
     icon: Headphones,
   },
 ] as const;
+
+type RollingArrowLinkProps = {
+  href: string;
+  className: string;
+  text: string;
+  hoverText: string;
+  ariaLabel?: string;
+};
+
+const RollingArrowLink = ({
+  href,
+  className,
+  text,
+  hoverText,
+  ariaLabel,
+}: RollingArrowLinkProps) => {
+  const [isHovered, setIsHovered] = useState(false);
+
+  return (
+    <Link
+      href={href}
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
+      onFocus={() => setIsHovered(true)}
+      onBlur={() => setIsHovered(false)}
+      aria-label={ariaLabel ?? text}
+      className={className}
+    >
+      <SlotText
+        className="slot-text"
+        text={isHovered ? hoverText : text}
+        options={{
+          direction: isHovered ? "up" : "down",
+          skipUnchanged: false,
+        }}
+      />
+      <ArrowRight className="h-4 w-4" />
+    </Link>
+  );
+};
 
 export const FeaturedCategoriesSection = () => {
   const { language } = useLanguage();
@@ -139,15 +182,18 @@ const landingCopy: Record<
     intro: string;
     primaryCta: string;
     secondaryCta: string;
+    secondaryCtaHover: string;
     stats: [string, string, string];
     heroEdit: string;
     heroTitle: string;
     viewProduct: string;
+    viewProductHover: string;
     limitedDrop: string;
     satinTitle: string;
     searchTitle: string;
     searchText: string;
     searchCta: string;
+    searchCtaHover: string;
     categoryEyebrow: string;
     categoryTitle: string;
     categoryCta: string;
@@ -158,10 +204,17 @@ const landingCopy: Record<
     saleText: string;
     saleCta: string;
     dressesCta: string;
+    dressesCtaHover: string;
     styleEyebrow: string;
     styleTitle: string;
     styleText: string;
     editorialCta: string;
+    editorialCtaHover: string;
+    viewAllProducts: string;
+    viewAllProductsHover: string;
+    feedbackEyebrow: string;
+    feedbackTitle: string;
+    feedbackText: string;
     trust: Record<(typeof trustItems)[number]["key"], { title: string; text: string }>;
     signupEyebrow: string;
     signupTitle: string;
@@ -183,16 +236,19 @@ const landingCopy: Record<
       "Discover sculptural dresses, soft tailoring, and elevated everyday pieces curated for weddings, dinners, workdays, and weekend escapes.",
     primaryCta: "Shop New Arrivals",
     secondaryCta: "Explore Collection",
+    secondaryCtaHover: "Open Collection",
     stats: ["Curated styles", "Average rating", "Fast dispatch"],
     heroEdit: "Hero edit",
     heroTitle: "Ivory occasion dresses",
     viewProduct: "View Product",
+    viewProductHover: "Open Product",
     limitedDrop: "Limited drop",
     satinTitle: "Satin and soft structure",
     searchTitle: "Find your next signature piece.",
     searchText:
       "Search by collection, occasion, color, or size and move quickly from discovery to checkout.",
     searchCta: "Search the store",
+    searchCtaHover: "Open Search",
     categoryEyebrow: "Shop by mood",
     categoryTitle: "Featured categories",
     categoryCta: "Explore all categories",
@@ -229,11 +285,19 @@ const landingCopy: Record<
       "A short-run edit of dresses, knits, and polished separates with the same premium styling and a softer price.",
     saleCta: "Shop the Sale",
     dressesCta: "View New Dresses",
+    dressesCtaHover: "Open Dresses",
     styleEyebrow: "Style notes",
     styleTitle: "Designed for the moments that make the calendar.",
     styleText:
       "Our edit balances clean lines, touchable textures, and confidence at checkout. Build complete outfits from dresses, refined tops, accessories, and seasonal layers without losing the premium feel.",
     editorialCta: "Read the editorial",
+    editorialCtaHover: "Open editorial",
+    viewAllProducts: "View all products",
+    viewAllProductsHover: "Browse products",
+    feedbackEyebrow: "Customer notes",
+    feedbackTitle: "What shoppers are saying.",
+    feedbackText:
+      "A rotating wall of fake user feedback using the same motion style as the provided scroll row design.",
     trust: {
       shipping: {
         title: "Free shipping",
@@ -272,16 +336,19 @@ const landingCopy: Record<
       "Entdecke skulpturale Kleider, weiches Tailoring und gehobene Alltagsstücke für Hochzeiten, Dinner, Arbeitstage und Wochenenden.",
     primaryCta: "Neuheiten shoppen",
     secondaryCta: "Kollektion entdecken",
+    secondaryCtaHover: "Kollektion öffnen",
     stats: ["Kuratierte Styles", "Durchschnittsbewertung", "Schneller Versand"],
     heroEdit: "Hero Edit",
     heroTitle: "Ivory Anlasskleider",
     viewProduct: "Produkt ansehen",
+    viewProductHover: "Produkt öffnen",
     limitedDrop: "Limitierter Drop",
     satinTitle: "Satin und weiche Struktur",
     searchTitle: "Finde dein nächstes Signature-Piece.",
     searchText:
       "Suche nach Kollektion, Anlass, Farbe oder Größe und gehe schnell von der Entdeckung zur Kasse.",
     searchCta: "Store durchsuchen",
+    searchCtaHover: "Suche öffnen",
     categoryEyebrow: "Nach Stimmung shoppen",
     categoryTitle: "Ausgewählte Kategorien",
     categoryCta: "Alle Kategorien entdecken",
@@ -318,11 +385,19 @@ const landingCopy: Record<
       "Ein kurzer Edit aus Kleidern, Strick und eleganten Separates mit Premium-Styling zu einem sanfteren Preis.",
     saleCta: "Sale shoppen",
     dressesCta: "Neue Kleider ansehen",
+    dressesCtaHover: "Kleider öffnen",
     styleEyebrow: "Style Notes",
     styleTitle: "Entworfen für die Momente, die im Kalender zählen.",
     styleText:
       "Unser Edit verbindet klare Linien, spürbare Texturen und Sicherheit beim Checkout. Stelle komplette Outfits aus Kleidern, feinen Tops, Accessoires und saisonalen Layern zusammen.",
     editorialCta: "Editorial lesen",
+    editorialCtaHover: "Editorial öffnen",
+    viewAllProducts: "Alle Produkte ansehen",
+    viewAllProductsHover: "Produkte ansehen",
+    feedbackEyebrow: "Kundenstimmen",
+    feedbackTitle: "Was Käuferinnen sagen.",
+    feedbackText:
+      "Eine rotierende Wand aus Fake-Feedback im gleichen Scroll-Row-Stil wie das bereitgestellte Design.",
     trust: {
       shipping: {
         title: "Kostenloser Versand",
@@ -361,16 +436,19 @@ const landingCopy: Record<
       "Düğünler, akşam yemekleri, iş günleri ve hafta sonu kaçamakları için seçilmiş heykelsi elbiseleri, yumuşak terziliği ve yükseltilmiş günlük parçaları keşfet.",
     primaryCta: "Yeni Gelenleri Al",
     secondaryCta: "Koleksiyonu Keşfet",
+    secondaryCtaHover: "Koleksiyonu Aç",
     stats: ["Seçilmiş stil", "Ortalama puan", "Hızlı gönderim"],
     heroEdit: "Öne çıkan seçki",
     heroTitle: "Fildişi davet elbiseleri",
     viewProduct: "Ürünü Gör",
+    viewProductHover: "Ürünü Aç",
     limitedDrop: "Limitli seri",
     satinTitle: "Saten ve yumuşak yapı",
     searchTitle: "Bir sonraki imza parçanı bul.",
     searchText:
       "Koleksiyon, davet, renk veya bedene göre ara; keşiften ödemeye hızlıca geç.",
     searchCta: "Mağazada ara",
+    searchCtaHover: "Aramayı Aç",
     categoryEyebrow: "Ruh haline göre alışveriş",
     categoryTitle: "Öne çıkan kategoriler",
     categoryCta: "Tüm kategorileri keşfet",
@@ -407,11 +485,19 @@ const landingCopy: Record<
       "Aynı premium styling hissini daha yumuşak bir fiyatla sunan kısa süreli elbise, triko ve şık ayrı parça seçkisi.",
     saleCta: "İndirimi Alışverişe Aç",
     dressesCta: "Yeni Elbiseleri Gör",
+    dressesCtaHover: "Elbiseleri Aç",
     styleEyebrow: "Stil notları",
     styleTitle: "Takvimde yer eden anlar için tasarlandı.",
     styleText:
       "Seçkimiz temiz çizgileri, dokunulabilir kumaşları ve güvenli alışveriş akışını dengeler. Elbiseler, rafine üstler, aksesuarlar ve sezon katmanlarıyla premium hissi kaybetmeden tam kombinler oluştur.",
     editorialCta: "Editoryali oku",
+    editorialCtaHover: "Editoryali aç",
+    viewAllProducts: "Tüm ürünleri gör",
+    viewAllProductsHover: "Ürünlere göz at",
+    feedbackEyebrow: "Müşteri notları",
+    feedbackTitle: "Alıcılar ne diyor?",
+    feedbackText:
+      "Sağlanan scroll-row tasarımıyla aynı hareket stilini kullanan sahte kullanıcı geri bildirimleri.",
     trust: {
       shipping: {
         title: "Ücretsiz kargo",
@@ -489,13 +575,13 @@ const KotonStyleLanding = () => {
               >
                 {copy.primaryCta}
               </Link>
-              <Link
+              <RollingArrowLink
                 href="/shop/luxury-collection"
-                className="inline-flex h-[52px] items-center justify-center gap-2 rounded-full border border-stone-300 bg-white px-7 py-4 text-sm font-bold text-stone-950 transition hover:border-stone-950 hover:bg-stone-50 focus:outline-none focus:ring-2 focus:ring-stone-950 focus:ring-offset-4"
-              >
-                {copy.secondaryCta}
-                <ArrowRight className="h-4 w-4" />
-              </Link>
+                ariaLabel={copy.secondaryCta}
+                className="inline-flex h-[52px] min-w-[210px] items-center justify-center gap-2 rounded-full border border-stone-300 bg-white px-7 py-4 text-sm font-bold text-stone-950 transition hover:border-stone-950 hover:bg-stone-50 focus:outline-none focus:ring-2 focus:ring-stone-950 focus:ring-offset-4"
+                text={copy.secondaryCta}
+                hoverText={copy.secondaryCtaHover}
+              />
             </div>
           </div>
 
@@ -516,10 +602,7 @@ const KotonStyleLanding = () => {
         </div>
 
         <div className="grid min-h-[620px] gap-4 sm:grid-cols-[1.15fr_0.85fr]">
-          <Link
-            href="/shop/special-edition"
-            className="group relative overflow-hidden rounded-[2rem] bg-stone-200"
-          >
+          <div className="group relative overflow-hidden rounded-[2rem] bg-stone-200">
             <img
               src="/assets/dress/1.png"
               alt="Ivory evening dress from the spring atelier collection"
@@ -532,12 +615,14 @@ const KotonStyleLanding = () => {
               <h2 className="mt-2 font-serif text-4xl font-semibold">
                 {copy.heroTitle}
               </h2>
-              <span className="mt-5 inline-flex items-center gap-2 rounded-full bg-white px-5 py-3 text-sm font-bold text-stone-950 transition group-hover:bg-[#f8f0e7]">
-                {copy.viewProduct}
-                <ArrowRight className="h-4 w-4" />
-              </span>
+              <RollingArrowLink
+                href="/shop/special-edition"
+                className="mt-5 inline-flex items-center gap-2 rounded-full bg-white px-5 py-3 text-sm font-bold text-stone-950 transition group-hover:bg-[#f8f0e7]"
+                text={copy.viewProduct}
+                hoverText={copy.viewProductHover}
+              />
             </div>
-          </Link>
+          </div>
 
           <div className="grid gap-4">
             <Link
@@ -568,13 +653,12 @@ const KotonStyleLanding = () => {
               <p className="mt-3 text-sm leading-6 text-white/70">
                 {copy.searchText}
               </p>
-              <Link
+              <RollingArrowLink
                 href="/search"
                 className="mt-6 inline-flex items-center gap-2 text-sm font-bold text-[#ead7bd] transition hover:text-white"
-              >
-                {copy.searchCta}
-                <ArrowRight className="h-4 w-4" />
-              </Link>
+                text={copy.searchCta}
+                hoverText={copy.searchCtaHover}
+              />
             </div>
           </div>
         </div>
@@ -594,13 +678,12 @@ const KotonStyleLanding = () => {
               stock status, wishlist saves, and quick cart actions.
             </p>
           </div>
-          <Link
+          <RollingArrowLink
             href="/shop"
             className="inline-flex w-fit items-center gap-2 rounded-full border border-stone-300 bg-white px-6 py-3 text-sm font-bold text-stone-950 transition hover:border-stone-950 hover:bg-stone-50 focus:outline-none focus:ring-2 focus:ring-stone-950 focus:ring-offset-4"
-          >
-            View all products
-            <ArrowRight className="h-4 w-4" />
-          </Link>
+            text={copy.viewAllProducts}
+            hoverText={copy.viewAllProductsHover}
+          />
         </div>
         <ProductGridWrapper sortCriteria="popularity" limit={6}>
           <HomeBestSellerGrid />
@@ -626,13 +709,12 @@ const KotonStyleLanding = () => {
               >
                 {copy.saleCta}
               </Link>
-              <Link
+              <RollingArrowLink
                 href="/shop/special-edition"
                 className="inline-flex items-center justify-center gap-2 rounded-full border border-white/30 px-7 py-4 text-sm font-bold text-white transition hover:border-white hover:bg-white/10"
-              >
-                {copy.dressesCta}
-                <ArrowRight className="h-4 w-4" />
-              </Link>
+                text={copy.dressesCta}
+                hoverText={copy.dressesCtaHover}
+              />
             </div>
           </div>
           <div className="grid min-h-[360px] grid-cols-2 gap-2 p-2">
@@ -680,15 +762,20 @@ const KotonStyleLanding = () => {
           <p className="mt-5 text-base leading-8 text-stone-600">
             {copy.styleText}
           </p>
-          <Link
+          <RollingArrowLink
             href="/info/about"
             className="mt-8 inline-flex w-fit items-center gap-2 rounded-full border border-stone-300 px-6 py-3 text-sm font-bold text-stone-950 transition hover:border-stone-950 hover:bg-stone-50"
-          >
-            {copy.editorialCta}
-            <ArrowRight className="h-4 w-4" />
-          </Link>
+            text={copy.editorialCta}
+            hoverText={copy.editorialCtaHover}
+          />
         </div>
       </section>
+
+      <CustomerFeedbackSection
+        eyebrow={copy.feedbackEyebrow}
+        title={copy.feedbackTitle}
+        text={copy.feedbackText}
+      />
 
       <section className="border-y border-stone-200 bg-white">
         <div className="mx-auto grid max-w-screen-2xl grid-cols-1 divide-y divide-stone-200 px-5 md:grid-cols-4 md:divide-x md:divide-y-0 md:px-8">
