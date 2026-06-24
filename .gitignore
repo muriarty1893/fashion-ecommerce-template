@@ -62,3 +62,5 @@ temp/
 .cache/
 .vercel
 .env*
+
+demo.html
