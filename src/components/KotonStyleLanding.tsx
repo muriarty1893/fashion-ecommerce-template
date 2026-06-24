@@ -12,6 +12,8 @@ import {
   Truck,
 } from "lucide-react";
 import Link from "next/link";
+import HomeBestSellerGrid from "./HomeBestSellerGrid";
+import ProductGridWrapper from "./ProductGridWrapper";
 import { useToast } from "./ToastProvider";
 import { Language, useLanguage } from "../i18n";
 
@@ -66,6 +68,67 @@ const trustItems = [
     icon: Headphones,
   },
 ] as const;
+
+export const FeaturedCategoriesSection = () => {
+  const { language } = useLanguage();
+  const copy = landingCopy[language];
+
+  return (
+    <section className="mx-auto max-w-screen-2xl px-5 py-14 md:px-8">
+      <div className="flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
+        <div>
+          <p className="text-xs font-bold uppercase tracking-[0.28em] text-[#9b6b43]">
+            {copy.categoryEyebrow}
+          </p>
+          <h2 className="mt-3 font-serif text-4xl font-semibold text-stone-950 md:text-5xl">
+            {copy.categoryTitle}
+          </h2>
+        </div>
+        <Link
+          href="/shop"
+          className="inline-flex w-fit items-center gap-2 text-sm font-bold text-stone-950 transition hover:text-[#9b6b43]"
+        >
+          {copy.categoryCta}
+          <ArrowRight className="h-4 w-4" />
+        </Link>
+      </div>
+
+      <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-5">
+        {categories.map((category) => {
+          const categoryCopy = copy.categories[category.key];
+
+          return (
+            <Link
+              key={category.key}
+              href={category.to}
+              className="group overflow-hidden rounded-3xl border border-stone-200 bg-white shadow-[0_18px_45px_rgba(28,25,23,0.06)] transition duration-300 hover:-translate-y-1 hover:shadow-[0_28px_65px_rgba(28,25,23,0.12)] focus:outline-none focus:ring-2 focus:ring-stone-950 focus:ring-offset-4"
+            >
+              <div className="aspect-[4/5] overflow-hidden bg-stone-100">
+                <img
+                  src={category.image}
+                  alt={`${categoryCopy.title} category`}
+                  className="h-full w-full object-cover object-top transition duration-700 group-hover:scale-[1.05]"
+                />
+              </div>
+              <div className="p-5">
+                <h3 className="font-serif text-2xl font-semibold">
+                  {categoryCopy.title}
+                </h3>
+                <p className="mt-2 text-sm leading-6 text-stone-600">
+                  {categoryCopy.text}
+                </p>
+                <span className="mt-4 inline-flex items-center gap-2 text-sm font-bold text-[#9b6b43]">
+                  {copy.shopNow}
+                  <ArrowRight className="h-4 w-4" />
+                </span>
+              </div>
+            </Link>
+          );
+        })}
+      </div>
+    </section>
+  );
+};
 
 const landingCopy: Record<
   Language,
@@ -518,57 +581,30 @@ const KotonStyleLanding = () => {
       </section>
 
       <section className="mx-auto max-w-screen-2xl px-5 py-14 md:px-8">
-        <div className="flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
+        <div className="flex flex-col gap-5 md:flex-row md:items-end md:justify-between">
           <div>
             <p className="text-xs font-bold uppercase tracking-[0.28em] text-[#9b6b43]">
-              {copy.categoryEyebrow}
+              Featured drop
             </p>
             <h2 className="mt-3 font-serif text-4xl font-semibold text-stone-950 md:text-5xl">
-              {copy.categoryTitle}
+              Best-selling pieces this week
             </h2>
+            <p className="mt-3 max-w-2xl text-base leading-7 text-stone-600">
+              Product cards are built for browsing: clear imagery, prices,
+              stock status, wishlist saves, and quick cart actions.
+            </p>
           </div>
           <Link
             href="/shop"
-            className="inline-flex w-fit items-center gap-2 text-sm font-bold text-stone-950 transition hover:text-[#9b6b43]"
+            className="inline-flex w-fit items-center gap-2 rounded-full border border-stone-300 bg-white px-6 py-3 text-sm font-bold text-stone-950 transition hover:border-stone-950 hover:bg-stone-50 focus:outline-none focus:ring-2 focus:ring-stone-950 focus:ring-offset-4"
           >
-            {copy.categoryCta}
+            View all products
             <ArrowRight className="h-4 w-4" />
           </Link>
         </div>
-
-        <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-5">
-          {categories.map((category) => {
-            const categoryCopy = copy.categories[category.key];
-
-            return (
-            <Link
-              key={category.key}
-              href={category.to}
-              className="group overflow-hidden rounded-3xl border border-stone-200 bg-white shadow-[0_18px_45px_rgba(28,25,23,0.06)] transition duration-300 hover:-translate-y-1 hover:shadow-[0_28px_65px_rgba(28,25,23,0.12)] focus:outline-none focus:ring-2 focus:ring-stone-950 focus:ring-offset-4"
-            >
-              <div className="aspect-[4/5] overflow-hidden bg-stone-100">
-                <img
-                  src={category.image}
-                  alt={`${categoryCopy.title} category`}
-                  className="h-full w-full object-cover object-top transition duration-700 group-hover:scale-[1.05]"
-                />
-              </div>
-              <div className="p-5">
-                <h3 className="font-serif text-2xl font-semibold">
-                  {categoryCopy.title}
-                </h3>
-                <p className="mt-2 text-sm leading-6 text-stone-600">
-                  {categoryCopy.text}
-                </p>
-                <span className="mt-4 inline-flex items-center gap-2 text-sm font-bold text-[#9b6b43]">
-                  {copy.shopNow}
-                  <ArrowRight className="h-4 w-4" />
-                </span>
-              </div>
-            </Link>
-            );
-          })}
-        </div>
+        <ProductGridWrapper sortCriteria="popularity" limit={6}>
+          <HomeBestSellerGrid />
+        </ProductGridWrapper>
       </section>
 
       <section className="mx-auto max-w-screen-2xl px-5 py-10 md:px-8">
