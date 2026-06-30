@@ -103,7 +103,10 @@ function ThreeDScrollTriggerRowImpl({
 
   const BlockContent = useMemo(
     () => (
-      <div className="inline-flex shrink-0" style={{ contain: "paint" }}>
+      <div
+        className="relative z-0 inline-flex shrink-0 [&:has(article:hover)]:z-[100]"
+        style={{ contain: "layout" }}
+      >
         {childrenArray}
       </div>
     ),
@@ -162,17 +165,23 @@ function ThreeDScrollTriggerRowImpl({
   return (
     <div
       ref={containerRef}
-      className={cn("w-full overflow-hidden whitespace-nowrap", className)}
+      className={cn(
+        "relative z-0 w-full overflow-x-clip overflow-y-visible whitespace-nowrap hover:z-[80]",
+        className,
+      )}
       {...props}
     >
       <motion.div
-        className="inline-flex will-change-transform transform-gpu"
+        className="relative z-0 inline-flex transform-gpu will-change-transform [&:has(article:hover)]:z-[100]"
         style={{ transform: xTransform }}
       >
         {Array.from({ length: numCopies }).map((_, i) => (
           <div
             key={i}
-            className={cn("inline-flex shrink-0", i === 0 && "threed-scroll-trigger-block")}
+            className={cn(
+              "relative z-0 inline-flex shrink-0 [&:has(article:hover)]:z-[100]",
+              i === 0 && "threed-scroll-trigger-block",
+            )}
           >
             {BlockContent}
           </div>
