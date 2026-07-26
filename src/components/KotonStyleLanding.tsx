@@ -818,64 +818,6 @@ const KotonStyleLanding = () => {
         </div>
       </section>
 
-      <section className="mx-auto grid max-w-screen-2xl gap-6 px-5 py-16 md:px-8 lg:grid-cols-[1.1fr_0.9fr] lg:py-24">
-        <div className="grid grid-cols-[0.9fr_1.1fr] gap-4 max-sm:grid-cols-1">
-          <img
-            src="/assets/banner1.jpg"
-            alt="Editorial styling story with layered clothing"
-            className="h-[540px] w-full rounded-[2rem] object-cover max-sm:h-[360px]"
-          />
-          <div className="grid gap-4">
-            <img
-              src="/assets/product image 5.jpg"
-              alt="Close editorial fashion detail"
-              className="h-[258px] w-full rounded-[2rem] object-cover"
-            />
-            <img
-              src="/assets/product image 15.jpg"
-              alt="Neutral premium clothing look"
-              className="h-[258px] w-full rounded-[2rem] object-cover"
-            />
-          </div>
-        </div>
-        <div className="flex flex-col justify-center rounded-[2rem] border border-stone-200 bg-white p-7 shadow-[0_18px_55px_rgba(28,25,23,0.06)] sm:p-10 lg:p-14">
-          <p className="text-xs font-bold uppercase tracking-[0.28em] text-[#9b6b43]">
-            {copy.styleEyebrow}
-          </p>
-          <h2 className="mt-4 font-serif text-4xl font-semibold leading-tight sm:text-5xl">
-            {copy.styleTitle}
-          </h2>
-          <p className="mt-5 text-base leading-8 text-stone-600">
-            {copy.styleText}
-          </p>
-          <p className="mt-4 text-sm leading-7 text-stone-500">
-            {copy.swipeHintStart}{" "}
-            {categories.map((category, index) => (
-              <span key={category.key}>
-                <CursorCard
-                  href={category.to}
-                  image={category.image}
-                  description={copy.categories[category.key].text}
-                  className="text-[#9b6b43] hover:bg-[#f8f0e7]"
-                >
-                  {copy.categories[category.key].title}
-                </CursorCard>
-                {index < categories.length - 1 ? (
-                  <span className="text-stone-400"> · </span>
-                ) : null}
-              </span>
-            ))}{" "}
-            {copy.swipeHintEnd}
-          </p>
-          <RollingArrowLink
-            href="/info/about"
-            className="mt-8 inline-flex w-fit items-center gap-2 rounded-full border border-stone-300 px-6 py-3 text-sm font-bold text-stone-950 transition hover:border-stone-950 hover:bg-stone-50"
-            text={copy.editorialCta}
-            hoverText={copy.editorialCtaHover}
-          />
-        </div>
-      </section>
-
       <CustomerFeedbackSection
         eyebrow={copy.feedbackEyebrow}
         title={copy.feedbackTitle}
@@ -947,8 +889,8 @@ const KotonStyleLanding = () => {
       </section>
 
       {/* Demo community — rotating masked customer avatars. */}
-      <section className="relative isolate overflow-hidden bg-[#1c1917] text-white">
-        <div className="relative z-10 mx-auto max-w-screen-2xl px-5 pt-16 text-center md:px-8">
+      <section className="relative isolate overflow-hidden bg-[#1c1917] py-14 text-white md:py-20">
+        <div className="relative z-10 mx-auto max-w-screen-2xl px-5 text-center md:px-8">
           <p className="text-xs font-bold uppercase tracking-[0.28em] text-[#ead7bd]">
             {copy.crowdEyebrow}
           </p>
@@ -958,8 +900,8 @@ const KotonStyleLanding = () => {
           <p className="mx-auto mt-3 max-w-2xl text-base leading-7 text-white/70">
             {copy.crowdText}
           </p>
-          <div className="mt-10 flex justify-center">
-            <MaskedAvatars avatars={communityAvatars} size={72} />
+          <div className="mt-6 flex items-end justify-center pb-4">
+            <MaskedAvatars avatars={communityAvatars} size={64} />
           </div>
         </div>
       </section>

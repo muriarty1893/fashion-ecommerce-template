@@ -5,14 +5,19 @@ import {
   ThreeDScrollTriggerContainer,
   ThreeDScrollTriggerRow,
 } from "./ThreeDScrollTrigger";
+import { CursorCard } from "../ui/cursor-card";
 
 type FeedbackCard = {
   name: string;
   handle: string;
   quote: string;
+  highlight: string;
   product: string;
   location: string;
   initials: string;
+  productImage: string;
+  productHref: string;
+  productNote: string;
 };
 
 type CustomerFeedbackSectionProps = {
@@ -21,121 +26,183 @@ type CustomerFeedbackSectionProps = {
   text: string;
 };
 
+const productMeta = {
+  "Special Edition Dress": {
+    image: "/assets/dress/5.png",
+    href: "/shop/special-edition",
+    note: "Occasion-ready shapes in satin, ivory, and cocoa tones.",
+  },
+  "Luxury Collection": {
+    image: "/assets/luxury fashion 7 1.png",
+    href: "/shop/luxury-collection",
+    note: "Elevated textures, sculpted tailoring, and limited runs.",
+  },
+  "New Arrivals": {
+    image: "/assets/luxury category 2.png",
+    href: "/shop",
+    note: "Fresh weekly edits for weekday polish and evening plans.",
+  },
+  "Essentials": {
+    image: "/assets/product image 18.jpg",
+    href: "/shop/unique-collection",
+    note: "Foundational pieces designed to be worn on repeat.",
+  },
+  Accessories: {
+    image: "/assets/luxury category 4.png",
+    href: "/shop/summer-edition",
+    note: "Finishing details for day-to-night styling.",
+  },
+  "Editorial Collection": {
+    image: "/assets/generated/editorial-orbit-tailoring.png",
+    href: "/shop/editorial-collection",
+    note: "Concept mannequin looks with halo details and uniform styling.",
+  },
+  Dresses: {
+    image: "/assets/dress/1.png",
+    href: "/shop/special-edition",
+    note: "Occasion-ready shapes in satin, ivory, and cocoa tones.",
+  },
+} as const;
+
+const withProduct = (
+  card: Omit<FeedbackCard, "productImage" | "productHref" | "productNote">,
+): FeedbackCard => {
+  const meta = productMeta[card.product as keyof typeof productMeta];
+  return {
+    ...card,
+    productImage: meta.image,
+    productHref: meta.href,
+    productNote: meta.note,
+  };
+};
+
 const rowOne: FeedbackCard[] = [
-  {
+  withProduct({
     name: "Ayla M.",
     handle: "@aylam",
     quote:
       "The dress looked exactly like the photos, and the fabric had enough weight to feel polished without being stiff. I wore it to dinner straight from the package after one quick steam, and it still held its shape after sitting through a long meal and a cab ride home.",
+    highlight: "Special Edition Dress",
     product: "Special Edition Dress",
     location: "London",
     initials: "AM",
-  },
-  {
+  }),
+  withProduct({
     name: "Noah R.",
     handle: "@noahr",
     quote:
       "I bought the luxury collection blazer for a dinner event and ended up wearing it twice that week. It works with tailored trousers, but it also made a plain white tee feel intentional. The shoulder line is sharp without feeling boxy, which is usually the detail that makes or breaks a blazer for me.",
+    highlight: "luxury collection blazer",
     product: "Luxury Collection",
     location: "Berlin",
     initials: "NR",
-  },
-  {
+  }),
+  withProduct({
     name: "Mira K.",
     handle: "@mirak",
     quote:
       "The product photos made the palette easy to trust, which matters so much when you are matching shoes and a bag from your closet. The color arrived exactly as expected in daylight and indoor lighting, so I did not have that usual moment of wondering whether it would work with anything I own.",
+    highlight: "the palette",
     product: "New Arrivals",
     location: "Milan",
     initials: "MK",
-  },
-  {
+  }),
+  withProduct({
     name: "Jonas L.",
     handle: "@jonasl",
     quote:
       "Fast delivery, clean packaging, and the quality reads like a much more expensive label.",
+    highlight: "a much more expensive label",
     product: "Essentials",
     location: "Copenhagen",
     initials: "JL",
-  },
+  }),
 ];
 
 const rowTwo: FeedbackCard[] = [
-  {
+  withProduct({
     name: "Sofia T.",
     handle: "@sofiat",
     quote:
       "The accessories completed the outfit instead of competing with it. I liked that the pieces felt special, but still quiet enough to wear again with jeans and a knit. They solved the last-minute styling problem without making the outfit look like I tried too hard.",
+    highlight: "accessories",
     product: "Accessories",
     location: "Paris",
     initials: "ST",
-  },
-  {
+  }),
+  withProduct({
     name: "Eren Y.",
     handle: "@ereny",
     quote:
       "The editorial collection looks bold on screen, but in person it still feels wearable. The cut has that styled-for-a-shoot energy without making me feel overdressed at a normal dinner. I liked that the styling ideas on the product page were dramatic, but the actual piece still worked with the coat and shoes I already had.",
+    highlight: "editorial collection",
     product: "Editorial Collection",
     location: "Istanbul",
     initials: "EY",
-  },
-  {
+  }),
+  withProduct({
     name: "Leah S.",
     handle: "@leahs",
     quote:
       "I used the size guide and got it right the first time. That saved me a return loop.",
+    highlight: "the size guide",
     product: "Dresses",
     location: "New York",
     initials: "LS",
-  },
-  {
+  }),
+  withProduct({
     name: "Tariq A.",
     handle: "@tariqa",
     quote:
       "Everything from the checkout to the product page feels careful. I could understand the fit, fabric, and styling before buying, which made the whole order feel less like a guess. The detail shots were useful too, especially for seeing the texture and how the piece falls instead of relying on one polished campaign image.",
+    highlight: "the fit, fabric, and styling",
     product: "Luxury Collection",
     location: "Dubai",
     initials: "TA",
-  },
+  }),
 ];
 
 const rowThree: FeedbackCard[] = [
-  {
+  withProduct({
     name: "Hana P.",
     handle: "@hanap",
     quote:
       "The knit layers nicely with the dress I already had, and the color is neutral without looking flat. It made my whole wardrobe feel more complete instead of like another random purchase. I have already worn it open over a slip dress, tucked into wide-leg trousers, and thrown over my shoulders at dinner.",
+    highlight: "The knit",
     product: "Essentials",
     location: "Seoul",
     initials: "HP",
-  },
-  {
+  }),
+  withProduct({
     name: "Luca V.",
     handle: "@lucav",
     quote:
       "The photos and the fit notes lined up well. I did not have to guess what I was getting.",
+    highlight: "the fit notes",
     product: "New Arrivals",
     location: "Rome",
     initials: "LV",
-  },
-  {
+  }),
+  withProduct({
     name: "Zara N.",
     handle: "@zaran",
     quote:
       "It reads like a small boutique with better logistics. The edit is tight, the styling is useful, and I did not have to scroll through hundreds of pieces to find something good. That made shopping feel calmer, especially because every product had enough context to imagine how I would actually wear it.",
+    highlight: "the edit",
     product: "Special Edition Dress",
     location: "Madrid",
     initials: "ZN",
-  },
-  {
+  }),
+  withProduct({
     name: "Omar F.",
     handle: "@omarf",
     quote:
       "The color palette is understated, but the silhouettes still feel special enough for occasion wear.",
+    highlight: "the silhouettes",
     product: "Editorial Collection",
     location: "Riyadh",
     initials: "OF",
-  },
+  }),
 ];
 
 const feedbackRows = [
@@ -143,6 +210,30 @@ const feedbackRows = [
   { items: rowTwo, direction: -1 as const, baseVelocity: 6 },
   { items: rowThree, direction: 1 as const, baseVelocity: 8 },
 ];
+
+const renderQuote = (card: FeedbackCard) => {
+  const idx = card.quote.toLowerCase().indexOf(card.highlight.toLowerCase());
+  if (idx === -1) {
+    return `“${card.quote}”`;
+  }
+  const before = card.quote.slice(0, idx);
+  const match = card.quote.slice(idx, idx + card.highlight.length);
+  const after = card.quote.slice(idx + card.highlight.length);
+  return (
+    <>
+      “{before}
+      <CursorCard
+        href={card.productHref}
+        image={card.productImage}
+        description={`${card.product} · ${card.location} — ${card.productNote}`}
+        className="rounded px-1 -mx-1 text-stone-900 hover:bg-[#f8f0e7]"
+      >
+        {match}
+      </CursorCard>
+      {after}”
+    </>
+  );
+};
 
 const FeedbackCardView = ({ card }: { card: FeedbackCard }) => (
   <article className="group relative z-0 mr-4 h-[220px] w-[320px] shrink-0 whitespace-normal hover:z-[200]">
@@ -165,7 +256,7 @@ const FeedbackCardView = ({ card }: { card: FeedbackCard }) => (
       </div>
 
       <p className="mt-5 min-w-0 max-h-14 flex-1 overflow-hidden text-wrap break-words text-sm leading-7 text-stone-600 transition-[max-height] duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:line-clamp-none group-hover:max-h-[390px]">
-        “{card.quote}”
+        {renderQuote(card)}
       </p>
 
       <div className="mt-auto flex min-w-0 items-center justify-between gap-4 pt-5 text-xs uppercase tracking-[0.18em] text-stone-400">

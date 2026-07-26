@@ -38,8 +38,8 @@ export function CursorCard({ children, image, description, href = "#", className
       <a
         href={href}
         className={cn(
-          "relative inline-block font-bold text-neutral-900 dark:text-neutral-100 transition-colors",
-          "hover:bg-orange-100 dark:hover:bg-orange-900/40 rounded px-1 -mx-1",
+          "relative inline-block font-bold text-stone-900 transition-colors",
+          "hover:bg-[#f8f0e7] rounded px-1 -mx-1",
           className
         )}
         onMouseEnter={() => setIsHovered(true)}
@@ -62,7 +62,7 @@ export function CursorCard({ children, image, description, href = "#", className
                 y: springY,
               }}
               className={cn(
-                "fixed top-0 left-0 pointer-events-none z-50 w-[240px]",
+                "fixed top-0 left-0 pointer-events-none z-[300] w-[240px]",
                 "bg-white dark:bg-neutral-900 p-3 shadow-2xl rounded-xl border border-oklch(0.923 0.003 48.717) border-neutral-200 dark:border-neutral-800 dark:border-oklch(1 0 0 / 10%)"
               )}
             >
