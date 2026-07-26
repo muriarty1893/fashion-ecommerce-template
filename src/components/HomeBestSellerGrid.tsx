@@ -11,7 +11,7 @@ import { productImageSrc } from "../utils/productImageSrc";
 const HomeBestSellerGrid = ({ products }: { products?: Product[] }) => {
   if (!products || products.length === 0) {
     return (
-      <div className="mx-auto mt-10 max-w-screen-2xl px-5 md:px-8">
+      <div className="mx-auto mt-10 hidden max-w-screen-2xl px-5 md:block md:px-8">
         <div className="rounded-3xl border border-stone-200 bg-white p-10 text-center">
           <p className="font-serif text-3xl font-semibold text-stone-950">
             No products found
@@ -22,7 +22,7 @@ const HomeBestSellerGrid = ({ products }: { products?: Product[] }) => {
   }
 
   return (
-    <div className="mx-auto mt-10 flex max-w-screen-2xl flex-wrap items-stretch justify-between gap-y-8 px-5 md:px-8 max-xl:justify-start max-xl:gap-5">
+    <div className="mx-auto mt-10 hidden max-w-screen-2xl flex-wrap items-stretch justify-between gap-y-8 px-5 md:flex md:px-8 max-xl:justify-start max-xl:gap-5">
       {products.map((product) => (
         <HomeBestSellerCard key={product.id} product={product} />
       ))}

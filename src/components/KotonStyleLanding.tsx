@@ -19,6 +19,35 @@ import HomeBestSellerGrid from "./HomeBestSellerGrid";
 import ProductGridWrapper from "./ProductGridWrapper";
 import { useToast } from "./ToastProvider";
 import { Language, useLanguage } from "../i18n";
+import { CursorCard } from "./ui/cursor-card";
+import { MaskedAvatars } from "./ui/masked-avatars";
+import { Carousel_002 } from "./ui/skiper-ui/skiper48";
+
+const carouselImages = [
+  { src: "/assets/dress/1.png", alt: "Ivory occasion dress" },
+  { src: "/assets/dress/2.png", alt: "Blue satin evening dress" },
+  { src: "/assets/dress/3.png", alt: "Cocoa wrap dress" },
+  { src: "/assets/dress/4.png", alt: "Soft tailoring dress" },
+  { src: "/assets/dress/5.png", alt: "Sculptural evening dress" },
+  { src: "/assets/dress/6.png", alt: "Elevated everyday dress" },
+  {
+    src: "/assets/generated/editorial-orbit-tailoring.png",
+    alt: "Editorial orbit tailoring look",
+  },
+  {
+    src: "/assets/generated/editorial-saint-lily-dress.png",
+    alt: "Editorial saint lily dress look",
+  },
+];
+
+// Demo "crowd" shoppers shown as masked avatars above the walking crowd canvas.
+const communityAvatars = [
+  { avatar: "https://i.pravatar.cc/150?img=1", name: "Ava" },
+  { avatar: "https://i.pravatar.cc/150?img=32", name: "Liam" },
+  { avatar: "https://i.pravatar.cc/150?img=5", name: "Mia" },
+  { avatar: "https://i.pravatar.cc/150?img=13", name: "Noah" },
+  { avatar: "https://i.pravatar.cc/150?img=25", name: "Sofia" },
+];
 
 const categories = [
   {
@@ -210,6 +239,15 @@ const landingCopy: Record<
     styleText: string;
     editorialCta: string;
     editorialCtaHover: string;
+    editorialPreviewDesc: string;
+    swipeHintStart: string;
+    swipeHintEnd: string;
+    carouselEyebrow: string;
+    carouselTitle: string;
+    carouselText: string;
+    crowdEyebrow: string;
+    crowdTitle: string;
+    crowdText: string;
     viewAllProducts: string;
     viewAllProductsHover: string;
     feedbackEyebrow: string;
@@ -292,6 +330,19 @@ const landingCopy: Record<
       "Our edit balances clean lines, touchable textures, and confidence at checkout. Build complete outfits from dresses, refined tops, accessories, and seasonal layers without losing the premium feel.",
     editorialCta: "Read the editorial",
     editorialCtaHover: "Open editorial",
+    editorialPreviewDesc:
+      "Concept mannequin looks with halo details and uniform styling.",
+    swipeHintStart: "Peek the",
+    swipeHintEnd: "lookbook — hover to preview.",
+    carouselEyebrow: "Swipe the season",
+    carouselTitle: "Swipe through the spring atelier",
+    carouselText:
+      "A card-stack preview of our latest dresses and editorial looks. Drag, swipe, or let it autoplay.",
+    crowdEyebrow: "Community",
+    crowdTitle:
+      "Join thousands of customers who dress for the moments that matter.",
+    crowdText:
+      "Hover the avatars to meet a few of our demo shoppers.",
     viewAllProducts: "View all products",
     viewAllProductsHover: "Browse products",
     feedbackEyebrow: "Customer notes",
@@ -392,6 +443,19 @@ const landingCopy: Record<
       "Unser Edit verbindet klare Linien, spürbare Texturen und Sicherheit beim Checkout. Stelle komplette Outfits aus Kleidern, feinen Tops, Accessoires und saisonalen Layern zusammen.",
     editorialCta: "Editorial lesen",
     editorialCtaHover: "Editorial öffnen",
+    editorialPreviewDesc:
+      "Konzept-Mannequin-Looks mit Halo-Details und Uniform-Styling.",
+    swipeHintStart: "Sieh das",
+    swipeHintEnd: "Lookbook — für Vorschau hovern.",
+    carouselEyebrow: "Die Saison swipen",
+    carouselTitle: "Streiche durch den Spring Atelier",
+    carouselText:
+      "Ein Kartenstapel-Vorschau unserer neuesten Kleider und Editorial-Looks. Ziehen, wischen oder autoplay lassen.",
+    crowdEyebrow: "Community",
+    crowdTitle:
+      "Tausende Kunden beitreten, die sich für die Momente kleiden, die zählen.",
+    crowdText:
+      "Über die Avatare hovern, um einige Demo-Shopper zu treffen.",
     viewAllProducts: "Alle Produkte ansehen",
     viewAllProductsHover: "Produkte ansehen",
     feedbackEyebrow: "Kundenstimmen",
@@ -492,6 +556,18 @@ const landingCopy: Record<
       "Seçkimiz temiz çizgileri, dokunulabilir kumaşları ve güvenli alışveriş akışını dengeler. Elbiseler, rafine üstler, aksesuarlar ve sezon katmanlarıyla premium hissi kaybetmeden tam kombinler oluştur.",
     editorialCta: "Editoryali oku",
     editorialCtaHover: "Editoryali aç",
+    editorialPreviewDesc:
+      "Halo detaylı ve üniforma etkili konsept vitrin görünümleri.",
+    swipeHintStart: "Bir göz at:",
+    swipeHintEnd: "lookbook — önizleme için üzerine gel.",
+    carouselEyebrow: "Sezonu kaydır",
+    carouselTitle: "İlkbahar atölyesini kaydırarak gez",
+    carouselText:
+      "En yeni elbiseler ve editoryal görünümler için kart yığını önizlemesi. Sürükle, kaydır veya otomatik oynat.",
+    crowdEyebrow: "Topluluk",
+    crowdTitle: "Önemli anlar için giyinen binlerce müşteriye katıl.",
+    crowdText:
+      "Demo alıcılarla tanışmak için avatarların üzerine gel.",
     viewAllProducts: "Tüm ürünleri gör",
     viewAllProductsHover: "Ürünlere göz at",
     feedbackEyebrow: "Müşteri notları",
@@ -688,6 +764,16 @@ const KotonStyleLanding = () => {
         <ProductGridWrapper sortCriteria="popularity" limit={6}>
           <HomeBestSellerGrid />
         </ProductGridWrapper>
+        <div className="mt-12 flex justify-center md:hidden">
+          <Carousel_002
+            images={carouselImages}
+            showPagination
+            showNavigation
+            loop
+            autoplay
+            spaceBetween={40}
+          />
+        </div>
       </section>
 
       <section className="mx-auto max-w-screen-2xl px-5 py-10 md:px-8">
@@ -761,6 +847,25 @@ const KotonStyleLanding = () => {
           </h2>
           <p className="mt-5 text-base leading-8 text-stone-600">
             {copy.styleText}
+          </p>
+          <p className="mt-4 text-sm leading-7 text-stone-500">
+            {copy.swipeHintStart}{" "}
+            {categories.map((category, index) => (
+              <span key={category.key}>
+                <CursorCard
+                  href={category.to}
+                  image={category.image}
+                  description={copy.categories[category.key].text}
+                  className="text-[#9b6b43] hover:bg-[#f8f0e7]"
+                >
+                  {copy.categories[category.key].title}
+                </CursorCard>
+                {index < categories.length - 1 ? (
+                  <span className="text-stone-400"> · </span>
+                ) : null}
+              </span>
+            ))}{" "}
+            {copy.swipeHintEnd}
           </p>
           <RollingArrowLink
             href="/info/about"
@@ -837,6 +942,24 @@ const KotonStyleLanding = () => {
               <Heart className="h-4 w-4 text-[#9b6b43]" />
               {copy.noSpam}
             </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Demo community — rotating masked customer avatars. */}
+      <section className="relative isolate overflow-hidden bg-[#1c1917] text-white">
+        <div className="relative z-10 mx-auto max-w-screen-2xl px-5 pt-16 text-center md:px-8">
+          <p className="text-xs font-bold uppercase tracking-[0.28em] text-[#ead7bd]">
+            {copy.crowdEyebrow}
+          </p>
+          <h2 className="mx-auto mt-3 max-w-3xl font-serif text-4xl font-semibold leading-tight md:text-5xl">
+            {copy.crowdTitle}
+          </h2>
+          <p className="mx-auto mt-3 max-w-2xl text-base leading-7 text-white/70">
+            {copy.crowdText}
+          </p>
+          <div className="mt-10 flex justify-center">
+            <MaskedAvatars avatars={communityAvatars} size={72} />
           </div>
         </div>
       </section>
